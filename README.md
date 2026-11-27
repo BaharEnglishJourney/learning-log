@@ -38,4 +38,8 @@ above the previous week's entry.
 **Yule bridge notes (how a computer would deal with this)**
 -
 -->
+## Entries
 
+| Week | Dates | Linguistics | Other topics |
+|---|---|---|---|
+| [Week 1](weeks/week-01.md) | 1–4 Dec 2026 (short week) | Yule: Preface, Ch. 1 | Python setup, Italian units 1–3, Kahneman |
