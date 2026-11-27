@@ -20,8 +20,6 @@ A weekly record of my path from English teaching (TEFL) into linguistics and lan
 
 ---
 
-## Entries
-
 <!--
 Copy this template for each new week and paste it just below "## Entries",
 above the previous week's entry.
