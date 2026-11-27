@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lezione 3 · Buon appetito! — Nuovo Espresso 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ===== Palette (varies per lesson) ===== */
+:root{
+  --primary:#7E2244; --primary-dark:#55142D; --accent:#D2802A; --bg:#FFF8F1; --surface:#FFFFFF;
+  --ink:#2B1F22; --muted:#6B5A5E; --line:#EEDDD3; --tint:#F8E6E8;
+  --hl1:#FFE3A1; --hl2:#5B6E2E; --hl3:#E3EFCB;
+  --ok:#1E7A3A; --ok-bg:#E5F4EA; --bad:#B3261E; --bad-bg:#FCE9E7; --near:#8A5300; --near-bg:#FFF1D9;
+  --nav-h:56px;
+}
+/* ===== Base ===== */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:120px}
+body{margin:0;font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif;font-size:16px;line-height:1.78;color:var(--ink);background:var(--bg);overflow-x:hidden;padding-top:var(--nav-h);padding-bottom:140px;-webkit-text-size-adjust:100%}
+p,li,td,th,h1,h2,h3,h4,h5,div,span,label,button,a,summary,dd,dt{overflow-wrap:break-word;word-break:break-word}
+img,table,video,iframe,svg{max-width:100%}
+h1,h2,h3,h4{font-family:'Playfair Display',Georgia,serif;line-height:1.25;color:var(--primary-dark);margin:1.2em 0 .5em}
+h3{font-size:1.35rem} h4{font-size:1.1rem}
+a{color:var(--primary-dark)}
+code,.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92em}
+.ipa{font-family:'Inter',sans-serif;color:var(--muted);font-size:.92em;white-space:nowrap}
+.page{max-width:900px;margin:0 auto;padding:0 18px}
+.muted{color:var(--muted)}
+.small{font-size:.9rem}
+
+/* ===== Progress bar + Nav ===== */
+.progress-bar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--accent);z-index:1003;transition:width .08s linear}
+.top-nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:var(--primary-dark);color:#fff;z-index:1002;display:flex;align-items:center;gap:8px;padding:4px 10px 0;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.nav-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:9px;height:38px;min-width:40px;padding:0 10px;font:600 15px 'Inter',sans-serif;cursor:pointer;flex-shrink:0}
+.nav-btn:hover,.nav-btn:focus-visible{background:rgba(255,255,255,.2)}
+.nav-btn.fa-btn{font-family:'Vazirmatn',sans-serif}
+.nav-btn[aria-pressed="false"]{opacity:.65;text-decoration:line-through}
+.nav-title{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;font-size:15px;word-break:normal}
+.score-badge{flex-shrink:0;font-size:13px;font-weight:700;background:#fff;color:var(--primary-dark);border-radius:999px;padding:3px 10px;white-space:nowrap}
+.nav-menu{position:fixed;top:var(--nav-h);left:0;right:0;max-height:calc(100vh - var(--nav-h));overflow-y:auto;background:var(--surface);z-index:1001;box-shadow:0 10px 30px rgba(0,0,0,.2);display:none}
+.nav-menu.open{display:block}
+.nav-menu-inner{max-width:900px;margin:0 auto;padding:6px 0 12px}
+.nav-menu a{display:block;padding:10px 20px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);font-size:15px}
+.nav-menu a:hover{background:var(--tint)}
+.nav-menu a.active{background:var(--tint);color:var(--primary-dark);font-weight:700;border-left:4px solid var(--primary)}
+
+/* ===== Header ===== */
+.lesson-header{background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff;margin:0 -18px;padding:34px 24px 26px;border-radius:0 0 26px 26px;position:relative;overflow:hidden}
+.lesson-header::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.08)}
+.lesson-header h1{color:#fff;font-size:clamp(1.9rem,6vw,2.9rem);margin:.15em 0 .1em}
+.lesson-header .en-title{font-size:1.1rem;opacity:.95;margin:0}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.pill{display:inline-block;border-radius:999px;padding:2px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4)}
+.cast{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.cast span{background:rgba(0,0,0,.18);border-radius:10px;padding:4px 10px;font-size:13.5px}
+.howto{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:18px 0}
+.howto ol{margin:.3em 0 0 1.1em;padding:0}
+
+/* ===== TOC ===== */
+.toc{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 20px;margin:20px 0 10px}
+.toc h2{margin:0 0 8px;font-size:1.3rem}
+.toc ol{columns:2;column-gap:28px;margin:0;padding:0;list-style:none;counter-reset:toc}
+.toc li{break-inside:avoid;padding:5px 0;counter-increment:toc}
+.toc li a{text-decoration:none;color:var(--ink);display:flex;gap:10px;align-items:baseline}
+.toc li a::before{content:counter(toc);flex-shrink:0;display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--tint);color:var(--primary-dark);font-weight:700;font-size:13px}
+.toc li a:hover{color:var(--primary-dark);text-decoration:underline}
+.toc ul{list-style:none;padding:0 0 0 36px;margin:2px 0}
+.toc ul li{counter-increment:none;padding:1px 0;font-size:14px}
+.toc ul li a::before{content:"–";background:none;width:auto;height:auto}
+
+/* ===== Sections + sticky headers ===== */
+.lesson-section{padding:4px 0 30px;border-bottom:1px solid var(--line)}
+.section-title{position:sticky;top:var(--nav-h);z-index:40;background:var(--bg);margin:0 -18px 14px;padding:12px 18px 10px;font-size:clamp(1.3rem,4.4vw,1.75rem);border-bottom:2px solid var(--primary);display:flex;gap:10px;align-items:baseline}
+.section-title .num{font-family:'Inter',sans-serif;font-size:.8em;font-weight:700;color:#fff;background:var(--primary);border-radius:8px;padding:0 8px;flex-shrink:0}
+.sub-title{border-left:5px solid var(--accent);padding-left:12px}
+
+/* ===== Highlights ===== */
+.g1{background:var(--hl1);border-radius:3px;padding:0 2px}
+.g2{border-bottom:3px solid var(--hl2);padding-bottom:1px}
+.g3{background:var(--hl3);border-radius:3px;padding:0 2px}
+.vv{font-weight:700;color:var(--primary-dark)}
+.story.hl-off .g1,.story.hl-off .g3{background:none;padding:0}
+.story.hl-off .g2{border-bottom:0}
+.story.hl-off .vv{font-weight:inherit;color:inherit}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:14px;margin:8px 0}
+.legend span{white-space:nowrap}
+
+/* ===== Story ===== */
+.warmup{background:var(--tint);border-radius:14px;padding:14px 18px;margin:12px 0}
+.story-tools{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.scene{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 16px 10px;margin:16px 0}
+.scene-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.scene-head h3{margin:0;font-size:1.2rem}
+.scene-setting{font-style:italic;color:var(--muted);margin:0 0 10px;font-size:15px}
+.line{display:flex;gap:10px;margin:10px 0;align-items:flex-start}
+.line.right{flex-direction:row-reverse}
+.avatar{flex-shrink:0;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff}
+.bubble{background:var(--bg);border:1px solid var(--line);border-radius:4px 16px 16px 16px;padding:8px 12px;max-width:min(560px,calc(100% - 48px))}
+.line.right .bubble{border-radius:16px 4px 16px 16px;background:var(--tint)}
+.who{display:block;font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.02em}
+.line-it{display:inline}
+.say{background:none;border:0;cursor:pointer;font-size:15px;padding:0 3px;vertical-align:baseline;opacity:.75}
+.say:hover{opacity:1}
+.no-tts .say,.no-tts .say-scene{display:none}
+.post{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin:16px 0;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.post-head{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.post-head b{display:block;line-height:1.2}
+.post .tags{color:var(--primary-dark);font-weight:600}
+.gloss{font-size:14px;color:var(--muted);margin-top:4px}
+
+/* ===== Buttons ===== */
+.btn{font:600 14.5px 'Inter',sans-serif;border-radius:10px;border:1.5px solid var(--primary);background:var(--surface);color:var(--primary-dark);padding:7px 14px;cursor:pointer;line-height:1.3}
+.btn:hover{background:var(--tint)}
+.btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn.primary:hover{background:var(--primary-dark)}
+.btn-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+
+/* ===== Cards / boxes ===== */
+.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:16px 0}
+.box h4{margin-top:.2em}
+.callout{border-left:5px solid var(--primary);background:var(--tint);border-radius:0 12px 12px 0;padding:12px 16px;margin:16px 0}
+.context-ref{background:var(--surface);border:1px dashed var(--primary);border-radius:12px;padding:10px 14px;margin:10px 0 14px;font-size:15.5px}
+.context-ref::before{content:"📖 Dal racconto";display:block;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.errors{background:var(--bad-bg);border-radius:12px;padding:12px 16px;margin:16px 0}
+.errors h4{color:var(--bad);margin:.1em 0 .4em;font-family:'Inter',sans-serif;font-size:1rem}
+.err-row{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.06)}
+.err-row:last-child{border-bottom:0}
+.err-row .x{color:var(--bad);text-decoration:line-through}
+.err-row .v{color:var(--ok);font-weight:600}
+.err-row .why{grid-column:1/-1;font-size:14px;color:var(--muted)}
+
+/* ===== Tables ===== */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:12px;border:1px solid var(--line);background:var(--surface);max-width:100%}
+.table-wrap .scroll-hint{display:none;position:sticky;left:0;font-size:12px;font-weight:700;color:var(--primary-dark);background:var(--tint);padding:3px 10px}
+.table-wrap.is-scrollable .scroll-hint{display:block}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{word-break:normal;overflow-wrap:break-word;padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--tint);color:var(--primary-dark);font-weight:700;font-size:14px}
+tr:last-child td{border-bottom:0}
+table.wide{min-width:560px}
+
+/* ===== Visual aids ===== */
+.spectrum{margin:18px 0}
+.spectrum-bar{height:12px;border-radius:999px;background:linear-gradient(90deg,var(--hl3),var(--hl1),var(--accent))}
+.spectrum-labels{display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;margin-top:6px}
+.spectrum-labels span{font-size:14px;text-align:center;flex:1;min-width:70px}
+.spectrum-ends{display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.blocks{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0;font-size:17px}
+.blk{border-radius:8px;padding:4px 10px;font-weight:600;border:1.5px solid var(--line);background:var(--surface)}
+.blk.a{background:var(--hl1)} .blk.b{background:var(--hl3)} .blk.c{background:var(--tint)}
+.two-doors{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.door{border-radius:14px;padding:12px 14px;border:2px solid var(--line);background:var(--surface)}
+.door h4{margin:0 0 6px;font-family:'Inter',sans-serif;font-size:15px}
+.timeline{display:flex;margin:16px 0;border-radius:12px;overflow:hidden;font-size:13.5px;text-align:center}
+.timeline div{padding:10px 6px;color:#1b1b1b}
+.wordmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:10px;margin:14px 0}
+.wordmap .hub{grid-column:1/-1;text-align:center;font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;background:var(--primary);color:#fff;border-radius:14px;padding:10px}
+.wordmap .cluster{border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--surface)}
+.wordmap .cluster b{display:block;color:var(--primary-dark);margin-bottom:4px}
+.colloc{border:2px solid var(--accent);border-radius:14px;padding:12px 16px;margin:16px 0;background:var(--surface)}
+.colloc h4{margin:.1em 0 .4em}
+.colloc ul{margin:0;padding-left:1.1em}
+.num-grid,.abc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;margin:12px 0}
+.tile{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:8px 6px;text-align:center;cursor:pointer;font:inherit;color:var(--ink)}
+.tile:hover{border-color:var(--primary);background:var(--tint)}
+.tile b{display:block;font-size:1.25rem;color:var(--primary-dark);line-height:1.2}
+.tile span{font-size:13.5px}
+.tile.foreign{border-style:dashed}
+
+/* ===== Vocabulary entries ===== */
+.vocab-group h4{margin-bottom:.2em}
+.vocab-list{display:grid;gap:8px;margin:8px 0 16px}
+.vocab-item{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:2px 14px}
+.vocab-item .w{font-weight:700;color:var(--primary-dark);font-size:1.05rem}
+.vocab-item .pos{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-left:4px}
+.vocab-item .en{text-align:right}
+.vocab-item .ex{grid-column:1/-1;font-size:14.5px;color:var(--muted);font-style:italic}
+
+/* ===== Flashcards ===== */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:12px 0}
+.flashcard{min-height:92px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;padding:10px;font:inherit;color:var(--ink);display:grid;place-items:center;text-align:center}
+.flashcard .back{display:none;color:var(--primary-dark);font-weight:600}
+.flashcard .front{font-weight:700;font-size:1.05rem}
+.flashcard.flipped{background:var(--tint);border-color:var(--primary)}
+.flashcard.flipped .front{display:none}.flashcard.flipped .back{display:block}
+
+/* ===== Exercises ===== */
+.exercise{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 18px;margin:20px 0;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.ex-head{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:4px}
+.ex-head h4{margin:0;font-size:1.08rem}
+.tag{font:700 11.5px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:.05em;border-radius:999px;padding:2px 9px;background:var(--tint);color:var(--primary-dark)}
+.tag.free{background:var(--hl3);color:#1f3b1f}
+.instr{margin:4px 0 8px}
+.ex-items{padding-left:1.4em;margin:8px 0}
+.ex-items li{margin:9px 0}
+.blank{font:inherit;font-size:16px;color:var(--ink);border:0;border-bottom:2px solid var(--primary);background:var(--tint);padding:1px 6px;width:8.5em;max-width:100%;border-radius:5px 5px 0 0}
+.blank.s{width:5em}.blank.w{width:15em}.blank.full{width:100%;display:block;margin-top:4px}
+.blank:focus{outline:2px solid var(--accent);outline-offset:1px}
+.blank.ok{border-color:var(--ok);background:var(--ok-bg)}
+.blank.bad{border-color:var(--bad);background:var(--bad-bg)}
+.blank.near{border-color:var(--near);background:var(--near-bg)}
+.blank.revealed{border-style:dashed}
+.ex-fb{font-weight:600;min-height:1.2em;margin:6px 0 0}
+.ex-fb.good{color:var(--ok)}.ex-fb.meh{color:var(--near)}
+.mcq{border-top:1px dashed var(--line);padding:10px 0}
+.mcq:first-of-type{border-top:0}
+.mcq .q{margin:0 0 6px;font-weight:500}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts button{font:inherit;font-size:15px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:6px 12px;cursor:pointer;text-align:left}
+.opts button:hover{border-color:var(--primary)}
+.opts button.correct{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);font-weight:700}
+.opts button.wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad);animation:shake .3s}
+.mcq .fb{font-size:14.5px;margin:6px 0 0;color:var(--ok)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;margin:10px 0}
+.match-col{display:flex;flex-direction:column;gap:8px}
+.match button{font:inherit;font-size:15px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:8px 10px;cursor:pointer;text-align:left;min-height:44px}
+.match button.sel{border-color:var(--accent);background:var(--near-bg);font-weight:600}
+.match button.done{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);cursor:default}
+.match button.no{animation:shake .3s;border-color:var(--bad)}
+.sorter .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;min-height:20px}
+.chip{font:inherit;font-size:15px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:5px 13px;cursor:pointer}
+.chip.sel{border-color:var(--accent);background:var(--near-bg);font-weight:600}
+.chip.placed{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);cursor:default}
+.buckets{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:10px}
+.bucket{border:2px dashed var(--line);border-radius:14px;padding:10px;min-height:90px;cursor:pointer;background:var(--bg)}
+.bucket h5{margin:0 0 6px;font:700 14px 'Inter',sans-serif;color:var(--primary-dark)}
+.bucket .drop{display:flex;flex-wrap:wrap;gap:6px}
+.bucket.no{border-color:var(--bad);animation:shake .3s}
+textarea.free{width:100%;min-height:120px;font:inherit;font-size:16px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg);color:var(--ink);resize:vertical}
+.saved-note{font-size:12.5px;color:var(--muted)}
+.hint{margin-top:8px}
+.hint summary{cursor:pointer;font-weight:600;color:var(--primary-dark);font-size:14.5px}
+details.reveal{background:var(--tint);border-radius:10px;padding:6px 12px;margin:8px 0}
+details.reveal summary{cursor:pointer;font-weight:600;color:var(--primary-dark)}
+
+/* ===== Noticing ===== */
+.notice-list{counter-reset:nq;list-style:none;padding:0}
+.notice-list>li{counter-increment:nq;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px 12px 54px;margin:12px 0;position:relative}
+.notice-list>li::before{content:counter(nq);position:absolute;left:14px;top:12px;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700}
+
+/* ===== Speaking ===== */
+.task{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 18px;margin:18px 0;border-top:5px solid var(--primary)}
+.task h3{margin:.1em 0 .3em;font-size:1.2rem}
+.task-meta{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:10px 0}
+.task-meta dt{font-weight:700;color:var(--primary-dark);font-size:14.5px}
+.task-meta dd{margin:0}
+.role-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:10px;margin:10px 0}
+.role{border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg)}
+.role b{color:var(--primary-dark)}
+.timer{display:inline-flex;align-items:center;gap:8px;background:var(--tint);border-radius:12px;padding:6px 10px;margin:6px 0;flex-wrap:wrap}
+.t-display{font:700 1.4rem 'Inter',monospace;min-width:3.2em;text-align:center;color:var(--primary-dark)}
+.timer.done .t-display{color:var(--bad)}
+.timer.running .t-display{color:var(--ok)}
+
+/* ===== Tips / Resources / Explore ===== */
+.tips{display:grid;gap:12px}
+.tip{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px;border-left:5px solid var(--accent)}
+.tip h4{margin:.1em 0 .3em;font-family:'Inter',sans-serif;font-size:1.02rem}
+.resource{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin:12px 0}
+.resource .platform{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.resource h4{margin:.1em 0 .3em}
+.explore-list{list-style:none;padding:0;counter-reset:ex}
+.explore-list>li{counter-increment:ex;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px 12px 56px;margin:10px 0;position:relative}
+.explore-list>li::before{content:"🧭";position:absolute;left:16px;top:12px;font-size:22px}
+
+/* ===== Summary ===== */
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:12px;margin:14px 0}
+.sum-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 16px;border-top:6px solid var(--primary)}
+.sum-card.c2{border-top-color:var(--accent)}.sum-card.c3{border-top-color:var(--hl2)}.sum-card.c4{border-top-color:var(--primary-dark)}
+.sum-card h4{margin:.1em 0 .4em;font-family:'Inter',sans-serif;font-size:1rem;text-transform:uppercase;letter-spacing:.04em}
+.sum-card ul{margin:0;padding-left:1.1em}
+.selfcheck{list-style:none;padding:0}
+.selfcheck li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:8px 0}
+.sc-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.sc-btn{font:inherit;font-size:13.5px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:3px 11px;cursor:pointer}
+.sc-btn.on[data-v="yes"]{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);font-weight:700}
+.sc-btn.on[data-v="almost"]{background:var(--near-bg);border-color:var(--near);color:var(--near);font-weight:700}
+.sc-btn.on[data-v="no"]{background:var(--bad-bg);border-color:var(--bad);color:var(--bad);font-weight:700}
+.checklist{list-style:none;padding:0}
+.checklist li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:8px 0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.checklist input{width:20px;height:20px;margin-top:4px;accent-color:var(--primary);flex-shrink:0}
+.checklist input:checked+span{text-decoration:line-through;color:var(--muted)}
+
+/* ===== Answer key ===== */
+.answer-key details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 14px;margin:10px 0}
+.answer-key summary{cursor:pointer;font-weight:700;color:var(--primary-dark)}
+.answer-key ol{padding-left:1.3em}
+.answer-key .note{color:var(--muted);font-size:14.5px}
+
+/* ===== Farsi notes (same style in every lesson) ===== */
+.farsi-note{direction:rtl;text-align:right;font-family:'Vazirmatn',Tahoma,sans-serif;font-size:15.5px;line-height:1.95;background:#EDF6F1;color:#1C2B25;border-right:4px solid #2F7D63;border-radius:10px;padding:9px 14px;margin:10px 0 14px}
+.farsi-note .fa-label{display:inline-block;font-size:11.5px;font-weight:700;background:#2F7D63;color:#fff;border-radius:999px;padding:0 9px;margin-left:8px;line-height:1.9;vertical-align:1px}
+.farsi-note p{margin:0;display:inline}
+.farsi-note bdi{font-family:'Inter',sans-serif;font-weight:600;color:#14532D}
+li .farsi-note,td .farsi-note{margin:6px 0 4px}
+body.fa-hidden .farsi-note{display:none}
+
+/* ===== Back to top ===== */
+.back-to-top{position:fixed;right:16px;bottom:18px;width:46px;height:46px;border-radius:50%;border:0;background:var(--primary-dark);color:#fff;font-size:20px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .2s;z-index:900}
+.back-to-top.show{opacity:1;pointer-events:auto}
+
+/* ===== Responsive ===== */
+@media (max-width:620px){
+  body{font-size:16px}
+  .toc ol{columns:1}
+  .two-doors{grid-template-columns:1fr}
+  .vocab-item{grid-template-columns:1fr}
+  .vocab-item .en{text-align:left}
+  .err-row{grid-template-columns:1fr}
+  .task-meta{grid-template-columns:1fr}
+  .task-meta dd{margin-bottom:6px}
+  .match{gap:8px}
+  .nav-title{font-size:13.5px}
+  .timeline{font-size:12px}
+}
+@media print{.top-nav,.progress-bar,.nav-menu,.back-to-top{display:none}body{padding-top:0}.section-title{position:static}}
+</style>
+</head>
+<body data-lesson="nuovo-espresso-lesson-03-buon-appetito">
+<div class="progress-bar" id="progressBar" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+<nav class="top-nav" aria-label="Lesson navigation">
+  <button class="nav-btn" id="menuBtn" aria-expanded="false" aria-controls="navMenu" aria-label="Open section menu">☰</button>
+  <div class="nav-title">Lezione 3 · Buon appetito!</div>
+  <span class="score-badge" id="scoreBadge" title="Exercises solved">✓ 0/0</span>
+  <button class="nav-btn fa-btn" id="faBtn" aria-pressed="true" title="Show / hide Farsi notes">فا</button>
+</nav>
+<div class="nav-menu" id="navMenu"><div class="nav-menu-inner">
+<a href="#story">1 · La storia — The Story</a>
+<a href="#noticing">2 · Noticing — Nota bene</a>
+<a href="#grammar">3 · Grammatica in contesto</a>
+<a href="#vocab">4 · Vocabolario in contesto</a>
+<a href="#practice-grammar">5 · Pratica — Grammatica</a>
+<a href="#practice-vocab">6 · Pratica — Vocabolario</a>
+<a href="#speaking">7 · Parlare — Speaking</a>
+<a href="#tips">8 · Consigli — Tips</a>
+<a href="#listening">9 · Ascoltare &amp; guardare</a>
+<a href="#explore">10 · Explore More</a>
+<a href="#summary">11 · Riepilogo — Summary</a>
+<a href="#answers">12 · Soluzioni — Answer Key</a>
+</div></div>
+<main class="page">
+<!-- SECTION: Page Header -->
+<header class="lesson-header" id="top">
+  <div class="meta-row">
+    <span class="pill">Lezione 3</span>
+    <span class="pill">Nuovo Espresso 1 · Lezione 3</span>
+    <span class="pill">Livello A1</span>
+  </div>
+  <h1>Buon appetito!</h1>
+  <p class="en-title">Enjoy your meal! Ordering at the bar and the restaurant, politely</p>
+  <div class="cast">
+    <span>🎨 Darya</span>
+    <span>⚙️ Thomas</span>
+    <span>☀️ Ana</span>
+    <span>📚 Sara</span>
+    <span>💻 Luca</span>
+    <span>☕ Marco — Bar Il Portico</span>
+    <span>🍽️ Giorgio — waiter (new!)</span>
+  </div>
+</header>
+
+<div class="howto">
+  <strong>Last lesson:</strong> jobs, addresses, the tandem, the library. <strong>This lesson:</strong> a full Saturday of food: breakfast at Marco's bar, then Darya's first real Bolognese dinner. Read for meaning → notice → rules → practise → speak.
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>این درس یه شنبه‌ی کامل با غذاست: صبحانه تو بار مارکو، بعد اولین شام بولونیایی داریا. روش مثل همیشه‌ست: اول معنی، بعد توجه، بعد قانون، بعد تمرین و صحبت.</p></div>
+</div>
+
+<nav class="toc" aria-label="Table of contents">
+  <h2>Indice · Contents</h2>
+  <ol>
+    <li><a href="#story">La storia · The Story</a></li>
+    <li><a href="#noticing">Noticing · Nota bene</a></li>
+    <li><a href="#grammar">Grammatica in contesto</a>
+      <ul>
+        <li><a href="#g1">Il plurale dei nomi</a></li>
+        <li><a href="#g2">Articoli: il, lo, l', la, i, gli, le</a></li>
+        <li><a href="#g3">Presente plurale: noi, voi, loro</a></li>
+      </ul>
+    </li>
+    <li><a href="#vocab">Vocabolario in contesto</a></li>
+    <li><a href="#practice-grammar">Pratica · Grammatica</a></li>
+    <li><a href="#practice-vocab">Pratica · Vocabolario</a></li>
+    <li><a href="#speaking">Parlare · Speaking</a></li>
+    <li><a href="#tips">Consigli · Tips</a></li>
+    <li><a href="#listening">Ascoltare &amp; guardare</a></li>
+    <li><a href="#explore">Explore More</a></li>
+    <li><a href="#summary">Riepilogo · Summary</a></li>
+    <li><a href="#answers">Soluzioni · Answer Key</a></li>
+  </ol>
+</nav>
+
+<!-- SECTION: The Context — The Story -->
+<section class="lesson-section" id="story" data-title="1 · La storia — The Story">
+  <h2 class="section-title"><span class="num">1</span> La storia: Un sabato bolognese</h2>
+
+  <div class="warmup">
+    <strong>Before you read 🤔</strong> What do you know about Italian food beyond pizza and pasta? What's a "typical breakfast" where you live, and when do people eat dinner? Have you heard of "spaghetti bolognese"? (Keep that one in mind…)
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>قبل از خوندن: غیر از پیتزا و پاستا، از غذای ایتالیایی چی می‌دونی؟ صبحونه‌ی معمولی تو شهر تو چیه و مردم کی شام می‌خورن؟ «اسپاگتی بولونز» رو شنیدی؟ یادت بمونه، تو داستان یه غافلگیری هست!</p></div>
+  </div>
+
+  <p><strong>The situation:</strong> Saturday. In the morning Darya, Thomas and Ana have breakfast at Marco's bar before a museum visit. In the evening Sara and Luca take the three of them to a traditional trattoria. It's Darya's first proper Bolognese dinner, and she has a question about the meat.</p>
+
+  <div class="story-tools">
+    <button class="btn hl-toggle" data-target="storyBox">🖍️ Evidenzia: OFF</button>
+    <button class="btn rate-toggle">🐢 Lento (OFF)</button>
+    <button class="btn stop-audio">⏹ Stop audio</button>
+  </div>
+  <div class="legend">
+    <span><span class="g1">giallo</span> = plural nouns</span>
+    <span><span class="g2">sottolineato</span> = definite articles</span>
+    <span><span class="g3">verde</span> = noi / voi / loro verbs</span>
+    <span><span class="vv">grassetto</span> = polite ordering</span>
+  </div>
+
+  <div class="story hl-off" id="storyBox">
+    <div class="scene" id="scene1">
+      <div class="scene-head"><h3>Scena 1 · Colazione al bar Il Portico</h3><button class="btn say-scene" data-target="scene1">▶ Ascolta la scena</button></div>
+      <p class="scene-setting">9 a.m. The smell of coffee. Marco is behind the counter.</p>
+      <div class="line"><div class="avatar" style="background:#3D6B35">MB</div><div class="bubble"><span class="who">Marco</span><span class="line-it">Buongiorno, ragazzi! Cosa <span class="g3">prendete</span>?</span> <button class="say" data-say="Buongiorno, ragazzi! Cosa prendete?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#2F6A8F">TW</div><div class="bubble"><span class="who">Thomas</span><span class="line-it">Io <span class="vv">prendo</span> un cappuccino e un cornetto.</span> <button class="say" data-say="Io prendo un cappuccino e un cornetto.">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#B5651D">AM</div><div class="bubble"><span class="who">Ana</span><span class="line-it">Anch'io: un cappuccino e un cornetto alla crema.</span> <button class="say" data-say="Anch'io: un cappuccino e un cornetto alla crema.">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it"><span class="vv">Per me</span> un caffè e una spremuta d'arancia, <span class="vv">per favore</span>.</span> <button class="say" data-say="Per me un caffè e una spremuta d'arancia, per favore.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#3D6B35">MB</div><div class="bubble"><span class="who">Marco</span><span class="line-it">Allora: due <span class="g1">cappuccini</span>, due <span class="g1">cornetti</span>, un caffè e una spremuta. Al banco o al tavolo?</span> <button class="say" data-say="Allora: due cappuccini, due cornetti, un caffè e una spremuta. Al banco o al tavolo?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#B5651D">AM</div><div class="bubble"><span class="who">Ana</span><span class="line-it">Al banco, grazie. <span class="g3">Siamo</span> di fretta!</span> <button class="say" data-say="Al banco, grazie. Siamo di fretta!">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#3D6B35">MB</div><div class="bubble"><span class="who">Marco</span><span class="line-it">Ecco <span class="g2">i</span> <span class="g1">cappuccini</span>, <span class="g2">i</span> <span class="g1">cornetti</span>, <span class="g2">la</span> spremuta… e <span class="g2">il</span> caffè per la signora!</span> <button class="say" data-say="Ecco i cappuccini, i cornetti, la spremuta, e il caffè per la signora!">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Mmm, Marco, <span class="g2">i</span> <span class="g1">cornetti</span> <span class="g3">sono</span> buonissimi!</span> <button class="say" data-say="Mmm, Marco, i cornetti sono buonissimi!">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#3D6B35">MB</div><div class="bubble"><span class="who">Marco</span><span class="line-it">Eh, <span class="g2">gli</span> <span class="g1">italiani</span> <span class="g3">mangiano</span> un cornetto quasi ogni mattina! E voi, cosa <span class="g3">fate</span> oggi?</span> <button class="say" data-say="Eh, gli italiani mangiano un cornetto quasi ogni mattina! E voi, cosa fate oggi?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#2F6A8F">TW</div><div class="bubble"><span class="who">Thomas</span><span class="line-it"><span class="g3">Visitiamo</span> <span class="g2">i</span> <span class="g1">musei</span> e stasera <span class="g3">mangiamo</span> in trattoria con <span class="g2">gli</span> <span class="g1">amici</span>. Marco, <span class="vv">quant'è</span>?</span> <button class="say" data-say="Visitiamo i musei e stasera mangiamo in trattoria con gli amici. Marco, quant'è?">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#3D6B35">MB</div><div class="bubble"><span class="who">Marco</span><span class="line-it">Dieci euro.</span> <button class="say" data-say="Dieci euro.">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#2F6A8F">TW</div><div class="bubble"><span class="who">Thomas</span><span class="line-it">Offro io!</span> <button class="say" data-say="Offro io!">🔊</button></div></div>
+      <p class="gloss">cosa prendete? = what are you (all) having? · anch'io = me too · la spremuta d'arancia = fresh orange juice · al banco = at the counter · siamo di fretta = we're in a hurry · ecco = here is/are · quasi ogni mattina = almost every morning · quant'è? = how much is it? · offro io = it's on me</p>
+    </div>
+
+    <div class="scene" id="scene2">
+      <div class="scene-head"><h3>Scena 2 · Sabato sera in trattoria</h3><button class="btn say-scene" data-target="scene2">▶ Ascolta la scena</button></div>
+      <p class="scene-setting">8.30 p.m. A small trattoria with wooden tables and photos of old Bologna. Giorgio, the waiter, comes to the door.</p>
+      <div class="line"><div class="avatar" style="background:#55142D">GI</div><div class="bubble"><span class="who">Giorgio</span><span class="line-it">Buonasera! <span class="g3">Siete</span> in cinque?</span> <button class="say" data-say="Buonasera! Siete in cinque?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#A13A2A">SF</div><div class="bubble"><span class="who">Sara</span><span class="line-it">Sì, <span class="g3">siamo</span> in cinque. <span class="g3">Abbiamo</span> una prenotazione a nome Ferri.</span> <button class="say" data-say="Sì, siamo in cinque. Abbiamo una prenotazione a nome Ferri.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#55142D">GI</div><div class="bubble"><span class="who">Giorgio</span><span class="line-it">Prego, ecco <span class="g2">il</span> tavolo. E questi sono <span class="g2">i</span> <span class="g1">menù</span>.</span> <button class="say" data-say="Prego, ecco il tavolo. E questi sono i menù.">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#1F6560">LR</div><div class="bubble"><span class="who">Luca</span><span class="line-it">Darya, qui a Bologna <span class="g2">le</span> <span class="g1">tagliatelle</span> al ragù <span class="g3">sono</span> obbligatorie! 😄</span> <button class="say" data-say="Darya, qui a Bologna le tagliatelle al ragù sono obbligatorie!">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it"><span class="g2">Le</span> <span class="g1">tagliatelle</span>? E <span class="g2">gli</span> <span class="g1">spaghetti</span> alla bolognese?</span> <button class="say" data-say="Le tagliatelle? E gli spaghetti alla bolognese?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#A13A2A">SF</div><div class="bubble"><span class="who">Sara</span><span class="line-it">No, no! A Bologna <span class="g2">gli</span> <span class="g1">spaghetti</span> alla bolognese non <span class="g3">esistono</span>! <span class="g2">I</span> <span class="g1">bolognesi</span> <span class="g3">mangiano</span> <span class="g2">le</span> <span class="g1">tagliatelle</span>.</span> <button class="say" data-say="No, no! A Bologna gli spaghetti alla bolognese non esistono! I bolognesi mangiano le tagliatelle.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#55142D">GI</div><div class="bubble"><span class="who">Giorgio</span><span class="line-it">Allora, cosa <span class="g3">prendete</span>?</span> <button class="say" data-say="Allora, cosa prendete?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#A13A2A">SF</div><div class="bubble"><span class="who">Sara</span><span class="line-it">Per cominciare, un antipasto misto per tutti: <span class="g2">i</span> <span class="g1">salumi</span>, <span class="g2">i</span> <span class="g1">formaggi</span> e <span class="g2">le</span> <span class="g1">tigelle</span>.</span> <button class="say" data-say="Per cominciare, un antipasto misto per tutti: i salumi, i formaggi e le tigelle.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#55142D">GI</div><div class="bubble"><span class="who">Giorgio</span><span class="line-it">Benissimo. E come primo?</span> <button class="say" data-say="Benissimo. E come primo?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#1F6560">LR</div><div class="bubble"><span class="who">Luca</span><span class="line-it"><span class="vv">Per me</span> <span class="g2">le</span> <span class="g1">tagliatelle</span> al ragù.</span> <button class="say" data-say="Per me le tagliatelle al ragù.">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#2F6A8F">TW</div><div class="bubble"><span class="who">Thomas</span><span class="line-it">Io <span class="vv">vorrei</span> <span class="g2">i</span> <span class="g1">tortellini</span> in brodo.</span> <button class="say" data-say="Io vorrei i tortellini in brodo.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Scusi, <span class="g2">le</span> <span class="g1">tagliatelle</span> <span class="g3">sono</span> con la carne?</span> <button class="say" data-say="Scusi, le tagliatelle sono con la carne?">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#55142D">GI</div><div class="bubble"><span class="who">Giorgio</span><span class="line-it">Sì, signora: <span class="g2">il</span> ragù è con la carne di manzo e di maiale. Ma <span class="g3">abbiamo</span> anche <span class="g2">i</span> <span class="g1">tortelloni</span> burro e salvia: <span class="g3">sono</span> vegetariani.</span> <button class="say" data-say="Sì, signora: il ragù è con la carne di manzo e di maiale. Ma abbiamo anche i tortelloni burro e salvia: sono vegetariani.">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Allora <span class="vv">per me</span> <span class="g2">i</span> <span class="g1">tortelloni</span>, grazie.</span> <button class="say" data-say="Allora per me i tortelloni, grazie.">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#B5651D">AM</div><div class="bubble"><span class="who">Ana</span><span class="line-it">E io <span class="vv">prendo</span> <span class="g2">la</span> lasagna verde.</span> <button class="say" data-say="E io prendo la lasagna verde.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#55142D">GI</div><div class="bubble"><span class="who">Giorgio</span><span class="line-it">E da bere?</span> <button class="say" data-say="E da bere?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#A13A2A">SF</div><div class="bubble"><span class="who">Sara</span><span class="line-it">Due <span class="g1">bottiglie</span> di acqua frizzante e mezzo litro di vino rosso della casa. <span class="g3">Voi</span> <span class="g3">bevete</span> vino, ragazzi?</span> <button class="say" data-say="Due bottiglie di acqua frizzante e mezzo litro di vino rosso della casa. Voi bevete vino, ragazzi?">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Io no, grazie. <span class="vv">Mi porta</span> una limonata, <span class="vv">per favore</span>?</span> <button class="say" data-say="Io no, grazie. Mi porta una limonata, per favore?">🔊</button></div></div>
+      <p class="scene-setting">… an hour and a half later …</p>
+      <div class="line"><div class="avatar" style="background:#55142D">GI</div><div class="bubble"><span class="who">Giorgio</span><span class="line-it">Dolce? Caffè?</span> <button class="say" data-say="Dolce? Caffè?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#2F6A8F">TW</div><div class="bubble"><span class="who">Thomas</span><span class="line-it">No, grazie, <span class="g3">siamo</span> pieni! <span class="vv">Il conto, per favore.</span></span> <button class="say" data-say="No, grazie, siamo pieni! Il conto, per favore.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#55142D">GI</div><div class="bubble"><span class="who">Giorgio</span><span class="line-it"><span class="g3">Pagate</span> insieme?</span> <button class="say" data-say="Pagate insieme?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#1F6560">LR</div><div class="bubble"><span class="who">Luca</span><span class="line-it">Sì, <span class="g3">paghiamo</span> alla romana!</span> <button class="say" data-say="Sì, paghiamo alla romana!">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Alla romana? Ma <span class="g3">siamo</span> a Bologna! 😄</span> <button class="say" data-say="Alla romana? Ma siamo a Bologna!">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#A13A2A">SF</div><div class="bubble"><span class="who">Sara</span><span class="line-it">"Alla romana" vuol dire che <span class="g3">dividiamo</span> il conto: ognuno paga la sua parte.</span> <button class="say" data-say="Alla romana vuol dire che dividiamo il conto: ognuno paga la sua parte.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#55142D">GI</div><div class="bubble"><span class="who">Giorgio</span><span class="line-it">Sono centodieci euro, con il coperto. Ventidue euro a testa.</span> <button class="say" data-say="Sono centodieci euro, con il coperto. Ventidue euro a testa.">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Perfetto. Grazie, era tutto buonissimo! Buona serata!</span> <button class="say" data-say="Perfetto. Grazie, era tutto buonissimo! Buona serata!">🔊</button></div></div>
+      <p class="gloss">siete in cinque? = are there five of you? · la prenotazione = booking · obbligatorie = compulsory · non esistono = don't exist · per cominciare = to start · i salumi = cured meats · le tigelle = small Bolognese flatbreads · il brodo = broth · il manzo / il maiale = beef / pork · burro e salvia = butter and sage · da bere = to drink · mi porta…? = could you bring me…? · siamo pieni = we're full · a testa = per person · era tutto buonissimo = everything was delicious</p>
+    </div>
+
+    <div class="post">
+      <div class="post-head"><div class="avatar" style="background:#7A3E9D">DK</div><div><b>darya.designs</b><span class="small muted">Trattoria, Bologna · 23:05</span></div></div>
+      <p class="line-it">Prima cena bolognese! 🍝 Qui <span class="g2">gli</span> <span class="g1">spaghetti</span> alla bolognese non <span class="g3">esistono</span>: <span class="g2">i</span> <span class="g1">bolognesi</span> <span class="g3">mangiano</span> <span class="g2">le</span> <span class="g1">tagliatelle</span> al ragù. Io non mangio carne di maiale, allora prendo <span class="g2">i</span> <span class="g1">tortelloni</span> burro e salvia: buonissimi! 😍 <span class="g2">Gli</span> <span class="g1">italiani</span> <span class="g3">cenano</span> tardi, alle otto o alle nove. E alla fine <span class="g3">paghiamo</span> "alla romana"… a Bologna! <span class="tags">#buonappetito #bologna #tortelloni</span></p>
+      <button class="say" data-say="Prima cena bolognese! Qui gli spaghetti alla bolognese non esistono: i bolognesi mangiano le tagliatelle al ragù. Io non mangio carne di maiale, allora prendo i tortelloni burro e salvia: buonissimi! Gli italiani cenano tardi, alle otto o alle nove. E alla fine paghiamo alla romana, a Bologna!">🔊 Ascolta il post</button>
+      <p class="gloss">cenano = they have dinner · tardi = late · alla fine = at the end</p>
+    </div>
+  </div>
+
+  <details class="reveal">
+    <summary>✔ Did you understand? (quick gist check)</summary>
+    <p>1) Thomas pays for breakfast (10 euros). 2) "Spaghetti bolognese" isn't a Bolognese dish; locals eat tagliatelle al ragù. 3) Darya doesn't eat pork, so she orders tortelloni with butter and sage. 4) They split the bill "alla romana": €22 each.</p>
+  </details>
+</section>
+
+<!-- SECTION: Noticing Phase -->
+<section class="lesson-section" id="noticing" data-title="2 · Noticing — Nota bene">
+  <h2 class="section-title"><span class="num">2</span> Noticing · Nota bene</h2>
+  <p>Highlights <strong>ON</strong> (🖍️), then answer before opening the hints.</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>رنگ‌ها رو روشن کن و قبل از باز کردن راهنما، خودت جواب بده.</p></div>
+  <ol class="notice-list">
+    <li><strong>Can you find</strong> the plurals of <em>cappuccino, cornetto, bottiglia</em>? What happens to the last letter? Now look at <em>il caffè</em> → Marco never says "caffè" differently. Why?
+      <details class="hint"><summary>💡 Hint</summary><p>-o → -i, -a → -e. Words ending in an accented vowel (<em>caffè, menù</em>) don't change: <em>i menù</em>.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p><bdi>-o</bdi> می‌شه <bdi>-i</bdi> و <bdi>-a</bdi> می‌شه <bdi>-e</bdi>. کلمه‌هایی که آخرشون حرف صدادارِ تکیه‌دار دارن (<bdi>caffè, menù</bdi>) عوض نمی‌شن. تو فارسی «ها» اضافه می‌کنیم، ولی ایتالیایی حرف آخر رو عوض می‌کنه.</p></div></details></li>
+    <li><strong>What do you notice about</strong> the word for "the"? Find <em>il</em> caffè, <em>la</em> spremuta, <em>i</em> cornetti, <em>le</em> tagliatelle, <em>gli</em> spaghetti, <em>gli</em> italiani. How many forms can you count?
+      <details class="hint"><summary>💡 Hint</summary><p>At least 5 in the story (il, la, i, le, gli), and there are 7 in total. Compare with Lesson 2's <em>un / uno / una / un'</em>: they follow the same logic!</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>فارسی حرف تعریف معین نداره (فقط از جمله می‌فهمیم)، ولی ایتالیایی ۷ شکل داره. خبر خوب: منطقش دقیقاً مثل <bdi>un / uno / una / un'</bdi> درس ۲ هست.</p></div></details></li>
+    <li><strong>Why</strong> <em>gli</em> spaghetti and <em>gli</em> italiani, but <em>i</em> cornetti?
+      <details class="hint"><summary>💡 Hint</summary><p>Look at the first letter of the noun: <em>s + consonant</em> (spaghetti), a <em>vowel</em> (italiani)… or an ordinary consonant (cornetti).</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>به حرف اول اسم نگاه کن: <bdi>s</bdi> + حرف بی‌صدا؟ حرف صدادار؟ یا یه حرف بی‌صدای معمولی؟</p></div></details></li>
+    <li><strong>Green verbs:</strong> Marco asks <em>Cosa prendete?</em> and Thomas answers <em>Visitiamo… mangiamo…</em>. Sara says the Bolognesi <em>mangiano</em>. Who is <em>-iamo</em>? Who is <em>-ete/-ate</em>? Who is <em>-ano/-ono</em>?
+      <details class="hint"><summary>💡 Hint</summary><p>-iamo = we (noi) · -ate/-ete/-ite = you all (voi) · -ano/-ono = they (loro).</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p><bdi>-iamo</bdi> = ما، <bdi>-ate/-ete/-ite</bdi> = شما (جمع)، <bdi>-ano/-ono</bdi> = آن‌ها. درست مثل شناسه‌های «ـیم، ـید، ـند» در فارسی!</p></div></details></li>
+    <li><strong>Polite ordering:</strong> list every way a character orders. Which sounds the most polite?
+      <details class="hint"><summary>💡 Hint</summary><p><em>prendo… / per me… / vorrei… / mi porta…?</em> <em>Vorrei</em> ("I would like") and <em>Mi porta…, per favore?</em> are the softest.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>راه‌های سفارش دادن: <bdi>prendo</bdi> (برمی‌دارم/می‌گیرم)، <bdi>per me</bdi> (برای من)، <bdi>vorrei</bdi> (دلم می‌خواد/می‌خواستم) و <bdi>Mi porta…?</bdi> (برام میارید؟). دوتای آخر مؤدبانه‌ترن، مثل «لطفاً... میل دارم» در فارسی.</p></div></details></li>
+  </ol>
+</section>
+
+<!-- SECTION: Grammar in Context -->
+<section class="lesson-section" id="grammar" data-title="3 · Grammatica in contesto">
+  <h2 class="section-title"><span class="num">3</span> Grammatica in contesto</h2>
+
+  <h3 class="sub-title" id="g1">3.1 · Plural nouns</h3>
+  <div class="context-ref">"due <span class="g1">cappuccini</span>, due <span class="g1">cornetti</span>" · "Due <span class="g1">bottiglie</span> di acqua" · "i <span class="g1">formaggi</span>, i <span class="g1">salumi</span>" · "questi sono i <span class="g1">menù</span>"</div>
+  <p>Italian makes plurals by <strong>changing the final vowel</strong>, not by adding a letter.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Singular ending</th><th>Plural</th><th>Examples (from the story)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>-o</strong> (m)</td><td><strong>-i</strong></td><td>cornett<strong>o</strong> → cornett<strong>i</strong> · cappuccin<strong>o</strong> → cappuccin<strong>i</strong> · muse<strong>o</strong> → muse<strong>i</strong></td></tr>
+      <tr><td><strong>-a</strong> (f)</td><td><strong>-e</strong></td><td>bottigli<strong>a</strong> → bottigli<strong>e</strong> · spremut<strong>a</strong> → spremut<strong>e</strong> · tigell<strong>a</strong> → tigell<strong>e</strong></td></tr>
+      <tr><td><strong>-e</strong> (m or f)</td><td><strong>-i</strong></td><td>bicchier<strong>e</strong> → bicchier<strong>i</strong> · dolc<strong>e</strong> → dolc<strong>i</strong> · la porzion<strong>e</strong> → le porzion<strong>i</strong></td></tr>
+      <tr><td>accented vowel</td><td>no change</td><td>il caff<strong>è</strong> → i caff<strong>è</strong> · il men<strong>ù</strong> → i men<strong>ù</strong> · il t<strong>è</strong> → i t<strong>è</strong></td></tr>
+      <tr><td>consonant / foreign</td><td>no change</td><td>il bar → i bar · il toast → i toast · lo yogurt → gli yogurt</td></tr>
+    </tbody></table></div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تو فارسی برای جمع «ها» یا «ان» اضافه می‌کنیم، ولی تو ایتالیایی حرف صدادار آخر <strong>عوض</strong> می‌شه: <bdi>-o → -i</bdi>، <bdi>-a → -e</bdi>، <bdi>-e → -i</bdi>. کلمه‌هایی که به حرف تکیه‌دار (<bdi>caffè</bdi>) یا حرف بی‌صدا (<bdi>bar</bdi>) تموم می‌شن، یا کلمه‌های خارجی، جمعشون عوض نمی‌شه.</p></div>
+
+  <h4>Visual: the plural switchboard</h4>
+  <div class="blocks"><span class="blk c">cornett</span><span class="blk a">o</span> → <span class="blk c">cornett</span><span class="blk b">i</span> <span class="muted small">(m)</span></div>
+  <div class="blocks"><span class="blk c">bottigli</span><span class="blk a">a</span> → <span class="blk c">bottigli</span><span class="blk b">e</span> <span class="muted small">(f)</span></div>
+  <div class="blocks"><span class="blk c">bicchier</span><span class="blk a">e</span> → <span class="blk c">bicchier</span><span class="blk b">i</span> <span class="muted small">(m/f)</span></div>
+  <div class="blocks"><span class="blk c">caff</span><span class="blk a">è</span> → <span class="blk c">caff</span><span class="blk a">è</span> <span class="muted small">(🔒 locked)</span></div>
+  <p class="small"><strong>Food note:</strong> many pasta names are <em>already plural</em>: <em>gli spaghetti, i tortellini, le tagliatelle, le lasagne</em>. One single piece is a <em>tortellino</em>! In a restaurant you order them in the plural.</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>نکته‌ی غذایی: خیلی از اسم‌های پاستا خودشون جمع‌ان (<bdi>spaghetti, tortellini, tagliatelle</bdi>)، پس با فعل و حرف تعریف جمع میان: <bdi>le tagliatelle sono…</bdi>.</p></div>
+
+  <div class="errors">
+    <h4>⚠️ Common errors</h4>
+    <div class="err-row"><span class="x">due caffès / due caffèi</span><span class="v">due caffè</span><span class="why">Accented final vowel → invariable.</span></div>
+    <div class="err-row"><span class="x">due bottiglias</span><span class="v">due bottiglie</span><span class="why">Never add -s (Spanish/English habit).</span></div>
+    <div class="err-row"><span class="x">le tagliatelle è buona</span><span class="v">le tagliatelle sono buone</span><span class="why">Plural noun → plural verb and adjective.</span></div>
+    <div class="err-row"><span class="x">i bicchiere</span><span class="v">i bicchieri</span><span class="why">-e → -i.</span></div>
+    <div class="err-row"><span class="x">i bars</span><span class="v">i bar</span><span class="why">Foreign / consonant-ending words don't change.</span></div>
+  </div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>هیچ‌وقت به ایتالیایی <bdi>s</bdi> برای جمع اضافه نکن (عادت انگلیسی). و یادت باشه وقتی اسم جمعه، فعل و صفت هم باید جمع بشن: <bdi>le tagliatelle sono buone</bdi>.</p></div>
+
+  <h3 class="sub-title" id="g2">3.2 · The definite article: il, lo, l', la, i, gli, le</h3>
+  <div class="context-ref">"Ecco <span class="g2">i</span> cappuccini, <span class="g2">la</span> spremuta… e <span class="g2">il</span> caffè" · "<span class="g2">gli</span> spaghetti" · "<span class="g2">gli</span> italiani" · "<span class="g2">le</span> tagliatelle" · "<span class="g2">il</span> conto"</div>
+  <p>"The" has seven forms. If you remember Lesson 2's <em>un / uno / una / un'</em>, you already know the logic: <strong>gender + first sound</strong> of the next word.</p>
+  <div class="table-wrap"><table class="wide">
+    <thead><tr><th></th><th>Before…</th><th>Singular</th><th>Plural</th><th>Example</th><th>Compare: "a"</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="3"><strong>Masc.</strong></td><td>most consonants</td><td><strong>il</strong></td><td><strong>i</strong></td><td>il cornetto → i cornetti</td><td>un</td></tr>
+      <tr><td>s+cons., z, ps, gn, y</td><td><strong>lo</strong></td><td><strong>gli</strong></td><td>lo spritz → gli spritz · lo zucchero</td><td>uno</td></tr>
+      <tr><td>vowel</td><td><strong>l'</strong></td><td><strong>gli</strong></td><td>l'antipasto → gli antipasti</td><td>un</td></tr>
+      <tr><td rowspan="2"><strong>Fem.</strong></td><td>consonant</td><td><strong>la</strong></td><td><strong>le</strong></td><td>la bottiglia → le bottiglie</td><td>una</td></tr>
+      <tr><td>vowel</td><td><strong>l'</strong></td><td><strong>le</strong></td><td>l'acqua → le acque · l'arancia → le arance</td><td>un'</td></tr>
+    </tbody></table></div>
+  <p><strong>Pronunciation:</strong> <em>gli</em> = /ʎi/, a soft "ly" sound made with the middle of the tongue against the palate (not "g-li"). <em>Gli italiani</em> /ʎi itaˈljani/.</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>«the» تو ایتالیایی ۷ شکل داره، ولی منطقش همونه که برای <bdi>un/uno/una/un'</bdi> یاد گرفتی: جنسیت + صدای اول کلمه. مذکر: <bdi>il → i</bdi>، <bdi>lo / l' → gli</bdi>. مؤنث: <bdi>la / l' → le</bdi>. <bdi>gli</bdi> رو «لی» با وسط زبون به سقف دهن تلفظ کن، نه «گ-لی».</p></div>
+
+  <h4>Visual: singular → plural article map</h4>
+  <div class="two-doors">
+    <div class="door" style="border-color:var(--primary)"><h4>♂ Masculine</h4><p><strong>il</strong> → <strong>i</strong><br><strong>lo</strong> → <strong>gli</strong><br><strong>l'</strong> → <strong>gli</strong></p><p class="small muted">gli = for the "difficult" starts (s+cons., z, vowel)</p></div>
+    <div class="door" style="border-color:var(--accent)"><h4>♀ Feminine</h4><p><strong>la</strong> → <strong>le</strong><br><strong>l'</strong> → <strong>le</strong></p><p class="small muted">Easy: feminine plural is always le.</p></div>
+  </div>
+  <p>Unlike English, Italian uses the article for things in general: <em>Gli italiani mangiano tardi</em> (Italians eat late) · <em>Il caffè è buono</em> (coffee is good).</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>برخلاف انگلیسی، ایتالیایی برای حرف زدن کلی هم حرف تعریف می‌ذاره: <bdi>Gli italiani mangiano tardi</bdi> («ایتالیایی‌ها دیر غذا می‌خورن»). مؤنث جمع همیشه <bdi>le</bdi> هست، پس سخت‌ترین قسمت فقط مذکره.</p></div>
+
+  <div class="errors">
+    <h4>⚠️ Common errors</h4>
+    <div class="err-row"><span class="x">i amici · i spaghetti</span><span class="v">gli amici · gli spaghetti</span><span class="why">vowel / s+consonant → gli.</span></div>
+    <div class="err-row"><span class="x">lo cornetto</span><span class="v">il cornetto</span><span class="why"><em>c</em> is an ordinary consonant → il.</span></div>
+    <div class="err-row"><span class="x">la caffè</span><span class="v">il caffè</span><span class="why"><em>caffè</em> is masculine (it doesn't end in -a).</span></div>
+    <div class="err-row"><span class="x">gli tagliatelle</span><span class="v">le tagliatelle</span><span class="why">Feminine plural is always <em>le</em>.</span></div>
+    <div class="err-row"><span class="x">la acqua</span><span class="v">l'acqua</span><span class="why">la + vowel → l'.</span></div>
+  </div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>ترفند: هر غذای جدید رو با حرف تعریفش حفظ کن، مثل اسم کامل یه آدم: «<bdi>il caffè</bdi>»، «<bdi>gli spaghetti</bdi>»، «<bdi>l'acqua</bdi>».</p></div>
+
+  <h3 class="sub-title" id="g3">3.3 · The present tense, plural: noi, voi, loro</h3>
+  <div class="context-ref">"Cosa <span class="g3">prendete</span>?" · "<span class="g3">Visitiamo</span> i musei e stasera <span class="g3">mangiamo</span> in trattoria" · "I bolognesi <span class="g3">mangiano</span> le tagliatelle" · "<span class="g3">Siamo</span> in cinque. <span class="g3">Abbiamo</span> una prenotazione" · "<span class="g3">Paghiamo</span> alla romana!"</div>
+  <p>In Lesson 2 you learnt io/tu/lui. Eating out is a group activity, so now you need the plural persons.</p>
+  <div class="table-wrap"><table class="wide">
+    <thead><tr><th>Person</th><th>mangi<strong>are</strong></th><th>prend<strong>ere</strong></th><th>offr<strong>ire</strong></th><th>IPA (loro)</th></tr></thead>
+    <tbody>
+      <tr><td>noi (we)</td><td>mangi<strong>amo</strong></td><td>prend<strong>iamo</strong></td><td>offr<strong>iamo</strong></td><td></td></tr>
+      <tr><td>voi (you all)</td><td>mangi<strong>ate</strong></td><td>prend<strong>ete</strong></td><td>offr<strong>ite</strong></td><td></td></tr>
+      <tr><td>loro (they)</td><td>mangi<strong>ano</strong></td><td>prend<strong>ono</strong></td><td>offr<strong>ono</strong></td><td class="ipa">/ˈmandʒano/ · /ˈprɛndono/ · /ˈɔffrono/</td></tr>
+    </tbody></table></div>
+  <p><strong>Pattern:</strong> <em>noi</em> is <strong>-iamo</strong> for all three families. <em>voi</em> keeps the family vowel: <strong>-ate / -ete / -ite</strong>. <em>loro</em>: <strong>-ano</strong> for -are, <strong>-ono</strong> for -ere and -ire.</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>«ما» برای همه‌ی فعل‌ها <bdi>-iamo</bdi> هست. «شما»ی جمع حرف صدادار خانواده‌ی فعل رو نگه می‌داره: <bdi>-ate / -ete / -ite</bdi>. «آن‌ها»: <bdi>-are</bdi> ← <bdi>-ano</bdi>، بقیه ← <bdi>-ono</bdi>. مثل شناسه‌های فارسی «ـیم / ـید / ـند».</p></div>
+
+  <h4>Irregular plurals you need at the table</h4>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Person</th><th>essere</th><th>avere</th><th>fare</th></tr></thead>
+    <tbody>
+      <tr><td>noi</td><td>siamo</td><td>abbiamo</td><td>facciamo</td></tr>
+      <tr><td>voi</td><td>siete</td><td>avete</td><td>fate</td></tr>
+      <tr><td>loro</td><td>sono</td><td>hanno <span class="ipa">/ˈanno/</span></td><td>fanno</td></tr>
+    </tbody></table></div>
+
+  <h4>Visual: where's the stress? 🎯</h4>
+  <div class="timeline">
+    <div style="background:var(--hl3);flex:1">man-<strong>GIA</strong>-mo<br><span class="small">noi (penultimate)</span></div>
+    <div style="background:var(--hl1);flex:1">man-<strong>GIA</strong>-te<br><span class="small">voi (penultimate)</span></div>
+    <div style="background:#F3C7CF;flex:1"><strong>MAN</strong>-gia-no<br><span class="small">loro (3rd from last!)</span></div>
+  </div>
+  <p class="small"><strong>Spelling note:</strong> <em>pagare</em> → <em>pa<strong>gh</strong>iamo</em>: the <em>h</em> keeps the hard /g/ sound before <em>i</em>. Same with <em>cercare</em> → <em>cer<strong>ch</strong>iamo</em>.</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>مهم‌ترین نکته‌ی تلفظ: تو شکل «آن‌ها» تکیه روی سومین هجا از آخره: <bdi>MANgiano</bdi>، نه <bdi>mangiAno</bdi>. نکته‌ی املایی: <bdi>pagare</bdi> می‌شه <bdi>paghiamo</bdi> (با <bdi>h</bdi>) تا صدای «گ» بمونه.</p></div>
+
+  <div class="errors">
+    <h4>⚠️ Common errors</h4>
+    <div class="err-row"><span class="x">loro mangiAno (stress on -a-)</span><span class="v">loro MANgiano</span><span class="why">loro forms are stressed like the io form: mangio → mangiano.</span></div>
+    <div class="err-row"><span class="x">Voi prendate?</span><span class="v">Voi prendete?</span><span class="why">-ere verb → -ete.</span></div>
+    <div class="err-row"><span class="x">Noi paghamo</span><span class="v">Noi paghiamo</span><span class="why">noi = -iamo, and gh keeps the hard g.</span></div>
+    <div class="err-row"><span class="x">Gli italiani mangia tardi.</span><span class="v">Gli italiani mangiano tardi.</span><span class="why">Plural subject → loro form.</span></div>
+    <div class="err-row"><span class="x">Siete in cinque? – Sì, sono in cinque.</span><span class="v">Sì, siamo in cinque.</span><span class="why">Answer "you all" with "we".</span></div>
+  </div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>اشتباه رایج: وقتی فاعل جمعه (مثل <bdi>gli italiani</bdi>)، فعل هم باید جمع باشه. و وقتی گارسون می‌پرسه <bdi>Siete…?</bdi> (شما...؟) جواب با <bdi>Siamo…</bdi> (ما...) هست.</p></div>
+</section>
+
+<!-- SECTION: Vocabulary in Context -->
+<section class="lesson-section" id="vocab" data-title="4 · Vocabolario in contesto">
+  <h2 class="section-title"><span class="num">4</span> Vocabolario in contesto</h2>
+
+  <h4>🗣️ Ordering politely: from direct to very polite</h4>
+  <div class="spectrum">
+    <div class="spectrum-ends"><span>Direct</span><span>Very polite</span></div>
+    <div class="spectrum-bar"></div>
+    <div class="spectrum-labels"><span><strong>Un caffè.</strong><br><span class="small">(+ per favore!)</span></span><span><strong>Prendo…</strong><br><span class="small">I'll have…</span></span><span><strong>Per me…</strong><br><span class="small">For me…</span></span><span><strong>Vorrei…</strong><br><span class="small">I'd like…</span></span><span><strong>Mi porta…, per favore?</strong><br><span class="small">Could you bring me…?</span></span></div>
+  </div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>از مستقیم به خیلی مؤدبانه: <bdi>Prendo…</bdi> (می‌گیرم)، <bdi>Per me…</bdi> (برای من...)، <bdi>Vorrei…</bdi> (میل دارم)، <bdi>Mi porta…?</bdi> (برام میارید؟). تو بار و رستوران <bdi>per favore</bdi> و <bdi>grazie</bdi> رو فراموش نکن.</p></div>
+
+  <div class="vocab-group"><h4>☕ Al bar</h4>
+  <div class="vocab-list">
+    <div class="vocab-item"><div><span class="w">il caffè</span> <span class="pos">n. m. (inv.)</span> <span class="ipa">/kafˈfɛ/</span> <button class="say" data-say="il caffè">🔊</button></div><div class="en">espresso (in Italy, "caffè" = espresso)</div><div class="ex">"Per me un caffè."</div></div>
+    <div class="vocab-item"><div><span class="w">il cappuccino</span> <span class="pos">n. m.</span> <span class="ipa">/kapputˈtʃino/</span> <button class="say" data-say="il cappuccino">🔊</button></div><div class="en">cappuccino</div><div class="ex">"Io prendo un cappuccino."</div></div>
+    <div class="vocab-item"><div><span class="w">il cornetto</span> <span class="pos">n. m.</span> <span class="ipa">/korˈnetto/</span> <button class="say" data-say="il cornetto">🔊</button></div><div class="en">croissant (also "brioche" in the north)</div><div class="ex">"un cornetto alla crema"</div></div>
+    <div class="vocab-item"><div><span class="w">la spremuta (d'arancia)</span> <span class="pos">n. f.</span> <span class="ipa">/spreˈmuta/</span> <button class="say" data-say="la spremuta d'arancia">🔊</button></div><div class="en">freshly squeezed (orange) juice</div><div class="ex">"una spremuta d'arancia, per favore"</div></div>
+    <div class="vocab-item"><div><span class="w">il banco · il tavolo</span> <span class="pos">n. m.</span> <span class="ipa">/ˈbanko/ · /ˈtavolo/</span> <button class="say" data-say="il banco, il tavolo">🔊</button></div><div class="en">counter · table</div><div class="ex">"Al banco o al tavolo?"</div></div>
+    <div class="vocab-item"><div><span class="w">Quant'è?</span> <span class="pos">expr.</span> <span class="ipa">/kwanˈtɛ/</span> <button class="say" data-say="Quant'è?">🔊</button></div><div class="en">How much is it?</div><div class="ex">"Marco, quant'è?"</div></div>
+    <div class="vocab-item"><div><span class="w">offrire · Offro io!</span> <span class="pos">v.</span> <span class="ipa">/ofˈfrire/</span> <button class="say" data-say="offrire. Offro io!">🔊</button></div><div class="en">to offer · It's on me!</div><div class="ex">Thomas: "Offro io!"</div></div>
+  </div></div>
+
+  <div class="vocab-group"><h4>🍽️ In trattoria</h4>
+  <div class="vocab-list">
+    <div class="vocab-item"><div><span class="w">la prenotazione</span> <span class="pos">n. f.</span> <span class="ipa">/prenotatˈtsjone/</span> <button class="say" data-say="la prenotazione">🔊</button></div><div class="en">booking, reservation</div><div class="ex">"Abbiamo una prenotazione a nome Ferri."</div></div>
+    <div class="vocab-item"><div><span class="w">il menù</span> <span class="pos">n. m. (inv.)</span> <span class="ipa">/meˈnu/</span> <button class="say" data-say="il menù">🔊</button></div><div class="en">menu</div><div class="ex">"Questi sono i menù."</div></div>
+    <div class="vocab-item"><div><span class="w">da bere</span> <span class="pos">expr.</span> <span class="ipa">/da ˈbere/</span> <button class="say" data-say="E da bere?">🔊</button></div><div class="en">to drink</div><div class="ex">"E da bere?"</div></div>
+    <div class="vocab-item"><div><span class="w">l'acqua naturale / frizzante</span> <span class="pos">n. f.</span> <span class="ipa">/ˈakkwa natuˈrale/ · /fridˈdzante/</span> <button class="say" data-say="l'acqua naturale, l'acqua frizzante">🔊</button></div><div class="en">still / sparkling water</div><div class="ex">"Due bottiglie di acqua frizzante"</div></div>
+    <div class="vocab-item"><div><span class="w">il vino (rosso / bianco) della casa</span> <span class="pos">n. m.</span> <span class="ipa">/ˈvino/</span> <button class="say" data-say="il vino rosso della casa">🔊</button></div><div class="en">house (red / white) wine</div><div class="ex">"mezzo litro di vino rosso della casa"</div></div>
+    <div class="vocab-item"><div><span class="w">la carne · il manzo · il maiale</span> <span class="pos">n.</span> <span class="ipa">/ˈkarne/ · /ˈmandzo/ · /maˈjale/</span> <button class="say" data-say="la carne, il manzo, il maiale">🔊</button></div><div class="en">meat · beef · pork</div><div class="ex">"il ragù è con la carne di manzo e di maiale"</div></div>
+    <div class="vocab-item"><div><span class="w">vegetariano/a · vegano/a</span> <span class="pos">adj.</span> <span class="ipa">/vedʒetaˈrjano/</span> <button class="say" data-say="vegetariano, vegano">🔊</button></div><div class="en">vegetarian · vegan</div><div class="ex">"i tortelloni burro e salvia: sono vegetariani"</div></div>
+    <div class="vocab-item"><div><span class="w">il conto</span> <span class="pos">n. m.</span> <span class="ipa">/ˈkonto/</span> <button class="say" data-say="Il conto, per favore.">🔊</button></div><div class="en">the bill</div><div class="ex">"Il conto, per favore."</div></div>
+    <div class="vocab-item"><div><span class="w">il coperto</span> <span class="pos">n. m.</span> <span class="ipa">/koˈpɛrto/</span> <button class="say" data-say="il coperto">🔊</button></div><div class="en">cover charge (bread, cutlery)</div><div class="ex">"centodieci euro, con il coperto"</div></div>
+    <div class="vocab-item"><div><span class="w">pagare alla romana</span> <span class="pos">expr.</span> <span class="ipa">/paˈɡare alla roˈmana/</span> <button class="say" data-say="pagare alla romana">🔊</button></div><div class="en">to split the bill equally</div><div class="ex">"Sì, paghiamo alla romana!"</div></div>
+    <div class="vocab-item"><div><span class="w">Buon appetito!</span> <span class="pos">expr.</span> <span class="ipa">/bwɔn appeˈtito/</span> <button class="say" data-say="Buon appetito!">🔊</button></div><div class="en">Enjoy your meal!</div><div class="ex">The title of this lesson, and what Italians say as the food arrives.</div></div>
+  </div></div>
+
+  <h4>Visual: the Italian menu, in order</h4>
+  <div class="wordmap">
+    <div class="hub">Il menù all'italiana</div>
+    <div class="cluster"><b>1 · Antipasti</b>starters: i salumi (mortadella, prosciutto), i formaggi, le tigelle</div>
+    <div class="cluster"><b>2 · Primi</b>pasta, rice, soup: le tagliatelle al ragù, i tortellini in brodo, la lasagna verde, i tortelloni</div>
+    <div class="cluster"><b>3 · Secondi</b>meat or fish: la cotoletta alla bolognese, il pesce</div>
+    <div class="cluster"><b>4 · Contorni</b>sides (ordered separately!): l'insalata, le patate, le verdure</div>
+    <div class="cluster"><b>5 · Dolci</b>desserts: la torta di riso, il tiramisù, il gelato</div>
+    <div class="cluster"><b>6 · Caffè / digestivo</b>espresso after the meal, never a cappuccino</div>
+  </div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>ترتیب منوی ایتالیایی: پیش‌غذا ← «اول» (پاستا یا برنج یا سوپ) ← «دوم» (گوشت یا ماهی) ← مخلفات (جدا سفارش داده می‌شه!) ← دسر ← قهوه. لازم نیست همه رو سفارش بدی؛ خیلی‌ها فقط یه «اول» یا یه «دوم» می‌گیرن.</p></div>
+
+  <h4>💶 Prices: euro e centesimi</h4>
+  <p>€6,50 = <em>sei euro e cinquanta</em> (Italians write a comma). <em>Euro</em> never changes: <em>un euro, dieci euro</em>. Numbers above 100: <em>centodieci</em> (110), <em>centoventi</em> (120), <em>duecento</em> (200).</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>قیمت‌ها: ایتالیایی‌ها به جای نقطه کاما می‌ذارن (۶,۵۰). <bdi>euro</bdi> جمع نمی‌بنده: <bdi>dieci euro</bdi>. سنت‌ها رو هم معمولاً فقط عددشون رو می‌گن: <bdi>sei euro e cinquanta</bdi>.</p></div>
+
+  <div class="colloc">
+    <h4>🔗 Collocation box</h4>
+    <ul>
+      <li><strong>prendere</strong> un caffè / un aperitivo / il primo: to have (food or drink)</li>
+      <li><strong>fare colazione</strong>: to have breakfast · <strong>pranzare / cenare</strong>: to have lunch / dinner</li>
+      <li><strong>essere in</strong> + number: <em>Siamo in cinque</em> (there are five of us)</li>
+      <li><strong>a nome</strong> + surname: <em>una prenotazione a nome Ferri</em></li>
+      <li><strong>… a testa</strong>: per person · <strong>mezzo litro / un quarto</strong> di vino</li>
+      <li><strong>al banco / al tavolo</strong>: at the counter / at a table (different prices!)</li>
+    </ul>
+  </div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تو ایتالیایی برای خوردن و نوشیدنی سفارش دادن معمولاً از <bdi>prendere</bdi> (گرفتن) استفاده می‌کنن، نه «خوردن». <bdi>fare colazione</bdi> یعنی صبحونه خوردن (تحت‌اللفظی: صبحونه کردن).</p></div>
+</section>
+
+<!-- SECTION: Practice — Grammar -->
+<section class="lesson-section" id="practice-grammar" data-title="5 · Pratica — Grammatica">
+  <h2 class="section-title"><span class="num">5</span> Pratica · Grammatica</h2>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>بنویس و <bdi>Controlla</bdi> یا Enter رو بزن. همه‌ی تمرین‌ها درباره‌ی همون شنبه‌ی بولونیایی‌ان.</p></div>
+
+  <h3 class="sub-title">3.1 · Plurals</h3>
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">A · Controllata</span><h4>Marco's order pad</h4></div>
+    <p class="instr">The whole tandem group comes in. Write the plural.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>کل گروه تاندم وارد بار شدن! شکل جمع رو بنویس. حواست به کلمه‌هایی که عوض نمی‌شن باشه.</p></div>
+    <ol class="ex-items">
+      <li>un cappuccino → tre <input class="blank" data-a="cappuccini" aria-label="1"></li>
+      <li>una spremuta → due <input class="blank" data-a="spremute" aria-label="2"></li>
+      <li>un caffè → quattro <input class="blank" data-a="caffè" aria-label="3"></li>
+      <li>un bicchiere d'acqua → cinque <input class="blank" data-a="bicchieri" aria-label="4"> d'acqua</li>
+      <li>un tramezzino → due <input class="blank" data-a="tramezzini" aria-label="5"></li>
+      <li>un toast → tre <input class="blank" data-a="toast" aria-label="6"></li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">B · Classificazione</span><h4>How does the plural behave?</h4></div>
+    <p class="instr">Tap a word, then the box that shows its plural ending.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>روی کلمه بزن، بعد جعبه‌ای که پایان جمعش رو نشون می‌ده انتخاب کن.</p></div>
+    <div class="sorter">
+      <div class="chips">
+        <button class="chip" data-c="i">formaggio</button><button class="chip" data-c="e">bottiglia</button><button class="chip" data-c="i">dolce</button><button class="chip" data-c="inv">tè</button><button class="chip" data-c="e">tigella</button><button class="chip" data-c="i">porzione</button><button class="chip" data-c="inv">bar</button><button class="chip" data-c="i">antipasto</button><button class="chip" data-c="inv">menù</button><button class="chip" data-c="e">pizza</button>
+      </div>
+      <div class="buckets">
+        <div class="bucket" data-c="i"><h5>→ -i</h5><div class="drop"></div></div>
+        <div class="bucket" data-c="e"><h5>→ -e</h5><div class="drop"></div></div>
+        <div class="bucket" data-c="inv"><h5>🔒 no change</h5><div class="drop"></div></div>
+      </div>
+      <p class="ex-fb" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">C · Scelta</span><h4>Singular or plural agreement?</h4></div>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>اسم مفرده یا جمع؟ فعل و صفت باید باهاش جور باشن.</p></div>
+    <div class="mcq" data-a="b" data-why="tagliatelle = plural → sono buonissime."><p class="q">1. Le tagliatelle ___ buonissime!</p><div class="opts"><button data-o="a">è</button><button data-o="b">sono</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="a" data-why="il ragù = singular → è."><p class="q">2. Il ragù ___ con la carne.</p><div class="opts"><button data-o="a">è</button><button data-o="b">sono</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="c" data-why="Accented → invariable: due caffè."><p class="q">3. Marco, due ___, per favore!</p><div class="opts"><button data-o="a">caffèi</button><button data-o="b">caffès</button><button data-o="c">caffè</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="b" data-why="Plural subject (i tortellini) → non sono."><p class="q">4. I tortellini in brodo ___ vegetariani: hanno la carne.</p><div class="opts"><button data-o="a">non è</button><button data-o="b">non sono</button></div><p class="fb"></p></div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag free">D · Libera</span><h4>Order for your group</h4></div>
+    <p class="instr">You're at Marco's bar with 4 friends. Write the full order in one or two sentences, using at least 4 plurals and one word that doesn't change.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>با ۴ تا دوست تو بار مارکو هستی. کل سفارش گروه رو تو یکی دو جمله بنویس: حداقل ۴ اسم جمع و یه کلمه‌ای که جمعش عوض نمی‌شه.</p></div>
+    <textarea class="free" data-key="g1-free" placeholder="Marco, per favore: tre cappuccini, due caffè…"></textarea>
+    <p class="saved-note">💾 Saved automatically in this browser.</p>
+  </div>
+
+  <h3 class="sub-title">3.2 · Definite articles</h3>
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">A · Classificazione</span><h4>Article sorter</h4></div>
+    <p class="instr">Tap a word, then its article.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>برای هر کلمه حرف تعریف معین درست رو پیدا کن. اول جنسیت، بعد حرف اول، بعد مفرد یا جمع.</p></div>
+    <div class="sorter">
+      <div class="chips">
+        <button class="chip" data-c="il">conto</button><button class="chip" data-c="lo">spritz</button><button class="chip" data-c="l">antipasto</button><button class="chip" data-c="la">lasagna</button><button class="chip" data-c="i">tortellini</button><button class="chip" data-c="gli">spaghetti</button><button class="chip" data-c="le">tagliatelle</button><button class="chip" data-c="gli">amici</button><button class="chip" data-c="l">acqua</button><button class="chip" data-c="lo">zucchero</button><button class="chip" data-c="i">dolci</button><button class="chip" data-c="le">bottiglie</button>
+      </div>
+      <div class="buckets">
+        <div class="bucket" data-c="il"><h5>il</h5><div class="drop"></div></div>
+        <div class="bucket" data-c="lo"><h5>lo</h5><div class="drop"></div></div>
+        <div class="bucket" data-c="l"><h5>l'</h5><div class="drop"></div></div>
+        <div class="bucket" data-c="la"><h5>la</h5><div class="drop"></div></div>
+        <div class="bucket" data-c="i"><h5>i</h5><div class="drop"></div></div>
+        <div class="bucket" data-c="gli"><h5>gli</h5><div class="drop"></div></div>
+        <div class="bucket" data-c="le"><h5>le</h5><div class="drop"></div></div>
+      </div>
+      <p class="ex-fb" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">B · Controllata</span><h4>Giorgio brings the food</h4></div>
+    <p class="instr">Complete with the definite article.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>جورجو غذاها رو میاره. جای خالی رو با حرف تعریف معین پر کن.</p></div>
+    <ol class="ex-items">
+      <li>Ecco <input class="blank s" data-a="le" aria-label="1"> tagliatelle per Luca,</li>
+      <li><input class="blank s" data-a="i" aria-label="2"> tortellini per Thomas,</li>
+      <li><input class="blank s" data-a="la" aria-label="3"> lasagna per Ana,</li>
+      <li><input class="blank s" data-a="l'" aria-label="4"> acqua frizzante,</li>
+      <li><input class="blank s" data-a="il" aria-label="5"> vino rosso…</li>
+      <li>…e <input class="blank s" data-a="gli" aria-label="6"> antipasti per tutti!</li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">C · Trasformazione</span><h4>Singular → plural, article and all</h4></div>
+    <p class="instr">Write the plural with its article.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>هم حرف تعریف و هم اسم رو جمع کن. هر دو باید عوض بشن!</p></div>
+    <ol class="ex-items">
+      <li>il cornetto → <input class="blank w" data-a="i cornetti" aria-label="1"></li>
+      <li>lo studente → <input class="blank w" data-a="gli studenti" aria-label="2"></li>
+      <li>l'amica → <input class="blank w" data-a="le amiche" aria-label="3"></li>
+      <li>la bottiglia → <input class="blank w" data-a="le bottiglie" aria-label="4"></li>
+      <li>l'italiano → <input class="blank w" data-a="gli italiani" aria-label="5"></li>
+      <li>il caffè → <input class="blank w" data-a="i caffè" aria-label="6"></li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag free">D · Libera</span><h4>Your dream Italian menu</h4></div>
+    <p class="instr">Write the menu for your perfect dinner (antipasto, primo, secondo, contorno, dolce), each dish with its article. Then add one sentence comparing it with a Persian meal (<em>In Iran mangiamo…</em>).</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>منوی شام ایده‌آلت رو بنویس (پیش‌غذا، اول، دوم، مخلفات، دسر) و هر غذا رو با حرف تعریفش بیار. آخرش یه جمله مقایسه با غذای ایرانی بنویس.</p></div>
+    <textarea class="free" data-key="g2-free" placeholder="Antipasto: i salumi… / Primo: le tagliatelle… / In Iran mangiamo il riso con…"></textarea>
+    <p class="saved-note">💾 Saved automatically in this browser.</p>
+  </div>
+
+  <h3 class="sub-title">3.3 · Present plural</h3>
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">A · Controllata</span><h4>Saturday plans</h4></div>
+    <p class="instr">Conjugate the verb.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>فعل رو صرف کن. اول فاعل رو پیدا کن: ما، شما (جمع) یا آن‌ها؟</p></div>
+    <ol class="ex-items">
+      <li>Noi <input class="blank" data-a="visitiamo" aria-label="1"> (visitare) i musei.</li>
+      <li>Ragazzi, cosa <input class="blank" data-a="prendete" aria-label="2"> (prendere)?</li>
+      <li>Gli italiani <input class="blank" data-a="cenano" aria-label="3"> (cenare) tardi.</li>
+      <li>Thomas e Ana <input class="blank" data-a="prendono" aria-label="4"> (prendere) il cappuccino.</li>
+      <li>Noi <input class="blank" data-a="siamo" aria-label="5"> (essere) in cinque.</li>
+      <li>Voi <input class="blank" data-a="avete" aria-label="6"> (avere) una prenotazione?</li>
+      <li>Sara e Luca <input class="blank" data-a="offrono" aria-label="7"> (offrire) il dolce.</li>
+      <li>Noi <input class="blank" data-a="paghiamo" aria-label="8"> (pagare) alla romana.</li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">B · Scelta</span><h4>Waiter ↔ table</h4></div>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>گارسون با گروه حرف می‌زنه (<bdi>voi</bdi>) و گروه جواب می‌ده (<bdi>noi</bdi>). گزینه‌ی درست رو انتخاب کن.</p></div>
+    <div class="mcq" data-a="b" data-why="Siete…? → Siamo…"><p class="q">1. "Siete in cinque?" – "Sì, ___ in cinque."</p><div class="opts"><button data-o="a">sono</button><button data-o="b">siamo</button><button data-o="c">siete</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="a" data-why="voi + bere (bev-) → bevete."><p class="q">2. "___ vino, ragazzi?"</p><div class="opts"><button data-o="a">Bevete</button><button data-o="b">Beviamo</button><button data-o="c">Bevono</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="c" data-why="loro, -are → -ano; stress on MAN."><p class="q">3. "I bolognesi ___ le tagliatelle."</p><div class="opts"><button data-o="a">mangiate</button><button data-o="b">mangia</button><button data-o="c">mangiano</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="b" data-why="avere, voi → avete."><p class="q">4. "Scusi, ___ i tortelloni vegetariani?" (to the restaurant staff)</p><div class="opts"><button data-o="a">abbiamo</button><button data-o="b">avete</button><button data-o="c">hanno</button></div><p class="fb"></p></div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">C · Trasformazione</span><h4>From one to many</h4></div>
+    <p class="instr">Make the subject plural: io → noi, tu → voi, lui/lei → loro. Write only the new verb.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>فاعل رو جمع کن (من ← ما، تو ← شما، او ← آن‌ها) و فقط فعل جدید رو بنویس.</p></div>
+    <ol class="ex-items">
+      <li>Io prendo un caffè. → Noi <input class="blank" data-a="prendiamo" aria-label="1"> un caffè.</li>
+      <li>Tu sei di Vienna? → Voi <input class="blank" data-a="siete" aria-label="2"> di Vienna?</li>
+      <li>Ana fa colazione al bar. → Ana e Darya <input class="blank" data-a="fanno" aria-label="3"> colazione al bar.</li>
+      <li>Marco ha un bar. → Marco e sua moglie <input class="blank" data-a="hanno" aria-label="4"> un bar.</li>
+      <li>Tu mangi la carne? → Voi <input class="blank" data-a="mangiate" aria-label="5"> la carne?</li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag free">D · Libera</span><h4>Organise a dinner: WhatsApp group message</h4></div>
+    <p class="instr">Write a message to the group (Darya, Thomas, Ana, Sara, Luca) proposing a dinner next week: where you eat, what you (noi) order, ask what they (voi) prefer, and say what Italians or Iranians (loro) usually do.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>یه پیام برای گروه واتس‌اپ بنویس و یه شام برای هفته‌ی بعد پیشنهاد بده: کجا می‌ریم (<bdi>noi</bdi>)، شماها چی دوست دارید (<bdi>voi</bdi>)، و ایتالیایی‌ها یا ایرانی‌ها معمولاً چیکار می‌کنن (<bdi>loro</bdi>).</p></div>
+    <textarea class="free" data-key="g3-free" placeholder="Ciao ragazzi! Sabato prossimo mangiamo…? Voi preferite…? In Iran gli iraniani cenano…"></textarea>
+    <p class="saved-note">💾 Saved automatically in this browser.</p>
+  </div>
+</section>
+
+<!-- SECTION: Practice — Vocabulary -->
+<section class="lesson-section" id="practice-vocab" data-title="6 · Pratica — Vocabolario">
+  <h2 class="section-title"><span class="num">6</span> Pratica · Vocabolario</h2>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">A · Abbinamento</span><h4>Which course?</h4></div>
+    <p class="instr">Match each dish to its place on the menu.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>هر غذا رو به جایگاهش در منو وصل کن.</p></div>
+    <div class="match">
+      <div class="match-col left">
+        <button data-k="1" data-say="i salumi e i formaggi">i salumi e i formaggi</button>
+        <button data-k="2" data-say="i tortellini in brodo">i tortellini in brodo</button>
+        <button data-k="3" data-say="la cotoletta alla bolognese">la cotoletta alla bolognese</button>
+        <button data-k="4" data-say="l'insalata">l'insalata</button>
+        <button data-k="5" data-say="il tiramisù">il tiramisù</button>
+      </div>
+      <div class="match-col right">
+        <button data-k="1">antipasto</button>
+        <button data-k="2">primo</button>
+        <button data-k="3">secondo</button>
+        <button data-k="4">contorno</button>
+        <button data-k="5">dolce</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">B · Dettato</span><h4>Quant'è? Price dictation 💶</h4></div>
+    <p class="instr">Listen and type the price in digits (e.g. 6,50).</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>گوش بده و قیمت رو با عدد بنویس (مثلاً ۶,۵۰). می‌تونی کاما یا نقطه بذاری.</p></div>
+    <ol class="ex-items">
+      <li>Un caffè: <button class="say" data-say="un euro e venti">🔊</button> € <input class="blank s" data-a="1,20|1,2" data-norm="digits" aria-label="1"></li>
+      <li>Una spremuta: <button class="say" data-say="tre euro e cinquanta">🔊</button> € <input class="blank s" data-a="3,50|3,5" data-norm="digits" aria-label="2"></li>
+      <li>Le tagliatelle: <button class="say" data-say="quattordici euro">🔊</button> € <input class="blank s" data-a="14|14,00" data-norm="digits" aria-label="3"></li>
+      <li>Il conto: <button class="say" data-say="settantotto euro e quaranta">🔊</button> € <input class="blank s" data-a="78,40|78,4" data-norm="digits" aria-label="4"></li>
+      <li>Una cena per sei: <button class="say" data-say="centoventi euro">🔊</button> € <input class="blank s" data-a="120|120,00" data-norm="digits" aria-label="5"></li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">C · Completamento</span><h4>Finish the phrase</h4></div>
+    <p class="instr">Complete each restaurant phrase with one word.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>هر جمله‌ی رستورانی رو با یه کلمه کامل کن. همه‌شون تو داستان هستن.</p></div>
+    <ol class="ex-items">
+      <li>Il <input class="blank" data-a="conto" aria-label="1">, per favore.</li>
+      <li>E da <input class="blank" data-a="bere" aria-label="2">?</li>
+      <li>Abbiamo una prenotazione a <input class="blank" data-a="nome" aria-label="3"> Karimi.</li>
+      <li>Paghiamo alla <input class="blank" data-a="romana" aria-label="4">.</li>
+      <li>Al banco o al <input class="blank" data-a="tavolo" aria-label="5">?</li>
+      <li><input class="blank" data-a="vorrei" aria-label="6"> i tortelloni, grazie. (= I'd like)</li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">D · Flashcards</span><h4>Flip &amp; recall</h4></div>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>قبل از برگردوندن، جواب رو با حرف تعریفش بلند بگو.</p></div>
+    <div class="cards">
+      <button class="flashcard" data-say="il conto"><span class="front">the bill</span><span class="back">il conto</span></button>
+      <button class="flashcard" data-say="gli spaghetti"><span class="front">the spaghetti</span><span class="back">gli spaghetti</span></button>
+      <button class="flashcard" data-say="l'acqua frizzante"><span class="front">sparkling water</span><span class="back">l'acqua frizzante</span></button>
+      <button class="flashcard" data-say="Offro io!"><span class="front">It's on me!</span><span class="back">Offro io!</span></button>
+      <button class="flashcard" data-say="Siamo in quattro."><span class="front">There are 4 of us.</span><span class="back">Siamo in quattro.</span></button>
+      <button class="flashcard" data-say="il coperto"><span class="front">cover charge</span><span class="back">il coperto</span></button>
+      <button class="flashcard" data-say="Mi porta un tè, per favore?"><span class="front">Could you bring me a tea?</span><span class="back">Mi porta un tè, per favore?</span></button>
+      <button class="flashcard" data-say="Buon appetito!"><span class="front">Enjoy your meal!</span><span class="back">Buon appetito!</span></button>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag free">E · Produzione</span><h4>Your table, your order</h4></div>
+    <p class="instr">Write the full dialogue between you, one friend and Giorgio: arrive (number of people, booking), order a starter to share, a primo each, drinks, ask a question about an ingredient, ask for the bill and split it.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>یه گفت‌وگوی کامل بین خودت، یه دوست و جورجو بنویس: رسیدن (چند نفرید، رزرو)، سفارش پیش‌غذا، «اول»، نوشیدنی، یه سؤال درباره‌ی مواد غذا، و درخواست صورت‌حساب و تقسیمش.</p></div>
+    <textarea class="free" data-key="v-free" placeholder="Giorgio: Buonasera! Siete in…? / Io: Sì, siamo in due. Abbiamo una prenotazione a nome…"></textarea>
+    <p class="saved-note">💾 Saved automatically in this browser.</p>
+  </div>
+</section>
+
+<!-- SECTION: Speaking Tasks -->
+<section class="lesson-section" id="speaking" data-title="7 · Parlare — Speaking">
+  <h2 class="section-title"><span class="num">7</span> Parlare · Speaking tasks</h2>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>گوشیت رو برای ضبط آماده کن. هر تمرین می‌گه چقدر طول بکشه، چی ضبط کنی و به چی دقت کنی.</p></div>
+
+  <div class="task">
+    <h3>🎭 Task 1 · Roleplay: dinner in a trattoria</h3>
+    <dl class="task-meta">
+      <dt>What to do</dt><dd>Play both roles. Giorgio is formal with customers (Lei / voi); the customers are a group of two (you use <em>noi</em>).</dd>
+      <dt>How long</dt><dd>3–4 minutes</dd>
+      <dt>Record</dt><dd>The whole scene.</dd>
+      <dt>Listen for</dt><dd>Articles with every dish. Plural verbs: <em>siamo, abbiamo, prendiamo, paghiamo</em>. Polite chunks: <em>vorrei, per me, mi porta</em>.</dd>
+    </dl>
+    <div class="role-cards">
+      <div class="role"><b>A · Customer (with a friend)</b><br>You have a booking. One of you doesn't eat meat. Order a shared antipasto, two primi, water and one other drink. Refuse dessert, ask for the bill, pay <em>alla romana</em>.</div>
+      <div class="role"><b>B · Giorgio, the waiter</b><br>Greet, ask how many, find the booking. Recommend the tagliatelle and explain they have meat; suggest a vegetarian option. Ask "E da bere?" and "Dolce? Caffè?". Give a total with <em>coperto</em> and the price per person.</div>
+    </div>
+    <div class="timer" data-s="240"><span class="t-display">4:00</span><button class="btn primary t-start">▶ Start</button><button class="btn t-reset">↺</button></div>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>هر دو نقش رو بازی کن. مشتری‌ها دو نفرن (پس از <bdi>noi</bdi> استفاده کن) و یکی‌شون گوشت نمی‌خوره. گارسون مؤدبه و آخرش قیمت کل و سهم هر نفر رو می‌گه. بعد گوش بده ببین با هر غذا حرف تعریف گفتی یا نه.</p></div>
+  </div>
+
+  <div class="task">
+    <h3>⏱️ Task 2 · Timed monologue: Iran vs Italy at the table</h3>
+    <dl class="task-meta">
+      <dt>What to do</dt><dd>Compare eating habits: breakfast, lunch, dinner times, typical dishes, who pays. Use <em>In Iran noi… / Gli italiani…</em> to practise plurals and articles. Don't stop: use <em>allora…</em>, <em>e poi…</em> to keep going.</dd>
+      <dt>How long</dt><dd>90 seconds</dd>
+      <dt>Record</dt><dd>Your monologue.</dd>
+      <dt>Listen for</dt><dd>loro forms with the right stress (<em>MANgiano, CEnano</em>). Articles for general statements (<em>il riso, gli italiani</em>).</dd>
+    </dl>
+    <div class="timer" data-s="90"><span class="t-display">1:30</span><button class="btn primary t-start">▶ Start</button><button class="btn t-reset">↺</button></div>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>عادت‌های غذایی ایران و ایتالیا رو مقایسه کن: صبحونه، ناهار، ساعت شام، غذاهای معمول، و اینکه کی پول رو می‌ده (تعارف!). از <bdi>In Iran noi…</bdi> و <bdi>Gli italiani…</bdi> استفاده کن. اگه گیر کردی بگو <bdi>e poi…</bdi> (و بعد...).</p></div>
+  </div>
+
+  <div class="task">
+    <h3>🎧 Task 3 · Shadowing: breakfast at the bar</h3>
+    <dl class="task-meta">
+      <dt>What to do</dt><dd>Use <a href="#scene1">Scena 1</a>. (1) Listen and read. (2) Speak along with the audio, matching speed and melody. (3) Perform Marco's lines alone, with energy: he's a real Bolognese barista!</dd>
+      <dt>How long</dt><dd>3 rounds · about 5 minutes</dd>
+      <dt>Record</dt><dd>Round 3.</dd>
+      <dt>Listen for</dt><dd>Double consonants: <em>cappuccino, cornetto, spremuta</em> (single m!). The <em>gli</em> sound in <em>gli italiani</em>. Rising intonation in <em>Al banco o al tavolo?</em></dd>
+    </dl>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>دور سوم فقط جمله‌های مارکو رو با انرژی اجرا کن. به حروف دوتایی (<bdi>cappuccino, cornetto</bdi>) و صدای <bdi>gli</bdi> دقت کن.</p></div>
+  </div>
+
+  <div class="task">
+    <h3>⚡ Task 4 · Sentence challenge</h3>
+    <dl class="task-meta">
+      <dt>What to do</dt><dd>60 seconds per word. Say as many different sentences as you can using: <strong>vorrei · gli · siamo · il conto · prendono</strong>.</dd>
+      <dt>How long</dt><dd>5 × 60 seconds</dd>
+      <dt>Record</dt><dd>Your best two rounds.</dd>
+      <dt>Listen for</dt><dd>Did every <em>gli</em> come before a vowel, s+consonant or z? Did <em>prendono</em> have stress on the first syllable?</dd>
+    </dl>
+    <div class="timer" data-s="60"><span class="t-display">1:00</span><button class="btn primary t-start">▶ Start</button><button class="btn t-reset">↺</button></div>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>برای هر کلمه ۶۰ ثانیه وقت داری تا هر چندتا جمله‌ی متفاوت که می‌تونی بسازی. دو تا از بهترین دورها رو ضبط کن.</p></div>
+  </div>
+</section>
+
+<!-- SECTION: Tips & Strategies -->
+<section class="lesson-section" id="tips" data-title="8 · Consigli — Tips">
+  <h2 class="section-title"><span class="num">8</span> Consigli · Tips &amp; strategies</h2>
+  <div class="tips">
+    <div class="tip"><h4>1 · The coffee rules ☕</h4><p>Many Italians drink cappuccino only in the morning, never after a meal. "Un caffè" means an espresso. Drinking at the counter (<em>al banco</em>) is cheaper than at a table. In busy bars you sometimes pay first at the till (<em>la cassa</em>) and show the receipt (<em>lo scontrino</em>) at the counter.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>خیلی از ایتالیایی‌ها کاپوچینو رو فقط صبح می‌خورن، نه بعد از غذا. <bdi>un caffè</bdi> یعنی اسپرسو. ایستاده کنار پیشخون (<bdi>al banco</bdi>) ارزون‌تر از نشستن پشت میزه. تو بارهای شلوغ گاهی اول پول رو به صندوق (<bdi>cassa</bdi>) می‌دی و رسید (<bdi>scontrino</bdi>) رو به بارمن نشون می‌دی.</p></div></div>
+    <div class="tip"><h4>2 · Learn food with its article, like a name</h4><p>Make your own "menu flashcards" with the article in a colour: <span style="color:#1E5AA8;font-weight:700">blue</span> for il/i, <span style="color:#7E2244;font-weight:700">red</span> for la/le, <span style="color:#5B6E2E;font-weight:700">green</span> for lo/l'/gli. Colour-coding gender helps learners whose first language has none, like Persian.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>کارت‌های غذا با حرف تعریف رنگی درست کن: آبی برای <bdi>il/i</bdi>، قرمز برای <bdi>la/le</bdi>، سبز برای <bdi>lo/l'/gli</bdi>. رنگ‌بندی جنسیت به کسایی که زبونشون جنسیت دستوری نداره (مثل ما) خیلی کمک می‌کنه.</p></div></div>
+    <div class="tip"><h4>3 · Dietary needs: useful phrases</h4><p>"Non mangio carne di maiale" (I don't eat pork) · "Sono vegetariano/a" · "C'è il maiale?" (Is there pork?) · "Sono allergico/a a…". Italian sauces and fillings often contain pork (ragù, tortellini, mortadella), so ask. Waiters are used to it.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>جمله‌های مفید برای رژیم غذایی: <bdi>Non mangio carne di maiale</bdi> (گوشت خوک نمی‌خورم)، <bdi>C'è il maiale?</bdi> (خوک داره؟). خیلی از سس‌ها و پاستاهای پرشده (راگو، تورتلینی، مورتادلا) گوشت خوک دارن، پس حتماً بپرس. گارسون‌ها به این سؤال عادت دارن.</p></div></div>
+    <div class="tip"><h4>4 · No "tarof" at the bill</h4><p>Iranian <em>ta'arof</em> (insisting several times on paying) can confuse Italians. "Offro io!" is a real offer: accept with a simple "Grazie!" and offer next time ("La prossima volta offro io!"). Among friends and colleagues, "alla romana" is very common.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تعارف سر پول دادن ایتالیایی‌ها رو گیج می‌کنه. وقتی کسی می‌گه <bdi>Offro io!</bdi> واقعاً جدیه. یه «<bdi>Grazie!</bdi>» ساده بگو و پیشنهاد بده دفعه‌ی بعد تو حساب کنی: <bdi>La prossima volta offro io!</bdi></p></div></div>
+    <div class="tip"><h4>5 · Outside this file: cook in Italian</h4><p>Pick one recipe on <strong>GialloZafferano</strong> (Italy's biggest recipe site and YouTube channel) and cook it reading only the Italian. Ingredient lists are full of articles and plurals, and you get dinner too!</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>یه دستور غذا از سایت یا کانال یوتیوب <bdi>GialloZafferano</bdi> (بزرگ‌ترین سایت آشپزی ایتالیا) انتخاب کن و فقط با متن ایتالیایی بپزش. لیست مواد پر از حرف تعریف و اسم جمعه. هم ایتالیایی یاد می‌گیری، هم شام داری!</p></div></div>
+  </div>
+</section>
+
+<!-- SECTION: Listening & Watching -->
+<section class="lesson-section" id="listening" data-title="9 · Ascoltare &amp; guardare">
+  <h2 class="section-title"><span class="num">9</span> Ascoltare &amp; guardare</h2>
+  <div class="resource">
+    <div class="platform">YouTube / web · GialloZafferano</div>
+    <h4>A video recipe for tagliatelle al ragù (or tortellini)</h4>
+    <p><strong>Why:</strong> Real Italian kitchen language, with ingredients on screen: lots of <em>il / la / gli / le</em> and plurals.</p>
+    <p><strong>Micro-task:</strong> Search "tagliatelle al ragù GialloZafferano". Pause on the ingredient list and write 8 ingredients <em>with</em> their article. Mark which are plural.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>«<bdi>tagliatelle al ragù GialloZafferano</bdi>» رو سرچ کن. روی لیست مواد ویدیو رو نگه دار و ۸ تا ماده رو با حرف تعریفش بنویس. جمع‌ها رو علامت بزن.</p></div>
+  </div>
+  <div class="resource">
+    <div class="platform">YouTube · Easy Italian</div>
+    <h4>Episodes about coffee, bars or food</h4>
+    <p><strong>Why:</strong> Italians on the street talk about their coffee habits and favourite food, with subtitles.</p>
+    <p><strong>Micro-task:</strong> Search the channel for "caffè" or "cibo". Count how many people mention cappuccino vs espresso, and write down 3 plural nouns you hear.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تو کانال دنبال «<bdi>caffè</bdi>» یا «<bdi>cibo</bdi>» بگرد. بشمر چند نفر از کاپوچینو حرف می‌زنن و چند نفر از اسپرسو، و ۳ تا اسم جمع که می‌شنوی رو بنویس.</p></div>
+  </div>
+  <div class="resource">
+    <div class="platform">YouTube · Italiano con Elisa</div>
+    <h4>Ordering at a bar or restaurant</h4>
+    <p><strong>Why:</strong> Clear, level-appropriate explanations of ordering phrases.</p>
+    <p><strong>Micro-task:</strong> Search her channel for "al bar" or "al ristorante". Each time she gives an ordering phrase, place it on the politeness spectrum from section 4. Note one phrase that's new to you.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تو کانالش دنبال «<bdi>al bar</bdi>» یا «<bdi>al ristorante</bdi>» بگرد. هر عبارت سفارشی که می‌گه رو روی نوار ادب بخش ۴ جا بده و یه عبارت جدید یادداشت کن.</p></div>
+  </div>
+</section>
+
+<!-- SECTION: Explore More — Autonomy -->
+<section class="lesson-section" id="explore" data-title="10 · Explore More">
+  <h2 class="section-title"><span class="num">10</span> Explore More · Autonomia</h2>
+  <ol class="explore-list">
+    <li><strong>A real Bologna menu.</strong> Search "trattoria Bologna menù" and open a real restaurant menu. Copy 2 dishes from each course (antipasti, primi, secondi, dolci) with their articles and prices.
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>«<bdi>trattoria Bologna menù</bdi>» رو سرچ کن، منوی یه رستوران واقعی رو باز کن و از هر بخش ۲ تا غذا رو با حرف تعریف و قیمتش یادداشت کن.</p></div></li>
+    <li><strong>"Alla romana".</strong> Search "pagare alla romana origine". Write one sentence (in English or Italian) about where the expression may come from.
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>«<bdi>pagare alla romana origine</bdi>» رو سرچ کن و یه جمله درباره‌ی ریشه‌ی این اصطلاح بنویس.</p></div></li>
+    <li><strong>Coffee prices.</strong> Search "prezzo caffè al bar" for a recent Italian news article. Note the average price of an espresso and in which city it's most expensive.
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>«<bdi>prezzo caffè al bar</bdi>» رو سرچ کن و یه خبر جدید پیدا کن. میانگین قیمت اسپرسو و گرون‌ترین شهر رو یادداشت کن.</p></div></li>
+    <li><strong>Cook one recipe.</strong> Choose a GialloZafferano recipe. List all ingredients with articles, cook it, and say each step aloud in Italian as you go.
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>یه دستور از <bdi>GialloZafferano</bdi> انتخاب کن، مواد رو با حرف تعریف بنویس و موقع پختن هر مرحله رو بلند به ایتالیایی بگو.</p></div></li>
+    <li><strong>Persian food in Italian.</strong> Describe 3 Persian dishes for an Italian friend using this lesson's words: e.g. "Il ghormeh sabzi è con la carne di manzo, i fagioli e le erbe." Look up any missing ingredient on WordReference.
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>۳ تا غذای ایرانی رو برای یه دوست ایتالیایی توضیح بده (مثلاً قورمه‌سبزی). مواد رو با حرف تعریف بگو و هر کلمه‌ای که بلد نیستی رو تو <bdi>WordReference</bdi> پیدا کن.</p></div></li>
+    <li><strong>Your own interest.</strong> Find something in Italian that genuinely interests you this week and note one new word or phrase from it.
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>این هفته یه چیز ایتالیایی پیدا کن که واقعاً برات جالبه و یه کلمه یا عبارت جدید ازش یادداشت کن.</p></div></li>
+  </ol>
+</section>
+
+<!-- SECTION: Weekly Summary -->
+<section class="lesson-section" id="summary" data-title="11 · Riepilogo — Summary">
+  <h2 class="section-title"><span class="num">11</span> Riepilogo · Lesson summary</h2>
+  <div class="summary-grid">
+    <div class="sum-card"><h4>📐 Grammar</h4><ul><li>plurals: -o→-i, -a→-e, -e→-i, caffè/bar = no change</li><li>il/lo/l'/la → i/gli/gli/le/le</li><li>noi -iamo · voi -ate/-ete/-ite · loro -ano/-ono</li><li>siamo/siete/sono · abbiamo/avete/hanno</li></ul></div>
+    <div class="sum-card c2"><h4>📚 Vocabulary</h4><ul><li>bar: caffè, cappuccino, cornetto, spremuta</li><li>menu: antipasti, primi, secondi, contorni, dolci</li><li>conto, coperto, prenotazione</li><li>prices: euro e centesimi</li></ul></div>
+    <div class="sum-card c3"><h4>💬 Key phrases</h4><ul><li>Vorrei… / Per me… / Mi porta…?</li><li>Siamo in cinque.</li><li>Quant'è? · Il conto, per favore.</li><li>Offro io! · Paghiamo alla romana.</li></ul></div>
+    <div class="sum-card c4"><h4>🇮🇹 Culture</h4><ul><li>No "spaghetti bolognese" in Bologna</li><li>Cappuccino = morning drink</li><li>Banco cheaper than tavolo</li><li>Dinner at 8–9 p.m.; coperto on the bill</li></ul></div>
+  </div>
+
+  <h3>Self-check · Can you…?</h3>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>صادقانه جواب بده. اگه «هنوز نه» زدی، برگرد به همون بخش.</p></div>
+  <ol class="selfcheck">
+    <li>…order breakfast for yourself and two friends at a bar?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…make the plural of cornetto, bottiglia, bicchiere and caffè?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…explain when to use <em>gli</em> instead of <em>i</em>?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…conjugate <em>mangiare</em> and <em>prendere</em> for noi, voi, loro, with the right stress?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…ask whether a dish contains meat, and say what you don't eat?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…name the five courses of an Italian menu in order?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…understand a price like "settantotto euro e quaranta"?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+  </ol>
+
+  <h3>Before the next lesson ✅</h3>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>قبل از درس بعدی این کارها رو انجام بده و تیکشون رو بزن.</p></div>
+  <ul class="checklist" data-key="next">
+    <li><label><input type="checkbox"><span>Make 15 colour-coded food flashcards with articles (tip 2).</span></label></li>
+    <li><label><input type="checkbox"><span>Record the trattoria roleplay again without looking at the role cards.</span></label></li>
+    <li><label><input type="checkbox"><span>Redo the article sorter (3.2-A) until you get it all right first time.</span></label></li>
+    <li><label><input type="checkbox"><span>Cook (or at least read through) one GialloZafferano recipe in Italian.</span></label></li>
+    <li><label><input type="checkbox"><span>Next time you buy a drink anywhere, say your order in Italian in your head first.</span></label></li>
+  </ul>
+</section>
+
+<!-- SECTION: Answer Key -->
+<section class="lesson-section answer-key" id="answers" data-title="12 · Soluzioni — Answer Key">
+  <h2 class="section-title"><span class="num">12</span> Soluzioni · Answer key</h2>
+  <p class="callout"><strong>Speaking and free-writing tasks don't have fixed answers — review your own output or share with a tutor.</strong></p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تمرین‌های گفتاری و نوشتاری آزاد جواب ثابت ندارن. خودت بررسیشون کن یا به معلم نشون بده.</p></div>
+
+  <details><summary>3.1 · A, Marco's order pad</summary><ol><li>cappuccini</li><li>spremute</li><li>caffè <span class="note">(accented → no change)</span></li><li>bicchieri <span class="note">(-e → -i)</span></li><li>tramezzini</li><li>toast <span class="note">(foreign word → no change)</span></li></ol></details>
+  <details><summary>3.1 · B, Plural behaviour</summary><p><strong>-i:</strong> formaggio, dolce, porzione, antipasto · <strong>-e:</strong> bottiglia, tigella, pizza · <strong>no change:</strong> tè, bar, menù</p></details>
+  <details><summary>3.1 · C, Agreement</summary><ol><li>sono</li><li>è</li><li>caffè</li><li>non sono <span class="note">(plural subject; tortellini have meat filling)</span></li></ol></details>
+  <details><summary>3.2 · A, Article sorter</summary><p><strong>il</strong> conto · <strong>lo</strong> spritz, <strong>lo</strong> zucchero · <strong>l'</strong>antipasto, <strong>l'</strong>acqua · <strong>la</strong> lasagna · <strong>i</strong> tortellini, <strong>i</strong> dolci · <strong>gli</strong> spaghetti, <strong>gli</strong> amici · <strong>le</strong> tagliatelle, <strong>le</strong> bottiglie</p></details>
+  <details><summary>3.2 · B, Giorgio brings the food</summary><ol><li>le</li><li>i</li><li>la</li><li>l' <span class="note">(la + vowel)</span></li><li>il</li><li>gli <span class="note">(masculine plural + vowel)</span></li></ol></details>
+  <details><summary>3.2 · C, Singular → plural</summary><ol><li>i cornetti</li><li>gli studenti <span class="note">(lo → gli)</span></li><li>le amiche <span class="note">(-ca → -che keeps the hard /k/)</span></li><li>le bottiglie</li><li>gli italiani <span class="note">(l' masculine → gli)</span></li><li>i caffè</li></ol></details>
+  <details><summary>3.3 · A, Saturday plans</summary><ol><li>visitiamo</li><li>prendete</li><li>cenano <span class="note">(stress: CEnano)</span></li><li>prendono</li><li>siamo</li><li>avete</li><li>offrono</li><li>paghiamo <span class="note">(gh keeps the hard g)</span></li></ol></details>
+  <details><summary>3.3 · B, Waiter ↔ table</summary><ol><li>siamo</li><li>Bevete</li><li>mangiano</li><li>avete</li></ol></details>
+  <details><summary>3.3 · C, From one to many</summary><ol><li>prendiamo</li><li>siete</li><li>fanno</li><li>hanno <span class="note">(silent h)</span></li><li>mangiate</li></ol></details>
+  <details><summary>3.D tasks, free writing</summary><p class="note">Check: every plural noun has a plural article and verb; noi forms end in -iamo; voi questions use -ate/-ete/-ite; general statements use the article (gli italiani, il riso).</p></details>
+  <details><summary>Vocabulary · A, Which course?</summary><p>salumi e formaggi → antipasto · tortellini in brodo → primo · cotoletta → secondo · insalata → contorno · tiramisù → dolce</p></details>
+  <details><summary>Vocabulary · B, Prices</summary><ol><li>1,20</li><li>3,50</li><li>14</li><li>78,40</li><li>120 <span class="note">(centoventi, one word)</span></li></ol></details>
+  <details><summary>Vocabulary · C, Finish the phrase</summary><ol><li>conto</li><li>bere</li><li>nome</li><li>romana</li><li>tavolo</li><li>Vorrei</li></ol></details>
+  <details><summary>Vocabulary · E, Your table</summary><p class="note">Look for: Siamo in due · Abbiamo una prenotazione a nome… · articles with every dish · vorrei / per me · C'è il maiale? or Le tagliatelle sono con la carne? · Il conto, per favore · alla romana.</p></details>
+</section>
+
+</main>
+<button class="back-to-top" id="backTop" aria-label="Back to top">↑</button>
+<script>
+(function(){
+  "use strict";
+  var KEY = document.body.getAttribute('data-lesson') || 'lesson';
+  var store = {
+    get: function(k){ try { var v = localStorage.getItem(KEY+':'+k); return v ? JSON.parse(v) : null; } catch(e){ return null; } },
+    set: function(k,v){ try { localStorage.setItem(KEY+':'+k, JSON.stringify(v)); } catch(e){} }
+  };
+  var $ = function(s,c){ return (c||document).querySelector(s); };
+  var $$ = function(s,c){ return Array.prototype.slice.call((c||document).querySelectorAll(s)); };
+
+  /* ---------- Progress bar, back to top, active section ---------- */
+  var bar = $('#progressBar'), backTop = $('#backTop');
+  var sections = $$('.lesson-section');
+  var menuLinks = $$('#navMenu a');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? Math.min(100, (h.scrollTop || document.body.scrollTop) / max * 100) : 0;
+    bar.style.width = pct + '%'; bar.setAttribute('aria-valuenow', Math.round(pct));
+    backTop.classList.toggle('show', (window.scrollY || h.scrollTop) > 600);
+    var current = null;
+    sections.forEach(function(s){ if (s.getBoundingClientRect().top < 140) current = s.id; });
+    menuLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#'+current); });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  backTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  /* ---------- Hamburger menu ---------- */
+  var menuBtn = $('#menuBtn'), menu = $('#navMenu');
+  function setMenu(open){ menu.classList.toggle('open', open); menuBtn.setAttribute('aria-expanded', open); menuBtn.textContent = open ? '✕' : '☰'; }
+  menuBtn.addEventListener('click', function(e){ e.stopPropagation(); setMenu(!menu.classList.contains('open')); });
+  menu.addEventListener('click', function(e){ if (e.target.tagName === 'A') setMenu(false); });
+  document.addEventListener('click', function(e){ if (menu.classList.contains('open') && !menu.contains(e.target)) setMenu(false); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') setMenu(false); });
+
+  /* ---------- Farsi toggle ---------- */
+  var faBtn = $('#faBtn');
+  function setFa(show){ document.body.classList.toggle('fa-hidden', !show); faBtn.setAttribute('aria-pressed', show); store.set('fa', show); }
+  var faPref = store.get('fa'); setFa(faPref === null ? true : faPref);
+  faBtn.addEventListener('click', function(){ setFa(document.body.classList.contains('fa-hidden')); });
+
+  /* ---------- Text-to-speech (Italian) ---------- */
+  var tts = ('speechSynthesis' in window) && ('SpeechSynthesisUtterance' in window);
+  var itVoice = null, rate = 0.9;
+  function pickVoice(){ try { var vs = speechSynthesis.getVoices(); itVoice = vs.filter(function(v){ return /^it([-_]|$)/i.test(v.lang); })[0] || null; } catch(e){} }
+  if (tts){ pickVoice(); try { speechSynthesis.onvoiceschanged = pickVoice; } catch(e){} } else { document.body.classList.add('no-tts'); }
+  function utter(t){ var u = new SpeechSynthesisUtterance(t); u.lang = 'it-IT'; if (itVoice) u.voice = itVoice; u.rate = rate; return u; }
+  function say(t){ if (!tts) return; speechSynthesis.cancel(); speechSynthesis.speak(utter(t)); }
+  function sayAll(list){ if (!tts) return; speechSynthesis.cancel(); list.forEach(function(t){ speechSynthesis.speak(utter(t)); }); }
+
+  /* ---------- Score ---------- */
+  var solved = {}, total = 0, sid = 0;
+  function reg(el){ el.setAttribute('data-sid', 's'+(sid++)); total++; }
+  function solve(el){ var k = el.getAttribute('data-sid'); if (k && !solved[k]) { solved[k] = 1; updScore(); } }
+  function updScore(){ $('#scoreBadge').textContent = '✓ ' + Object.keys(solved).length + '/' + total; }
+  $$('.exercise .blank').forEach(reg);
+  $$('.mcq').forEach(reg);
+  $$('.match .match-col.left button').forEach(reg);
+  $$('.sorter .chip').forEach(reg);
+
+  /* ---------- Fill-in blanks ---------- */
+  function norm(s){ return (s||'').toLowerCase().replace(/[’`´]/g,"'").replace(/[.,!?;:¿¡"«»()]/g,' ').replace(/\s+/g,' ').trim(); }
+  function strip(s){ return s.normalize ? s.normalize('NFD').replace(/[̀-ͯ]/g,'') : s; }
+  function checkBlank(inp){
+    inp.classList.remove('ok','bad','near');
+    var v = norm(inp.value); if (!v) return null;
+    var ans = (inp.getAttribute('data-a')||'').split('|').map(norm);
+    var res = 'bad';
+    if (inp.getAttribute('data-norm') === 'digits'){
+      var d = v.replace(/\D/g,''); if (ans.some(function(a){ return a.replace(/\D/g,'') === d; })) res = 'ok';
+    } else if (ans.indexOf(v) > -1) res = 'ok';
+    else if (ans.map(strip).indexOf(strip(v)) > -1) res = 'near';
+    inp.classList.add(res);
+    if (res === 'ok' && !inp.classList.contains('revealed')) solve(inp);
+    return res;
+  }
+  function checkExercise(ex){
+    var bl = $$('.blank', ex), ok = 0, near = 0, filled = 0;
+    bl.forEach(function(b){ var r = checkBlank(b); if (r) filled++; if (r === 'ok') ok++; if (r === 'near') near++; });
+    var fb = $('.ex-fb', ex); if (!fb) return;
+    fb.className = 'ex-fb ' + (ok === bl.length ? 'good' : 'meh');
+    fb.textContent = ok === bl.length ? 'Perfetto! ' + ok + '/' + bl.length + ' ✓' :
+      ok + '/' + bl.length + ' corrette' + (near ? ' · ' + near + ' quasi (controlla gli accenti ` ´)' : '') + (filled < bl.length ? ' · ' + (bl.length - filled) + ' vuote' : '');
+  }
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' && e.target.classList && e.target.classList.contains('blank')) { e.preventDefault(); checkBlank(e.target); }
+  });
+
+  /* ---------- Matching (shuffle right column) ---------- */
+  $$('.match').forEach(function(m){
+    var col = $('.match-col.right', m); if (!col) return;
+    var items = $$('button', col);
+    for (var i = items.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); col.appendChild(items[j]); items.splice(j,1); }
+  });
+
+  /* ---------- Delegated clicks ---------- */
+  document.addEventListener('click', function(e){
+    var t = e.target.closest ? e.target.closest('button, .bucket') : null;
+    if (!t) return;
+
+    if (t.classList.contains('say')) { say(t.getAttribute('data-say') || t.textContent); return; }
+    if (t.classList.contains('tile') && t.hasAttribute('data-say')) { say(t.getAttribute('data-say')); return; }
+    if (t.classList.contains('say-scene')) {
+      var sc = document.getElementById(t.getAttribute('data-target'));
+      if (sc) sayAll($$('.line-it', sc).map(function(x){ return x.textContent; }));
+      return;
+    }
+    if (t.classList.contains('stop-audio')) { if (tts) speechSynthesis.cancel(); return; }
+    if (t.classList.contains('rate-toggle')) {
+      rate = rate > 0.8 ? 0.65 : 0.9;
+      $$('.rate-toggle').forEach(function(b){ b.textContent = rate < 0.8 ? '🐢 Lento (ON)' : '🐢 Lento (OFF)'; });
+      return;
+    }
+    if (t.classList.contains('hl-toggle')) {
+      var st = document.getElementById(t.getAttribute('data-target'));
+      if (st) { st.classList.toggle('hl-off'); t.textContent = st.classList.contains('hl-off') ? '🖍️ Evidenzia: OFF' : '🖍️ Evidenzia: ON'; }
+      return;
+    }
+    if (t.classList.contains('btn-check')) { checkExercise(t.closest('.exercise')); return; }
+    if (t.classList.contains('btn-reveal')) {
+      var ex = t.closest('.exercise');
+      $$('.blank', ex).forEach(function(b){ if (!b.classList.contains('ok')) { b.value = (b.getAttribute('data-show') || b.getAttribute('data-a').split('|')[0]); b.classList.add('revealed'); checkBlank(b); } });
+      var fb = $('.ex-fb', ex); if (fb) { fb.className = 'ex-fb meh'; fb.textContent = 'Soluzioni mostrate — rifallo domani senza guardare!'; }
+      return;
+    }
+    if (t.classList.contains('btn-reset')) {
+      var ex2 = t.closest('.exercise');
+      $$('.blank', ex2).forEach(function(b){ b.value=''; b.classList.remove('ok','bad','near','revealed'); });
+      var fb2 = $('.ex-fb', ex2); if (fb2) fb2.textContent = '';
+      return;
+    }
+    /* MCQ */
+    if (t.parentNode && t.parentNode.classList && t.parentNode.classList.contains('opts')) {
+      var q = t.closest('.mcq'); if (!q || q.classList.contains('answered')) return;
+      if (t.getAttribute('data-o') === q.getAttribute('data-a')) {
+        t.classList.add('correct'); q.classList.add('answered'); solve(q);
+        var f = $('.fb', q); if (f) f.textContent = '✓ ' + (q.getAttribute('data-why') || 'Esatto!');
+      } else { t.classList.remove('wrong'); void t.offsetWidth; t.classList.add('wrong'); }
+      return;
+    }
+    /* Match */
+    var mm = t.closest('.match');
+    if (mm && t.tagName === 'BUTTON' && !t.classList.contains('done')) {
+      var side = t.closest('.match-col').classList.contains('left') ? 'left' : 'right';
+      $$('.match-col.' + side + ' button', mm).forEach(function(b){ b.classList.remove('sel'); });
+      t.classList.add('sel');
+      var L = $('.match-col.left button.sel', mm), R = $('.match-col.right button.sel', mm);
+      if (L && R) {
+        if (L.getAttribute('data-k') === R.getAttribute('data-k')) {
+          [L,R].forEach(function(b){ b.classList.remove('sel'); b.classList.add('done'); });
+          solve(L);
+          if (L.hasAttribute('data-say')) say(L.getAttribute('data-say'));
+        } else {
+          [L,R].forEach(function(b){ b.classList.remove('sel','no'); void b.offsetWidth; b.classList.add('no'); });
+        }
+      }
+      return;
+    }
+    /* Sorter */
+    if (t.classList.contains('chip') && !t.classList.contains('placed')) {
+      var srt = t.closest('.sorter'); $$('.chip', srt).forEach(function(c){ c.classList.remove('sel'); }); t.classList.add('sel'); return;
+    }
+    if (t.classList.contains('bucket')) {
+      var s2 = t.closest('.sorter'), chip = $('.chip.sel', s2); if (!chip) return;
+      if (chip.getAttribute('data-c') === t.getAttribute('data-c')) {
+        chip.classList.remove('sel'); chip.classList.add('placed'); $('.drop', t).appendChild(chip); solve(chip);
+        var left = $$('.chips .chip', s2).length, fbs = $('.ex-fb', s2.closest('.exercise') || s2);
+        if (fbs && left === 0) { fbs.className = 'ex-fb good'; fbs.textContent = 'Tutto a posto! ✓'; }
+      } else { t.classList.remove('no'); void t.offsetWidth; t.classList.add('no'); }
+      return;
+    }
+    /* Flashcards */
+    if (t.classList.contains('flashcard')) { t.classList.toggle('flipped'); if (!t.classList.contains('flipped') && t.hasAttribute('data-say')) {} else if (t.hasAttribute('data-say')) say(t.getAttribute('data-say')); return; }
+    /* Self-check */
+    if (t.classList.contains('sc-btn')) {
+      var li = t.closest('li'), idx = $$('.selfcheck li').indexOf(li);
+      $$('.sc-btn', li).forEach(function(b){ b.classList.remove('on'); }); t.classList.add('on');
+      var sc2 = store.get('selfcheck') || {}; sc2[idx] = t.getAttribute('data-v'); store.set('selfcheck', sc2);
+      return;
+    }
+  });
+
+  /* ---------- Timers ---------- */
+  $$('.timer').forEach(function(tm){
+    var secs = parseInt(tm.getAttribute('data-s'), 10) || 60, left = secs, iv = null;
+    var disp = $('.t-display', tm), start = $('.t-start', tm), reset = $('.t-reset', tm);
+    function fmt(n){ return Math.floor(n/60) + ':' + ('0' + (n%60)).slice(-2); }
+    function draw(){ disp.textContent = fmt(left); }
+    draw();
+    start.addEventListener('click', function(){
+      if (iv) { clearInterval(iv); iv = null; tm.classList.remove('running'); start.textContent = '▶ Riprendi'; return; }
+      if (left <= 0) left = secs;
+      tm.classList.remove('done'); tm.classList.add('running'); start.textContent = '⏸ Pausa';
+      iv = setInterval(function(){ left--; draw(); if (left <= 0) { clearInterval(iv); iv = null; tm.classList.remove('running'); tm.classList.add('done'); disp.textContent = 'Stop!'; start.textContent = '▶ Ancora'; try { navigator.vibrate && navigator.vibrate(300); } catch(e){} } }, 1000);
+    });
+    reset.addEventListener('click', function(){ clearInterval(iv); iv = null; left = secs; tm.classList.remove('running','done'); start.textContent = '▶ Start'; draw(); });
+  });
+
+  /* ---------- Persisted textareas, checklists, self-check ---------- */
+  $$('textarea.free').forEach(function(ta){
+    var k = 'ta:' + ta.getAttribute('data-key'); var v = store.get(k); if (v) ta.value = v;
+    ta.addEventListener('input', function(){ store.set(k, ta.value); });
+  });
+  $$('.checklist').forEach(function(cl){
+    var k = 'cl:' + cl.getAttribute('data-key'), saved = store.get(k) || {};
+    $$('input[type=checkbox]', cl).forEach(function(cb, i){ cb.checked = !!saved[i]; cb.addEventListener('change', function(){ saved[i] = cb.checked; store.set(k, saved); }); });
+  });
+  var scSaved = store.get('selfcheck') || {};
+  $$('.selfcheck li').forEach(function(li, i){ if (scSaved[i]) { var b = $('.sc-btn[data-v="' + scSaved[i] + '"]', li); if (b) b.classList.add('on'); } });
+
+  /* ---------- Scrollable tables hint ---------- */
+  function markTables(){ $$('.table-wrap').forEach(function(w){ w.classList.toggle('is-scrollable', w.scrollWidth > w.clientWidth + 2); }); }
+  $$('.table-wrap').forEach(function(w){ if (!$('.scroll-hint', w)) { var h = document.createElement('div'); h.className = 'scroll-hint'; h.textContent = '↔ scorri / scroll'; w.insertBefore(h, w.firstChild); } });
+  window.addEventListener('resize', markTables); markTables();
+
+  updScore(); onScroll();
+})();
+</script>
+</body>
+</html>

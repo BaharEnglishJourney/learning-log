@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lezione 2 · Io e gli altri — Nuovo Espresso 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ===== Palette (varies per lesson) ===== */
+:root{
+  --primary:#1F6560; --primary-dark:#123F3C; --accent:#C4572E; --bg:#F3F8F6; --surface:#FFFFFF;
+  --ink:#1D2A29; --muted:#55666A; --line:#D6E4E0; --tint:#E2F0EC;
+  --hl1:#FFE6A6; --hl2:#C4572E; --hl3:#D9ECFA;
+  --ok:#1E7A3A; --ok-bg:#E5F4EA; --bad:#B3261E; --bad-bg:#FCE9E7; --near:#8A5300; --near-bg:#FFF1D9;
+  --nav-h:56px;
+}
+/* ===== Base ===== */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:120px}
+body{margin:0;font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif;font-size:16px;line-height:1.78;color:var(--ink);background:var(--bg);overflow-x:hidden;padding-top:var(--nav-h);padding-bottom:140px;-webkit-text-size-adjust:100%}
+p,li,td,th,h1,h2,h3,h4,h5,div,span,label,button,a,summary,dd,dt{overflow-wrap:break-word;word-break:break-word}
+img,table,video,iframe,svg{max-width:100%}
+h1,h2,h3,h4{font-family:'Playfair Display',Georgia,serif;line-height:1.25;color:var(--primary-dark);margin:1.2em 0 .5em}
+h3{font-size:1.35rem} h4{font-size:1.1rem}
+a{color:var(--primary-dark)}
+code,.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92em}
+.ipa{font-family:'Inter',sans-serif;color:var(--muted);font-size:.92em;white-space:nowrap}
+.page{max-width:900px;margin:0 auto;padding:0 18px}
+.muted{color:var(--muted)}
+.small{font-size:.9rem}
+
+/* ===== Progress bar + Nav ===== */
+.progress-bar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--accent);z-index:1003;transition:width .08s linear}
+.top-nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:var(--primary-dark);color:#fff;z-index:1002;display:flex;align-items:center;gap:8px;padding:4px 10px 0;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.nav-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:9px;height:38px;min-width:40px;padding:0 10px;font:600 15px 'Inter',sans-serif;cursor:pointer;flex-shrink:0}
+.nav-btn:hover,.nav-btn:focus-visible{background:rgba(255,255,255,.2)}
+.nav-btn.fa-btn{font-family:'Vazirmatn',sans-serif}
+.nav-btn[aria-pressed="false"]{opacity:.65;text-decoration:line-through}
+.nav-title{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;font-size:15px;word-break:normal}
+.score-badge{flex-shrink:0;font-size:13px;font-weight:700;background:#fff;color:var(--primary-dark);border-radius:999px;padding:3px 10px;white-space:nowrap}
+.nav-menu{position:fixed;top:var(--nav-h);left:0;right:0;max-height:calc(100vh - var(--nav-h));overflow-y:auto;background:var(--surface);z-index:1001;box-shadow:0 10px 30px rgba(0,0,0,.2);display:none}
+.nav-menu.open{display:block}
+.nav-menu-inner{max-width:900px;margin:0 auto;padding:6px 0 12px}
+.nav-menu a{display:block;padding:10px 20px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);font-size:15px}
+.nav-menu a:hover{background:var(--tint)}
+.nav-menu a.active{background:var(--tint);color:var(--primary-dark);font-weight:700;border-left:4px solid var(--primary)}
+
+/* ===== Header ===== */
+.lesson-header{background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff;margin:0 -18px;padding:34px 24px 26px;border-radius:0 0 26px 26px;position:relative;overflow:hidden}
+.lesson-header::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.08)}
+.lesson-header h1{color:#fff;font-size:clamp(1.9rem,6vw,2.9rem);margin:.15em 0 .1em}
+.lesson-header .en-title{font-size:1.1rem;opacity:.95;margin:0}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.pill{display:inline-block;border-radius:999px;padding:2px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4)}
+.cast{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.cast span{background:rgba(0,0,0,.18);border-radius:10px;padding:4px 10px;font-size:13.5px}
+.howto{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:18px 0}
+.howto ol{margin:.3em 0 0 1.1em;padding:0}
+
+/* ===== TOC ===== */
+.toc{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 20px;margin:20px 0 10px}
+.toc h2{margin:0 0 8px;font-size:1.3rem}
+.toc ol{columns:2;column-gap:28px;margin:0;padding:0;list-style:none;counter-reset:toc}
+.toc li{break-inside:avoid;padding:5px 0;counter-increment:toc}
+.toc li a{text-decoration:none;color:var(--ink);display:flex;gap:10px;align-items:baseline}
+.toc li a::before{content:counter(toc);flex-shrink:0;display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--tint);color:var(--primary-dark);font-weight:700;font-size:13px}
+.toc li a:hover{color:var(--primary-dark);text-decoration:underline}
+.toc ul{list-style:none;padding:0 0 0 36px;margin:2px 0}
+.toc ul li{counter-increment:none;padding:1px 0;font-size:14px}
+.toc ul li a::before{content:"–";background:none;width:auto;height:auto}
+
+/* ===== Sections + sticky headers ===== */
+.lesson-section{padding:4px 0 30px;border-bottom:1px solid var(--line)}
+.section-title{position:sticky;top:var(--nav-h);z-index:40;background:var(--bg);margin:0 -18px 14px;padding:12px 18px 10px;font-size:clamp(1.3rem,4.4vw,1.75rem);border-bottom:2px solid var(--primary);display:flex;gap:10px;align-items:baseline}
+.section-title .num{font-family:'Inter',sans-serif;font-size:.8em;font-weight:700;color:#fff;background:var(--primary);border-radius:8px;padding:0 8px;flex-shrink:0}
+.sub-title{border-left:5px solid var(--accent);padding-left:12px}
+
+/* ===== Highlights ===== */
+.g1{background:var(--hl1);border-radius:3px;padding:0 2px}
+.g2{border-bottom:3px solid var(--hl2);padding-bottom:1px}
+.g3{background:var(--hl3);border-radius:3px;padding:0 2px}
+.vv{font-weight:700;color:var(--primary-dark)}
+.story.hl-off .g1,.story.hl-off .g3{background:none;padding:0}
+.story.hl-off .g2{border-bottom:0}
+.story.hl-off .vv{font-weight:inherit;color:inherit}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:14px;margin:8px 0}
+.legend span{white-space:nowrap}
+
+/* ===== Story ===== */
+.warmup{background:var(--tint);border-radius:14px;padding:14px 18px;margin:12px 0}
+.story-tools{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.scene{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 16px 10px;margin:16px 0}
+.scene-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.scene-head h3{margin:0;font-size:1.2rem}
+.scene-setting{font-style:italic;color:var(--muted);margin:0 0 10px;font-size:15px}
+.line{display:flex;gap:10px;margin:10px 0;align-items:flex-start}
+.line.right{flex-direction:row-reverse}
+.avatar{flex-shrink:0;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff}
+.bubble{background:var(--bg);border:1px solid var(--line);border-radius:4px 16px 16px 16px;padding:8px 12px;max-width:min(560px,calc(100% - 48px))}
+.line.right .bubble{border-radius:16px 4px 16px 16px;background:var(--tint)}
+.who{display:block;font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.02em}
+.line-it{display:inline}
+.say{background:none;border:0;cursor:pointer;font-size:15px;padding:0 3px;vertical-align:baseline;opacity:.75}
+.say:hover{opacity:1}
+.no-tts .say,.no-tts .say-scene{display:none}
+.post{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin:16px 0;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.post-head{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.post-head b{display:block;line-height:1.2}
+.post .tags{color:var(--primary-dark);font-weight:600}
+.gloss{font-size:14px;color:var(--muted);margin-top:4px}
+
+/* ===== Buttons ===== */
+.btn{font:600 14.5px 'Inter',sans-serif;border-radius:10px;border:1.5px solid var(--primary);background:var(--surface);color:var(--primary-dark);padding:7px 14px;cursor:pointer;line-height:1.3}
+.btn:hover{background:var(--tint)}
+.btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn.primary:hover{background:var(--primary-dark)}
+.btn-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+
+/* ===== Cards / boxes ===== */
+.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:16px 0}
+.box h4{margin-top:.2em}
+.callout{border-left:5px solid var(--primary);background:var(--tint);border-radius:0 12px 12px 0;padding:12px 16px;margin:16px 0}
+.context-ref{background:var(--surface);border:1px dashed var(--primary);border-radius:12px;padding:10px 14px;margin:10px 0 14px;font-size:15.5px}
+.context-ref::before{content:"📖 Dal racconto";display:block;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.errors{background:var(--bad-bg);border-radius:12px;padding:12px 16px;margin:16px 0}
+.errors h4{color:var(--bad);margin:.1em 0 .4em;font-family:'Inter',sans-serif;font-size:1rem}
+.err-row{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.06)}
+.err-row:last-child{border-bottom:0}
+.err-row .x{color:var(--bad);text-decoration:line-through}
+.err-row .v{color:var(--ok);font-weight:600}
+.err-row .why{grid-column:1/-1;font-size:14px;color:var(--muted)}
+
+/* ===== Tables ===== */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:12px;border:1px solid var(--line);background:var(--surface);max-width:100%}
+.table-wrap .scroll-hint{display:none;position:sticky;left:0;font-size:12px;font-weight:700;color:var(--primary-dark);background:var(--tint);padding:3px 10px}
+.table-wrap.is-scrollable .scroll-hint{display:block}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{word-break:normal;overflow-wrap:break-word;padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--tint);color:var(--primary-dark);font-weight:700;font-size:14px}
+tr:last-child td{border-bottom:0}
+table.wide{min-width:560px}
+
+/* ===== Visual aids ===== */
+.spectrum{margin:18px 0}
+.spectrum-bar{height:12px;border-radius:999px;background:linear-gradient(90deg,var(--hl3),var(--hl1),var(--accent))}
+.spectrum-labels{display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;margin-top:6px}
+.spectrum-labels span{font-size:14px;text-align:center;flex:1;min-width:70px}
+.spectrum-ends{display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.blocks{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0;font-size:17px}
+.blk{border-radius:8px;padding:4px 10px;font-weight:600;border:1.5px solid var(--line);background:var(--surface)}
+.blk.a{background:var(--hl1)} .blk.b{background:var(--hl3)} .blk.c{background:var(--tint)}
+.two-doors{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.door{border-radius:14px;padding:12px 14px;border:2px solid var(--line);background:var(--surface)}
+.door h4{margin:0 0 6px;font-family:'Inter',sans-serif;font-size:15px}
+.timeline{display:flex;margin:16px 0;border-radius:12px;overflow:hidden;font-size:13.5px;text-align:center}
+.timeline div{padding:10px 6px;color:#1b1b1b}
+.wordmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:10px;margin:14px 0}
+.wordmap .hub{grid-column:1/-1;text-align:center;font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;background:var(--primary);color:#fff;border-radius:14px;padding:10px}
+.wordmap .cluster{border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--surface)}
+.wordmap .cluster b{display:block;color:var(--primary-dark);margin-bottom:4px}
+.colloc{border:2px solid var(--accent);border-radius:14px;padding:12px 16px;margin:16px 0;background:var(--surface)}
+.colloc h4{margin:.1em 0 .4em}
+.colloc ul{margin:0;padding-left:1.1em}
+.num-grid,.abc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;margin:12px 0}
+.tile{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:8px 6px;text-align:center;cursor:pointer;font:inherit;color:var(--ink)}
+.tile:hover{border-color:var(--primary);background:var(--tint)}
+.tile b{display:block;font-size:1.25rem;color:var(--primary-dark);line-height:1.2}
+.tile span{font-size:13.5px}
+.tile.foreign{border-style:dashed}
+
+/* ===== Vocabulary entries ===== */
+.vocab-group h4{margin-bottom:.2em}
+.vocab-list{display:grid;gap:8px;margin:8px 0 16px}
+.vocab-item{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:2px 14px}
+.vocab-item .w{font-weight:700;color:var(--primary-dark);font-size:1.05rem}
+.vocab-item .pos{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-left:4px}
+.vocab-item .en{text-align:right}
+.vocab-item .ex{grid-column:1/-1;font-size:14.5px;color:var(--muted);font-style:italic}
+
+/* ===== Flashcards ===== */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:12px 0}
+.flashcard{min-height:92px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;padding:10px;font:inherit;color:var(--ink);display:grid;place-items:center;text-align:center}
+.flashcard .back{display:none;color:var(--primary-dark);font-weight:600}
+.flashcard .front{font-weight:700;font-size:1.05rem}
+.flashcard.flipped{background:var(--tint);border-color:var(--primary)}
+.flashcard.flipped .front{display:none}.flashcard.flipped .back{display:block}
+
+/* ===== Exercises ===== */
+.exercise{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 18px;margin:20px 0;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.ex-head{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:4px}
+.ex-head h4{margin:0;font-size:1.08rem}
+.tag{font:700 11.5px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:.05em;border-radius:999px;padding:2px 9px;background:var(--tint);color:var(--primary-dark)}
+.tag.free{background:var(--hl3);color:#1f3b1f}
+.instr{margin:4px 0 8px}
+.ex-items{padding-left:1.4em;margin:8px 0}
+.ex-items li{margin:9px 0}
+.blank{font:inherit;font-size:16px;color:var(--ink);border:0;border-bottom:2px solid var(--primary);background:var(--tint);padding:1px 6px;width:8.5em;max-width:100%;border-radius:5px 5px 0 0}
+.blank.s{width:5em}.blank.w{width:15em}.blank.full{width:100%;display:block;margin-top:4px}
+.blank:focus{outline:2px solid var(--accent);outline-offset:1px}
+.blank.ok{border-color:var(--ok);background:var(--ok-bg)}
+.blank.bad{border-color:var(--bad);background:var(--bad-bg)}
+.blank.near{border-color:var(--near);background:var(--near-bg)}
+.blank.revealed{border-style:dashed}
+.ex-fb{font-weight:600;min-height:1.2em;margin:6px 0 0}
+.ex-fb.good{color:var(--ok)}.ex-fb.meh{color:var(--near)}
+.mcq{border-top:1px dashed var(--line);padding:10px 0}
+.mcq:first-of-type{border-top:0}
+.mcq .q{margin:0 0 6px;font-weight:500}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts button{font:inherit;font-size:15px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:6px 12px;cursor:pointer;text-align:left}
+.opts button:hover{border-color:var(--primary)}
+.opts button.correct{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);font-weight:700}
+.opts button.wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad);animation:shake .3s}
+.mcq .fb{font-size:14.5px;margin:6px 0 0;color:var(--ok)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;margin:10px 0}
+.match-col{display:flex;flex-direction:column;gap:8px}
+.match button{font:inherit;font-size:15px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:8px 10px;cursor:pointer;text-align:left;min-height:44px}
+.match button.sel{border-color:var(--accent);background:var(--near-bg);font-weight:600}
+.match button.done{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);cursor:default}
+.match button.no{animation:shake .3s;border-color:var(--bad)}
+.sorter .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;min-height:20px}
+.chip{font:inherit;font-size:15px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:5px 13px;cursor:pointer}
+.chip.sel{border-color:var(--accent);background:var(--near-bg);font-weight:600}
+.chip.placed{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);cursor:default}
+.buckets{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:10px}
+.bucket{border:2px dashed var(--line);border-radius:14px;padding:10px;min-height:90px;cursor:pointer;background:var(--bg)}
+.bucket h5{margin:0 0 6px;font:700 14px 'Inter',sans-serif;color:var(--primary-dark)}
+.bucket .drop{display:flex;flex-wrap:wrap;gap:6px}
+.bucket.no{border-color:var(--bad);animation:shake .3s}
+textarea.free{width:100%;min-height:120px;font:inherit;font-size:16px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg);color:var(--ink);resize:vertical}
+.saved-note{font-size:12.5px;color:var(--muted)}
+.hint{margin-top:8px}
+.hint summary{cursor:pointer;font-weight:600;color:var(--primary-dark);font-size:14.5px}
+details.reveal{background:var(--tint);border-radius:10px;padding:6px 12px;margin:8px 0}
+details.reveal summary{cursor:pointer;font-weight:600;color:var(--primary-dark)}
+
+/* ===== Noticing ===== */
+.notice-list{counter-reset:nq;list-style:none;padding:0}
+.notice-list>li{counter-increment:nq;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px 12px 54px;margin:12px 0;position:relative}
+.notice-list>li::before{content:counter(nq);position:absolute;left:14px;top:12px;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700}
+
+/* ===== Speaking ===== */
+.task{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 18px;margin:18px 0;border-top:5px solid var(--primary)}
+.task h3{margin:.1em 0 .3em;font-size:1.2rem}
+.task-meta{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:10px 0}
+.task-meta dt{font-weight:700;color:var(--primary-dark);font-size:14.5px}
+.task-meta dd{margin:0}
+.role-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:10px;margin:10px 0}
+.role{border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg)}
+.role b{color:var(--primary-dark)}
+.timer{display:inline-flex;align-items:center;gap:8px;background:var(--tint);border-radius:12px;padding:6px 10px;margin:6px 0;flex-wrap:wrap}
+.t-display{font:700 1.4rem 'Inter',monospace;min-width:3.2em;text-align:center;color:var(--primary-dark)}
+.timer.done .t-display{color:var(--bad)}
+.timer.running .t-display{color:var(--ok)}
+
+/* ===== Tips / Resources / Explore ===== */
+.tips{display:grid;gap:12px}
+.tip{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px;border-left:5px solid var(--accent)}
+.tip h4{margin:.1em 0 .3em;font-family:'Inter',sans-serif;font-size:1.02rem}
+.resource{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin:12px 0}
+.resource .platform{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.resource h4{margin:.1em 0 .3em}
+.explore-list{list-style:none;padding:0;counter-reset:ex}
+.explore-list>li{counter-increment:ex;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px 12px 56px;margin:10px 0;position:relative}
+.explore-list>li::before{content:"🧭";position:absolute;left:16px;top:12px;font-size:22px}
+
+/* ===== Summary ===== */
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:12px;margin:14px 0}
+.sum-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 16px;border-top:6px solid var(--primary)}
+.sum-card.c2{border-top-color:var(--accent)}.sum-card.c3{border-top-color:var(--hl2)}.sum-card.c4{border-top-color:var(--primary-dark)}
+.sum-card h4{margin:.1em 0 .4em;font-family:'Inter',sans-serif;font-size:1rem;text-transform:uppercase;letter-spacing:.04em}
+.sum-card ul{margin:0;padding-left:1.1em}
+.selfcheck{list-style:none;padding:0}
+.selfcheck li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:8px 0}
+.sc-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.sc-btn{font:inherit;font-size:13.5px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:3px 11px;cursor:pointer}
+.sc-btn.on[data-v="yes"]{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);font-weight:700}
+.sc-btn.on[data-v="almost"]{background:var(--near-bg);border-color:var(--near);color:var(--near);font-weight:700}
+.sc-btn.on[data-v="no"]{background:var(--bad-bg);border-color:var(--bad);color:var(--bad);font-weight:700}
+.checklist{list-style:none;padding:0}
+.checklist li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:8px 0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.checklist input{width:20px;height:20px;margin-top:4px;accent-color:var(--primary);flex-shrink:0}
+.checklist input:checked+span{text-decoration:line-through;color:var(--muted)}
+
+/* ===== Answer key ===== */
+.answer-key details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 14px;margin:10px 0}
+.answer-key summary{cursor:pointer;font-weight:700;color:var(--primary-dark)}
+.answer-key ol{padding-left:1.3em}
+.answer-key .note{color:var(--muted);font-size:14.5px}
+
+/* ===== Farsi notes (same style in every lesson) ===== */
+.farsi-note{direction:rtl;text-align:right;font-family:'Vazirmatn',Tahoma,sans-serif;font-size:15.5px;line-height:1.95;background:#EDF6F1;color:#1C2B25;border-right:4px solid #2F7D63;border-radius:10px;padding:9px 14px;margin:10px 0 14px}
+.farsi-note .fa-label{display:inline-block;font-size:11.5px;font-weight:700;background:#2F7D63;color:#fff;border-radius:999px;padding:0 9px;margin-left:8px;line-height:1.9;vertical-align:1px}
+.farsi-note p{margin:0;display:inline}
+.farsi-note bdi{font-family:'Inter',sans-serif;font-weight:600;color:#14532D}
+li .farsi-note,td .farsi-note{margin:6px 0 4px}
+body.fa-hidden .farsi-note{display:none}
+
+/* ===== Back to top ===== */
+.back-to-top{position:fixed;right:16px;bottom:18px;width:46px;height:46px;border-radius:50%;border:0;background:var(--primary-dark);color:#fff;font-size:20px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .2s;z-index:900}
+.back-to-top.show{opacity:1;pointer-events:auto}
+
+/* ===== Responsive ===== */
+@media (max-width:620px){
+  body{font-size:16px}
+  .toc ol{columns:1}
+  .two-doors{grid-template-columns:1fr}
+  .vocab-item{grid-template-columns:1fr}
+  .vocab-item .en{text-align:left}
+  .err-row{grid-template-columns:1fr}
+  .task-meta{grid-template-columns:1fr}
+  .task-meta dd{margin-bottom:6px}
+  .match{gap:8px}
+  .nav-title{font-size:13.5px}
+  .timeline{font-size:12px}
+}
+@media print{.top-nav,.progress-bar,.nav-menu,.back-to-top{display:none}body{padding-top:0}.section-title{position:static}}
+</style>
+</head>
+<body data-lesson="nuovo-espresso-lesson-02-io-e-gli-altri">
+<div class="progress-bar" id="progressBar" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+<nav class="top-nav" aria-label="Lesson navigation">
+  <button class="nav-btn" id="menuBtn" aria-expanded="false" aria-controls="navMenu" aria-label="Open section menu">☰</button>
+  <div class="nav-title">Lezione 2 · Io e gli altri</div>
+  <span class="score-badge" id="scoreBadge" title="Exercises solved">✓ 0/0</span>
+  <button class="nav-btn fa-btn" id="faBtn" aria-pressed="true" title="Show / hide Farsi notes">فا</button>
+</nav>
+<div class="nav-menu" id="navMenu"><div class="nav-menu-inner">
+<a href="#story">1 · La storia — The Story</a>
+<a href="#noticing">2 · Noticing — Nota bene</a>
+<a href="#grammar">3 · Grammatica in contesto</a>
+<a href="#vocab">4 · Vocabolario in contesto</a>
+<a href="#practice-grammar">5 · Pratica — Grammatica</a>
+<a href="#practice-vocab">6 · Pratica — Vocabolario</a>
+<a href="#speaking">7 · Parlare — Speaking</a>
+<a href="#tips">8 · Consigli — Tips</a>
+<a href="#listening">9 · Ascoltare &amp; guardare</a>
+<a href="#explore">10 · Explore More</a>
+<a href="#summary">11 · Riepilogo — Summary</a>
+<a href="#answers">12 · Soluzioni — Answer Key</a>
+</div></div>
+<main class="page">
+<!-- SECTION: Page Header -->
+<header class="lesson-header" id="top">
+  <div class="meta-row">
+    <span class="pill">Lezione 2</span>
+    <span class="pill">Nuovo Espresso 1 · Lezione 2</span>
+    <span class="pill">Livello A1</span>
+  </div>
+  <h1>Io e gli altri</h1>
+  <p class="en-title">Me and others: how are you, introducing people, jobs, languages, where you live</p>
+  <div class="cast">
+    <span>🎨 Darya Karimi — designer</span>
+    <span>📚 Sara Ferri — tutor</span>
+    <span>💻 Luca Ricci — translator (new!)</span>
+    <span>🏛️ Dott.ssa Conti</span>
+    <span>📖 Sig.ra Gatti — library clerk (new!)</span>
+    <span>☕ Marco — Bar Il Portico</span>
+  </div>
+</header>
+
+<div class="howto">
+  <strong>Last lesson:</strong> Darya arrived in Bologna and introduced herself. <strong>This lesson:</strong> one week later, she finds a language-exchange partner and gets her library card. Same routine as before: read for meaning → notice → rules → practise → speak.
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>درس قبل داریا به بولونیا رسید و خودش رو معرفی کرد. این درس، یه هفته بعد، یه هم‌زبان (پارتنر تبادل زبان) پیدا می‌کنه و کارت کتابخونه می‌گیره. روش مثل قبله: اول معنی، بعد توجه، بعد قانون، بعد تمرین و صحبت.</p></div>
+</div>
+
+<nav class="toc" aria-label="Table of contents">
+  <h2>Indice · Contents</h2>
+  <ol>
+    <li><a href="#story">La storia · The Story</a></li>
+    <li><a href="#noticing">Noticing · Nota bene</a></li>
+    <li><a href="#grammar">Grammatica in contesto</a>
+      <ul>
+        <li><a href="#g1">Presente: -are, -ere, -ire + avere, fare</a></li>
+        <li><a href="#g2">Un, uno, una, un' + questo/questa</a></li>
+        <li><a href="#g3">A, in, di + che, chi, dove, quanti</a></li>
+      </ul>
+    </li>
+    <li><a href="#vocab">Vocabolario in contesto</a></li>
+    <li><a href="#practice-grammar">Pratica · Grammatica</a></li>
+    <li><a href="#practice-vocab">Pratica · Vocabolario</a></li>
+    <li><a href="#speaking">Parlare · Speaking</a></li>
+    <li><a href="#tips">Consigli · Tips</a></li>
+    <li><a href="#listening">Ascoltare &amp; guardare</a></li>
+    <li><a href="#explore">Explore More</a></li>
+    <li><a href="#summary">Riepilogo · Summary</a></li>
+    <li><a href="#answers">Soluzioni · Answer Key</a></li>
+  </ol>
+</nav>
+
+<!-- SECTION: The Context — The Story -->
+<section class="lesson-section" id="story" data-title="1 · La storia — The Story">
+  <h2 class="section-title"><span class="num">1</span> La storia: Il tandem</h2>
+
+  <div class="warmup">
+    <strong>Before you read 🤔</strong> When you meet someone new at a social event, what are the first three or four questions people usually ask? Are any of them "rude" in your culture but normal elsewhere (age? salary? marriage?)?
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>قبل از خوندن: وقتی تو یه مهمونی با کسی آشنا می‌شی، معمولاً اولین سؤال‌ها چیه؟ (شغل؟ سن؟ کجا زندگی می‌کنی؟) کدومش تو فرهنگ ما عادیه ولی شاید جای دیگه بی‌ادبی حساب بشه؟</p></div>
+  </div>
+
+  <p><strong>The situation:</strong> Darya's second week in Bologna. Sara invites her to a "tandem" evening at Marco's bar, where Italians and foreigners swap languages. There Darya meets Luca, a translator with a surprising hobby. The next day she goes to Salaborsa, Bologna's big public library in Piazza Maggiore, to get a library card.</p>
+
+  <div class="story-tools">
+    <button class="btn hl-toggle" data-target="storyBox">🖍️ Evidenzia: OFF</button>
+    <button class="btn rate-toggle">🐢 Lento (OFF)</button>
+    <button class="btn stop-audio">⏹ Stop audio</button>
+  </div>
+  <div class="legend">
+    <span><span class="g1">giallo</span> = verbs in the present</span>
+    <span><span class="g2">sottolineato</span> = un / uno / una / un' · questo / questa</span>
+    <span><span class="g3">azzurro</span> = a / in / di</span>
+    <span><span class="vv">grassetto</span> = question words</span>
+  </div>
+
+  <div class="story hl-off" id="storyBox">
+    <div class="scene" id="scene1">
+      <div class="scene-head"><h3>Scena 1 · Lunedì mattina, a scuola</h3><button class="btn say-scene" data-target="scene1">▶ Ascolta la scena</button></div>
+      <p class="scene-setting">Before class. Sara is at the coffee machine; the director walks by.</p>
+      <div class="line"><div class="avatar" style="background:#A13A2A">SF</div><div class="bubble"><span class="who">Sara</span><span class="line-it">Ciao Darya! <span class="vv">Come</span> <span class="g1">stai</span>?</span> <button class="say" data-say="Ciao Darya! Come stai?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Bene, grazie! E tu?</span> <button class="say" data-say="Bene, grazie! E tu?">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#A13A2A">SF</div><div class="bubble"><span class="who">Sara</span><span class="line-it">Benissimo! Senti, stasera c'è il tandem al bar di Marco: italiani e stranieri parlano insieme. Vieni?</span> <button class="say" data-say="Benissimo! Senti, stasera c'è il tandem al bar di Marco: italiani e stranieri parlano insieme. Vieni?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Sì, certo!</span> <button class="say" data-say="Sì, certo!">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#4A4A4A">LC</div><div class="bubble"><span class="who">Dott.ssa Conti</span><span class="line-it">Buongiorno, signora Karimi. <span class="vv">Come</span> <span class="g1">sta</span>?</span> <button class="say" data-say="Buongiorno, signora Karimi. Come sta?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Abbastanza bene, grazie. E Lei?</span> <button class="say" data-say="Abbastanza bene, grazie. E Lei?">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#4A4A4A">LC</div><div class="bubble"><span class="who">Dott.ssa Conti</span><span class="line-it">Non c'è male, grazie. Lei <span class="g1">lavora</span> già <span class="g3">a</span> Bologna?</span> <button class="say" data-say="Non c'è male, grazie. Lei lavora già a Bologna?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Sì, <span class="g1">lavoro</span> <span class="g3">in</span> <span class="g2">uno</span> studio di design, <span class="g3">in</span> via Zamboni.</span> <button class="say" data-say="Sì, lavoro in uno studio di design, in via Zamboni.">🔊</button></div></div>
+      <p class="gloss">senti = listen · stasera = this evening · c'è = there is · stranieri = foreigners · insieme = together · vieni? = are you coming? · già = already</p>
+    </div>
+
+    <div class="scene" id="scene2">
+      <div class="scene-head"><h3>Scena 2 · Il tandem al bar Il Portico</h3><button class="btn say-scene" data-target="scene2">▶ Ascolta la scena</button></div>
+      <p class="scene-setting">8 p.m. The bar is full of small groups: an Italian with a foreigner at each table. Sara brings a man in his thirties over to Darya.</p>
+      <div class="line"><div class="avatar" style="background:#A13A2A">SF</div><div class="bubble"><span class="who">Sara</span><span class="line-it">Darya, <span class="g2">questo</span> è Luca, <span class="g2">un</span> amico. Luca, <span class="g2">questa</span> è Darya.</span> <button class="say" data-say="Darya, questo è Luca, un amico. Luca, questa è Darya.">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#1F6560">LR</div><div class="bubble"><span class="who">Luca</span><span class="line-it">Ciao Darya, piacere! Allora, <span class="vv">di dove</span> sei?</span> <button class="say" data-say="Ciao Darya, piacere! Allora, di dove sei?">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Sono iraniana, <span class="g3">di</span> Teheran. Ma <span class="g1">abito</span> <span class="g3">a</span> Bologna, <span class="g3">in</span> via del Pratello.</span> <button class="say" data-say="Sono iraniana, di Teheran. Ma abito a Bologna, in via del Pratello.">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#1F6560">LR</div><div class="bubble"><span class="who">Luca</span><span class="line-it">Teheran! Sai, io <span class="g1">studio</span> persiano, la sera, all'università.</span> <button class="say" data-say="Teheran! Sai, io studio persiano, la sera, all'università.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Davvero? <span class="g1">Parli</span> persiano?</span> <button class="say" data-say="Davvero? Parli persiano?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#1F6560">LR</div><div class="bubble"><span class="who">Luca</span><span class="line-it">Un po'… "Salam! Chetori?" 😄</span> <button class="say" data-say="Un po'.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Bravo! E <span class="vv">che</span> lavoro <span class="g1">fai</span>?</span> <button class="say" data-say="Bravo! E che lavoro fai?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#1F6560">LR</div><div class="bubble"><span class="who">Luca</span><span class="line-it"><span class="g1">Faccio</span> il traduttore. <span class="g1">Lavoro</span> <span class="g3">a</span> casa, con il computer. E tu?</span> <button class="say" data-say="Faccio il traduttore. Lavoro a casa, con il computer. E tu?">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Sono designer. <span class="g1">Lavoro</span> <span class="g3">in</span> <span class="g2">uno</span> studio in centro: <span class="g1">disegno</span> app e siti web.</span> <button class="say" data-say="Sono designer. Lavoro in uno studio in centro: disegno app e siti web.">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#1F6560">LR</div><div class="bubble"><span class="who">Luca</span><span class="line-it">Che bello! E quel ragazzo alto, <span class="vv">chi</span> è?</span> <button class="say" data-say="Che bello! E quel ragazzo alto, chi è?">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#A13A2A">SF</div><div class="bubble"><span class="who">Sara</span><span class="line-it">È Thomas, <span class="g2">un</span> compagno di corso. È austriaco, <span class="g1">fa</span> l'ingegnere e <span class="g1">lavora</span> <span class="g3">in</span> <span class="g2">un'</span>azienda tedesca. E lì c'è Ana: <span class="g1">studia</span> architettura e <span class="g1">lavora</span> <span class="g3">in</span> <span class="g2">una</span> libreria.</span> <button class="say" data-say="È Thomas, un compagno di corso. È austriaco, fa l'ingegnere e lavora in un'azienda tedesca. E lì c'è Ana: studia architettura e lavora in una libreria.">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#1F6560">LR</div><div class="bubble"><span class="who">Luca</span><span class="line-it">Darya, <span class="vv">quante</span> lingue <span class="g1">parli</span>?</span> <button class="say" data-say="Darya, quante lingue parli?">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it"><span class="g1">Parlo</span> persiano, inglese… e un po' di italiano!</span> <button class="say" data-say="Parlo persiano, inglese, e un po' di italiano!">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#1F6560">LR</div><div class="bubble"><span class="who">Luca</span><span class="line-it">Un po'? <span class="g1">Parli</span> benissimo! Senti, <span class="g1">hai</span> <span class="g2">un</span> numero di telefono? Io <span class="g1">insegno</span> l'italiano a te e tu <span class="g1">insegni</span> il persiano a me!</span> <button class="say" data-say="Un po'? Parli benissimo! Senti, hai un numero di telefono? Io insegno l'italiano a te e tu insegni il persiano a me!">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Perfetto! Tre tre nove, uno due otto, sette sei cinque zero.</span> <button class="say" data-say="Perfetto! Tre tre nove, uno due otto, sette sei cinque zero.">🔊</button></div></div>
+      <p class="gloss">sai = you know · davvero? = really? · un po' = a bit · quel ragazzo alto = that tall guy · compagno di corso = classmate · lì = there · la libreria = bookshop (not library!)</p>
+    </div>
+
+    <div class="scene" id="scene3">
+      <div class="scene-head"><h3>Scena 3 · Alla biblioteca Salaborsa</h3><button class="btn say-scene" data-target="scene3">▶ Ascolta la scena</button></div>
+      <p class="scene-setting">The next morning. The registration desk of the public library. The clerk, Signora Gatti, types on her computer.</p>
+      <div class="line"><div class="avatar" style="background:#6B4E2E">SG</div><div class="bubble"><span class="who">Sig.ra Gatti</span><span class="line-it">Buongiorno. Desidera?</span> <button class="say" data-say="Buongiorno. Desidera?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Buongiorno. Vorrei la tessera della biblioteca.</span> <button class="say" data-say="Buongiorno. Vorrei la tessera della biblioteca.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#6B4E2E">SG</div><div class="bubble"><span class="who">Sig.ra Gatti</span><span class="line-it">Certo. <span class="vv">Come</span> si chiama?</span> <button class="say" data-say="Certo. Come si chiama?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Darya Karimi.</span> <button class="say" data-say="Darya Karimi.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#6B4E2E">SG</div><div class="bubble"><span class="who">Sig.ra Gatti</span><span class="line-it"><span class="vv">Quanti</span> anni <span class="g1">ha</span>?</span> <button class="say" data-say="Quanti anni ha?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it"><span class="g1">Ho</span> trentuno anni.</span> <button class="say" data-say="Ho trentuno anni.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#6B4E2E">SG</div><div class="bubble"><span class="who">Sig.ra Gatti</span><span class="line-it"><span class="vv">Dove</span> <span class="g1">abita</span>?</span> <button class="say" data-say="Dove abita?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it"><span class="g1">Abito</span> <span class="g3">in</span> via del Pratello, numero quarantadue.</span> <button class="say" data-say="Abito in via del Pratello, numero quarantadue.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#6B4E2E">SG</div><div class="bubble"><span class="who">Sig.ra Gatti</span><span class="line-it">E <span class="vv">che</span> lavoro <span class="g1">fa</span>?</span> <button class="say" data-say="E che lavoro fa?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Sono designer.</span> <button class="say" data-say="Sono designer.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#6B4E2E">SG</div><div class="bubble"><span class="who">Sig.ra Gatti</span><span class="line-it"><span class="g1">Ha</span> <span class="g2">un</span> indirizzo email?</span> <button class="say" data-say="Ha un indirizzo email?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Sì: darya punto karimi chiocciola gmail punto com.</span> <button class="say" data-say="Sì: darya punto karimi chiocciola gmail punto com.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#6B4E2E">SG</div><div class="bubble"><span class="who">Sig.ra Gatti</span><span class="line-it">Perfetto. Ecco la tessera.</span> <button class="say" data-say="Perfetto. Ecco la tessera.">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Grazie! Scusi, la biblioteca <span class="g1">apre</span> la domenica?</span> <button class="say" data-say="Grazie! Scusi, la biblioteca apre la domenica?">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#6B4E2E">SG</div><div class="bubble"><span class="who">Sig.ra Gatti</span><span class="line-it">No, mi dispiace, la domenica è chiusa.</span> <button class="say" data-say="No, mi dispiace, la domenica è chiusa.">🔊</button></div></div>
+      <p class="gloss">Desidera? = How can I help? (formal) · vorrei = I'd like · la tessera = card · ecco = here is · chiocciola = @ (lit. "snail"!) · punto = dot · mi dispiace = I'm sorry · chiusa = closed</p>
+    </div>
+
+    <div class="post">
+      <div class="post-head"><div class="avatar" style="background:#7A3E9D">DK</div><div><b>Profilo Tandem · Darya, 31</b><span class="small muted">Bologna · cerca: italiano 🇮🇹</span></div></div>
+      <p class="line-it">Ciao! Mi chiamo Darya, <span class="g1">ho</span> 31 anni e sono iraniana, <span class="g3">di</span> Teheran. <span class="g1">Abito</span> <span class="g3">a</span> Bologna, <span class="g3">in</span> Italia. Sono designer: <span class="g1">lavoro</span> <span class="g3">in</span> <span class="g2">uno</span> studio in centro e <span class="g1">disegno</span> app. <span class="g1">Parlo</span> persiano e inglese, e <span class="g1">studio</span> italiano. <span class="g1">Cerco</span> <span class="g2">un</span> partner per <span class="g2">un</span> tandem: io <span class="g1">insegno</span> il persiano, tu <span class="g1">insegni</span> l'italiano. <span class="g1">Scrivi</span>! 😊</p>
+      <button class="say" data-say="Ciao! Mi chiamo Darya, ho trentuno anni e sono iraniana, di Teheran. Abito a Bologna, in Italia. Sono designer: lavoro in uno studio in centro e disegno app. Parlo persiano e inglese, e studio italiano. Cerco un partner per un tandem: io insegno il persiano, tu insegni l'italiano. Scrivi!">🔊 Ascolta il profilo</button>
+      <p class="gloss">cerco = I'm looking for · scrivi! = write (to me)!</p>
+    </div>
+  </div>
+
+  <details class="reveal">
+    <summary>✔ Did you understand? (quick gist check)</summary>
+    <p>1) Luca is a translator who works from home and studies Persian in the evenings. 2) Darya works in a design studio in the centre. 3) Thomas is an engineer; Ana studies architecture and works in a bookshop. 4) Darya is 31 and lives at via del Pratello 42. 5) The library is closed on Sundays.</p>
+  </details>
+</section>
+
+<!-- SECTION: Noticing Phase -->
+<section class="lesson-section" id="noticing" data-title="2 · Noticing — Nota bene">
+  <h2 class="section-title"><span class="num">2</span> Noticing · Nota bene</h2>
+  <p>Switch the highlights <strong>ON</strong> (🖍️) and look again.</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>رنگ‌ها رو روشن کن و دوباره داستان رو نگاه کن. قبل از باز کردن راهنما، خودت حدس بزن.</p></div>
+  <ol class="notice-list">
+    <li><strong>Look at the yellow verbs.</strong> Darya says <em>lavoro, abito, parlo</em>. Luca asks her <em>parli?</em> Sara says Thomas <em>lavora</em>. What's the pattern in the endings: I → ?, you → ?, he/she → ?
+      <details class="hint"><summary>💡 Hint</summary><p>io → <strong>-o</strong>, tu → <strong>-i</strong>, lui/lei/Lei → <strong>-a</strong> (for -are verbs). Now check <em>apre</em> (the library opens): what's different?</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>برای فعل‌های <bdi>-are</bdi>: من ← <bdi>-o</bdi>، تو ← <bdi>-i</bdi>، او ← <bdi>-a</bdi>. حالا به <bdi>apre</bdi> (باز می‌کنه) نگاه کن: آخرش <bdi>-e</bdi> هست، چرا؟</p></div></details></li>
+    <li><strong>Can you find</strong> two ways to talk about a job? Compare: <em>Sono designer</em> / <em>Faccio il traduttore</em> / <em>fa l'ingegnere</em>.
+      <details class="hint"><summary>💡 Hint</summary><p><em>essere</em> + job (no article) · <em>fare</em> + <strong>il/la/l'</strong> + job. Same meaning.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>دو راه برای گفتن شغل: <bdi>essere</bdi> + شغل (بدون حرف تعریف) یا <bdi>fare</bdi> + <bdi>il/la</bdi> + شغل. معنی هر دو یکیه.</p></div></details></li>
+    <li><strong>What do you notice about</strong> the underlined words? Why <em>un amico</em> but <em>uno studio</em>, <em>una libreria</em> but <em>un'azienda</em>?
+      <details class="hint"><summary>💡 Hint</summary><p>Look at the first letter(s) of the next word: a vowel? <em>s</em> + consonant? And is the word masculine or feminine?</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>به حرف اول کلمه‌ی بعدی نگاه کن: حرف صداداره؟ <bdi>s</bdi> + یه حرف بی‌صداست؟ و کلمه مذکره یا مؤنث؟</p></div></details></li>
+    <li><strong>Blue words:</strong> <em>abito <strong>a</strong> Bologna</em>, <em><strong>in</strong> via del Pratello</em>, <em><strong>in</strong> Italia</em>, <em>sono <strong>di</strong> Teheran</em>. When do you use <em>a</em>, when <em>in</em>, when <em>di</em>?
+      <details class="hint"><summary>💡 Hint</summary><p>City → <em>a</em>. Country, street, workplace → <em>in</em>. Where you're <em>originally</em> from → <em>di</em>.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>شهر ← <bdi>a</bdi>. کشور، خیابون، محل کار ← <bdi>in</bdi>. اصالتاً اهل کجا ← <bdi>di</bdi>. همه‌شون تو فارسی می‌شن «در» یا «اهلِ»، برای همین باید جدا حفظشون کنی.</p></div></details></li>
+    <li><strong>Age:</strong> how does Darya say she's 31? Which verb does she use, and how is that different from English and Persian?
+      <details class="hint"><summary>💡 Hint</summary><p><em>Ho trentuno anni</em>: literally "I <strong>have</strong> 31 years" (avere, not essere).</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>ایتالیایی برای سن از فعل «داشتن» (<bdi>avere</bdi>) استفاده می‌کنه: <bdi>Ho 31 anni</bdi> یعنی تحت‌اللفظی «۳۱ سال دارم». نگو <bdi>Sono 31 anni</bdi>!</p></div></details></li>
+  </ol>
+</section>
+
+<!-- SECTION: Grammar in Context -->
+<section class="lesson-section" id="grammar" data-title="3 · Grammatica in contesto">
+  <h2 class="section-title"><span class="num">3</span> Grammatica in contesto</h2>
+
+  <h3 class="sub-title" id="g1">3.1 · The present tense (singular): -are, -ere, -ire + avere, fare</h3>
+  <div class="context-ref">"<span class="g1">Lavoro</span> in uno studio." · "<span class="g1">Parli</span> persiano?" · "Thomas <span class="g1">lavora</span> in un'azienda." · "La biblioteca <span class="g1">apre</span> la domenica?" · "<span class="g1">Ho</span> trentuno anni." · "Che lavoro <span class="g1">fai</span>?"</div>
+  <p>Italian verbs belong to three families, recognisable from the infinitive ending: <strong>-are</strong> (lavorare), <strong>-ere</strong> (scrivere), <strong>-ire</strong> (aprire). Remove the ending, and add the person ending to the stem.</p>
+  <div class="table-wrap"><table class="wide">
+    <thead><tr><th>Person</th><th>lavor<strong>are</strong></th><th>scriv<strong>ere</strong></th><th>apr<strong>ire</strong></th><th>Story example</th></tr></thead>
+    <tbody>
+      <tr><td>io</td><td>lavor<strong>o</strong></td><td>scriv<strong>o</strong></td><td>apr<strong>o</strong></td><td>Lavoro in uno studio. · Abito a Bologna.</td></tr>
+      <tr><td>tu</td><td>lavor<strong>i</strong></td><td>scriv<strong>i</strong></td><td>apr<strong>i</strong></td><td>Parli persiano? · Scrivi!</td></tr>
+      <tr><td>lui / lei / Lei</td><td>lavor<strong>a</strong></td><td>scriv<strong>e</strong></td><td>apr<strong>e</strong></td><td>Thomas lavora… · La biblioteca apre…</td></tr>
+    </tbody></table></div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>فعل‌ها سه خانواده دارن: <bdi>-are</bdi>، <bdi>-ere</bdi>، <bdi>-ire</bdi>. پایان مصدر رو حذف کن و شناسه‌ی شخص رو اضافه کن. برای «من» همیشه <bdi>-o</bdi>، برای «تو» همیشه <bdi>-i</bdi>. فقط سوم‌شخص فرق داره: <bdi>-are</bdi> ← <bdi>-a</bdi> ولی <bdi>-ere/-ire</bdi> ← <bdi>-e</bdi>. مثل شناسه‌های فارسی (ـم، ـی، ـد) که فعل رو به شخص وصل می‌کنن.</p></div>
+
+  <h4>Visual: one stem, three endings</h4>
+  <div class="blocks"><span class="blk c">parl</span>→ <span class="blk a">-o</span> <span class="blk a">-i</span> <span class="blk a">-a</span> <span class="muted small">(-are)</span></div>
+  <div class="blocks"><span class="blk c">viv</span>→ <span class="blk b">-o</span> <span class="blk b">-i</span> <span class="blk b">-e</span> <span class="muted small">(-ere)</span></div>
+  <div class="blocks"><span class="blk c">part</span>→ <span class="blk b">-o</span> <span class="blk b">-i</span> <span class="blk b">-e</span> <span class="muted small">(-ire)</span></div>
+  <p class="small muted">Memory hook: <strong>o – i – a</strong> for -are; <strong>o – i – e</strong> for -ere and -ire.</p>
+
+  <h4>Two irregular verbs you need right now</h4>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Person</th><th>avere (to have)</th><th>IPA</th><th>fare (to do / make)</th><th>IPA</th></tr></thead>
+    <tbody>
+      <tr><td>io</td><td><strong>ho</strong></td><td class="ipa">/ɔ/</td><td><strong>faccio</strong></td><td class="ipa">/ˈfattʃo/</td></tr>
+      <tr><td>tu</td><td><strong>hai</strong></td><td class="ipa">/ˈai/</td><td><strong>fai</strong></td><td class="ipa">/ˈfai/</td></tr>
+      <tr><td>lui / lei / Lei</td><td><strong>ha</strong></td><td class="ipa">/a/</td><td><strong>fa</strong></td><td class="ipa">/fa/</td></tr>
+    </tbody></table></div>
+  <p>The <strong>h</strong> in <em>ho, hai, ha</em> is silent. It's only there to tell <em>ho</em> (I have) apart from <em>o</em> (or) and <em>ha</em> (has) from <em>a</em> (to/at).</p>
+  <div class="callout"><strong>Uses from the story:</strong> age → <em>avere</em>: "Ho trentuno anni." · job → <em>fare</em>: "Che lavoro fai?" "Faccio il traduttore." · possession → <em>avere</em>: "Hai un numero di telefono?"</div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p><bdi>avere</bdi> (داشتن) و <bdi>fare</bdi> (کردن/انجام دادن) بی‌قاعده‌ان و باید حفظ بشن. <bdi>h</bdi> تو <bdi>ho / hai / ha</bdi> اصلاً خونده نمی‌شه: <bdi>ho</bdi> = «اُ». سن رو با <bdi>avere</bdi> می‌گیم و شغل رو با <bdi>fare</bdi> می‌پرسیم: <bdi>Che lavoro fai?</bdi> یعنی «چه‌کاره‌ای؟».</p></div>
+
+  <div class="errors">
+    <h4>⚠️ Common errors</h4>
+    <div class="err-row"><span class="x">Sono trentuno anni.</span><span class="v">Ho trentuno anni.</span><span class="why">Age uses <em>avere</em>.</span></div>
+    <div class="err-row"><span class="x">Thomas lavori in un'azienda.</span><span class="v">Thomas lavora in un'azienda.</span><span class="why">Thomas = he → -a.</span></div>
+    <div class="err-row"><span class="x">La biblioteca apra la domenica?</span><span class="v">La biblioteca apre la domenica?</span><span class="why">-ire verbs: he/she ends in -e, not -a.</span></div>
+    <div class="err-row"><span class="x">Io lavorare a casa.</span><span class="v">Io lavoro a casa.</span><span class="why">Never use the infinitive with a subject: conjugate!</span></div>
+    <div class="err-row"><span class="x">Che lavoro fa? (to a friend)</span><span class="v">Che lavoro fai?</span><span class="why"><em>fa</em> = he/she/Lei; <em>fai</em> = tu.</span></div>
+    <div class="err-row"><span class="x">Io ho [h pronounced]</span><span class="v">/ɔ/</span><span class="why">The h is silent. Don't say "ho" with an English h!</span></div>
+  </div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>اشتباه رایج فارسی‌زبان‌ها: «من ۳۱ سالمه» رو تحت‌اللفظی ترجمه کردن (<bdi>Sono 31 anni</bdi>). درستش <bdi>Ho 31 anni</bdi> هست. مصدر (<bdi>lavorare</bdi>) هم هیچ‌وقت بعد از فاعل نمیاد. همیشه صرفش کن.</p></div>
+
+  <h3 class="sub-title" id="g2">3.2 · The indefinite article: un, uno, una, un' + questo / questa</h3>
+  <div class="context-ref">"Luca, <span class="g2">un</span> amico" · "<span class="g2">uno</span> studio di design" · "<span class="g2">una</span> libreria" · "<span class="g2">un'</span>azienda tedesca" · "<span class="g2">Questo</span> è Luca… <span class="g2">questa</span> è Darya."</div>
+  <p>"A / an" has four forms in Italian. The choice depends on <strong>gender</strong> (masculine/feminine) and the <strong>first sound</strong> of the next word.</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th></th><th>Before…</th><th>Article</th><th>Examples</th></tr></thead>
+    <tbody>
+      <tr><td rowspan="2"><strong>Masculine</strong></td><td>most consonants &amp; all vowels</td><td><strong>un</strong></td><td>un amico · un ristorante · un indirizzo · un numero</td></tr>
+      <tr><td>s + consonant, z, ps, gn, y</td><td><strong>uno</strong></td><td>uno studio · uno studente · uno zaino · uno psicologo</td></tr>
+      <tr><td rowspan="2"><strong>Feminine</strong></td><td>consonants</td><td><strong>una</strong></td><td>una libreria · una scuola · una lingua</td></tr>
+      <tr><td>vowels</td><td><strong>un'</strong></td><td>un'azienda · un'amica · un'insegnante (f)</td></tr>
+    </tbody></table></div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>«یک/یه» تو ایتالیایی چهار شکل داره. برای مذکر: معمولاً <bdi>un</bdi>، ولی قبل از <bdi>s</bdi> + بی‌صدا یا <bdi>z</bdi> می‌شه <bdi>uno</bdi>. برای مؤنث: <bdi>una</bdi>، ولی قبل از حرف صدادار می‌شه <bdi>un'</bdi> (با آپوستروف). مذکر هیچ‌وقت آپوستروف نمی‌گیره: <bdi>un amico</bdi>.</p></div>
+
+  <h4>Visual: the article decision tree</h4>
+  <div class="two-doors">
+    <div class="door" style="border-color:var(--primary)"><h4>♂ Masculine word</h4><p>Starts with <strong>s+consonant / z / ps / gn</strong>?<br>→ yes: <strong>uno</strong> (uno studio)<br>→ no: <strong>un</strong> (un amico, un bar)</p></div>
+    <div class="door" style="border-color:var(--accent)"><h4>♀ Feminine word</h4><p>Starts with a <strong>vowel</strong>?<br>→ yes: <strong>un'</strong> (un'azienda)<br>→ no: <strong>una</strong> (una libreria)</p></div>
+  </div>
+  <p><strong>Gender clue:</strong> words in <em>-o</em> are usually masculine, in <em>-a</em> usually feminine; words in <em>-e</em> can be either (il ristorante m, la lezione f). Learn them with their article!</p>
+
+  <h4>Questo / questa: introducing someone</h4>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Introducing a…</th><th>Phrase</th><th>From the story</th></tr></thead>
+    <tbody>
+      <tr><td>man</td><td><strong>Questo è</strong> + name</td><td>Questo è Luca, un amico.</td></tr>
+      <tr><td>woman</td><td><strong>Questa è</strong> + name</td><td>Questa è Darya.</td></tr>
+    </tbody></table></div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>برای معرفی یه نفر: مرد ← <bdi>Questo è…</bdi>، زن ← <bdi>Questa è…</bdi> (یعنی «این ... است»). تو فارسی ممکنه «این آقای...» بی‌ادبانه به نظر بیاد، ولی تو ایتالیایی کاملاً عادی و مؤدبانه‌ست.</p></div>
+
+  <div class="errors">
+    <h4>⚠️ Common errors</h4>
+    <div class="err-row"><span class="x">un studio</span><span class="v">uno studio</span><span class="why">s + consonant → uno.</span></div>
+    <div class="err-row"><span class="x">una azienda</span><span class="v">un'azienda</span><span class="why">Feminine + vowel → un' (with apostrophe).</span></div>
+    <div class="err-row"><span class="x">un'amico</span><span class="v">un amico</span><span class="why">Masculine never takes an apostrophe.</span></div>
+    <div class="err-row"><span class="x">Questo è Darya.</span><span class="v">Questa è Darya.</span><span class="why">Darya is a woman → questa.</span></div>
+    <div class="err-row"><span class="x">Lavoro in una studio.</span><span class="v">Lavoro in uno studio.</span><span class="why"><em>studio</em> is masculine (-o).</span></div>
+  </div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>چون فارسی جنسیت دستوری نداره، بهترین روش اینه که هر اسم رو همراه حرف تعریفش حفظ کنی، نه تنهایی: «<bdi>uno studio</bdi>»، نه فقط «<bdi>studio</bdi>».</p></div>
+
+  <h3 class="sub-title" id="g3">3.3 · Prepositions a, in, di + question words</h3>
+  <div class="context-ref">"Sono iraniana, <span class="g3">di</span> Teheran. Ma abito <span class="g3">a</span> Bologna, <span class="g3">in</span> via del Pratello." · "Abito <span class="g3">a</span> Bologna, <span class="g3">in</span> Italia." · "Lavoro <span class="g3">a</span> casa." · "Lavora <span class="g3">in</span> una libreria."</div>
+  <p>Persian uses «در» for almost all of these; Italian splits them up. The good news: the rules are very regular.</p>
+  <h4>Visual: zoom out from your front door</h4>
+  <div class="wordmap">
+    <div class="hub">Dove abiti? · Where do you live?</div>
+    <div class="cluster"><b>🏠 Street → in</b>in via del Pratello · in piazza Maggiore</div>
+    <div class="cluster"><b>🏙️ City → a</b>a Bologna · a Teheran · a Vienna</div>
+    <div class="cluster"><b>🗺️ Region → in</b>in Emilia-Romagna · in Toscana</div>
+    <div class="cluster"><b>🌍 Country → in</b>in Italia · in Iran · in Austria</div>
+    <div class="cluster"><b>🏢 Workplace → in</b>in uno studio · in una libreria · in banca · in ufficio</div>
+    <div class="cluster"><b>🛋️ Home → a</b>a casa (no article!)</div>
+    <div class="cluster"><b>🧬 Origin → di</b>Sono di Teheran (city only)</div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Preposition</th><th>Use</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><strong>a</strong></td><td>cities · <em>casa</em></td><td>Abito a Bologna. Lavoro a casa.</td></tr>
+      <tr><td><strong>in</strong></td><td>countries, regions, streets, workplaces</td><td>in Italia · in via Zamboni · in un'azienda</td></tr>
+      <tr><td><strong>di</strong></td><td>origin (with <em>essere</em>) + city</td><td>Sono di Teheran.</td></tr>
+    </tbody></table></div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>فارسی برای همه‌ی این‌ها «در» می‌گه، ولی ایتالیایی جداشون می‌کنه: شهر ← <bdi>a</bdi>؛ کشور، منطقه، خیابون و محل کار ← <bdi>in</bdi>؛ اصالت (اهل کجا) ← <bdi>di</bdi> + شهر. «خونه» هم استثناست: <bdi>a casa</bdi>.</p></div>
+
+  <h4>Question words in this lesson</h4>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Word</th><th>IPA</th><th>Meaning</th><th>From the story</th></tr></thead>
+    <tbody>
+      <tr><td><strong>che</strong></td><td class="ipa">/ke/</td><td>what / which</td><td>Che lavoro fai?</td></tr>
+      <tr><td><strong>chi</strong></td><td class="ipa">/ki/</td><td>who</td><td>Quel ragazzo, chi è?</td></tr>
+      <tr><td><strong>dove</strong></td><td class="ipa">/ˈdove/</td><td>where</td><td>Dove abita?</td></tr>
+      <tr><td><strong>quanti / quante</strong></td><td class="ipa">/ˈkwanti/</td><td>how many (m / f)</td><td>Quanti anni ha? · Quante lingue parli?</td></tr>
+      <tr><td><strong>come</strong></td><td class="ipa">/ˈkome/</td><td>how</td><td>Come stai? · Come sta?</td></tr>
+    </tbody></table></div>
+  <p class="small"><strong>Pronunciation trap:</strong> <em>che</em> = /ke/ and <em>chi</em> = /ki/. The <em>h</em> makes the <em>c</em> hard. <em>Quanti</em> agrees: <em>anni</em> is masculine → quant<strong>i</strong>; <em>lingue</em> is feminine → quant<strong>e</strong>.</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p><bdi>che</bdi> = چه/چی (تلفظ: «که»)، <bdi>chi</bdi> = کی/چه کسی (تلفظ: «کی»)، <bdi>dove</bdi> = کجا، <bdi>quanti/quante</bdi> = چندتا. حواست باشه <bdi>chi</bdi> یعنی «چه کسی»، نه «کِی (چه زمانی)». <bdi>quanti</bdi> هم با اسم بعدش جور می‌شه: <bdi>anni</bdi> مذکره پس <bdi>quanti</bdi>، <bdi>lingue</bdi> مؤنثه پس <bdi>quante</bdi>.</p></div>
+
+  <div class="errors">
+    <h4>⚠️ Common errors</h4>
+    <div class="err-row"><span class="x">Abito in Bologna.</span><span class="v">Abito a Bologna.</span><span class="why">City → a.</span></div>
+    <div class="err-row"><span class="x">Abito a Italia.</span><span class="v">Abito in Italia.</span><span class="why">Country → in.</span></div>
+    <div class="err-row"><span class="x">Sono di Iran.</span><span class="v">Sono iraniana. / Sono di Teheran.</span><span class="why"><em>di</em> + city, not country. For the country, use the nationality.</span></div>
+    <div class="err-row"><span class="x">Lavoro in casa.</span><span class="v">Lavoro a casa.</span><span class="why">Fixed expression: <em>a casa</em>.</span></div>
+    <div class="err-row"><span class="x">Che è quel ragazzo?</span><span class="v">Chi è quel ragazzo?</span><span class="why">Person → chi.</span></div>
+  </div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>برای اینکه <bdi>a</bdi> و <bdi>in</bdi> رو قاطی نکنی، یه جمله‌ی کامل درباره‌ی خودت حفظ کن، مثلاً: «<bdi>Abito a Teheran, in Iran</bdi>». هر بار شک کردی، این جمله رو یادت بیار.</p></div>
+</section>
+
+<!-- SECTION: Vocabulary in Context -->
+<section class="lesson-section" id="vocab" data-title="4 · Vocabolario in contesto">
+  <h2 class="section-title"><span class="num">4</span> Vocabolario in contesto</h2>
+
+  <h4>😊 Come stai? · The "how are you" spectrum</h4>
+  <div class="spectrum">
+    <div class="spectrum-ends"><span>😀 Great</span><span>Bad 😞</span></div>
+    <div class="spectrum-bar" style="background:linear-gradient(90deg,#4CAF50,#C5E1A5,#FFE082,#FFB74D,#E57373)"></div>
+    <div class="spectrum-labels"><span><strong>benissimo</strong></span><span><strong>bene</strong></span><span><strong>abbastanza bene</strong></span><span><strong>non c'è male</strong></span><span><strong>così così</strong></span><span><strong>male</strong></span></div>
+  </div>
+  <p class="small">Answer, then bounce it back: <em>E tu?</em> (friend) / <em>E Lei?</em> (formal). Italians rarely answer <em>male</em> to a stranger. <em>Non c'è male</em> ("not bad") is the polite middle.</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>بعد از جواب دادن، سؤال رو برگردون: <bdi>E tu?</bdi> (به دوست) یا <bdi>E Lei?</bdi> (رسمی). <bdi>Non c'è male</bdi> یعنی «بد نیستم»، یه جواب مؤدبانه‌ی وسط.</p></div>
+
+  <div class="vocab-group"><h4>💼 Lavoro · Jobs and workplaces</h4>
+  <div class="vocab-list">
+    <div class="vocab-item"><div><span class="w">il lavoro</span> <span class="pos">n. m.</span> <span class="ipa">/laˈvoro/</span> <button class="say" data-say="il lavoro">🔊</button></div><div class="en">job, work</div><div class="ex">"E che lavoro fai?"</div></div>
+    <div class="vocab-item"><div><span class="w">lavorare</span> <span class="pos">v.</span> <span class="ipa">/lavoˈrare/</span> <button class="say" data-say="lavorare">🔊</button></div><div class="en">to work</div><div class="ex">"Lavoro a casa, con il computer."</div></div>
+    <div class="vocab-item"><div><span class="w">il traduttore / la traduttrice</span> <span class="pos">n.</span> <span class="ipa">/tradutˈtore/</span> <button class="say" data-say="il traduttore, la traduttrice">🔊</button></div><div class="en">translator (m / f)</div><div class="ex">"Faccio il traduttore."</div></div>
+    <div class="vocab-item"><div><span class="w">l'ingegnere</span> <span class="pos">n. m./f.</span> <span class="ipa">/indʒeɲˈɲere/</span> <button class="say" data-say="l'ingegnere">🔊</button></div><div class="en">engineer</div><div class="ex">"Thomas fa l'ingegnere."</div></div>
+    <div class="vocab-item"><div><span class="w">lo studio</span> <span class="pos">n. m.</span> <span class="ipa">/ˈstudjo/</span> <button class="say" data-say="lo studio">🔊</button></div><div class="en">studio, office (design/law); also "study"</div><div class="ex">"Lavoro in uno studio in centro."</div></div>
+    <div class="vocab-item"><div><span class="w">l'azienda</span> <span class="pos">n. f.</span> <span class="ipa">/adˈdzjɛnda/</span> <button class="say" data-say="l'azienda">🔊</button></div><div class="en">company, firm</div><div class="ex">"Lavora in un'azienda tedesca."</div></div>
+    <div class="vocab-item"><div><span class="w">la libreria</span> <span class="pos">n. f.</span> <span class="ipa">/libreˈria/</span> <button class="say" data-say="la libreria">🔊</button></div><div class="en">bookshop ⚠️ false friend</div><div class="ex">"Ana lavora in una libreria."</div></div>
+    <div class="vocab-item"><div><span class="w">la biblioteca</span> <span class="pos">n. f.</span> <span class="ipa">/biblioˈtɛka/</span> <button class="say" data-say="la biblioteca">🔊</button></div><div class="en">library</div><div class="ex">"La biblioteca apre la domenica?"</div></div>
+    <div class="vocab-item"><div><span class="w">studiare</span> <span class="pos">v.</span> <span class="ipa">/stuˈdjare/</span> <button class="say" data-say="studiare">🔊</button></div><div class="en">to study</div><div class="ex">"Io studio persiano, la sera."</div></div>
+    <div class="vocab-item"><div><span class="w">insegnare</span> <span class="pos">v.</span> <span class="ipa">/inseɲˈɲare/</span> <button class="say" data-say="insegnare">🔊</button></div><div class="en">to teach</div><div class="ex">"Io insegno l'italiano a te."</div></div>
+    <div class="vocab-item"><div><span class="w">disegnare</span> <span class="pos">v.</span> <span class="ipa">/diseɲˈɲare/</span> <button class="say" data-say="disegnare">🔊</button></div><div class="en">to draw, to design</div><div class="ex">"Disegno app e siti web."</div></div>
+  </div></div>
+
+  <h4>👩‍⚕️ Professions: masculine / feminine patterns</h4>
+  <div class="table-wrap"><table class="wide">
+    <thead><tr><th>Pattern</th><th>Man</th><th>Woman</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td>-o → -a</td><td>impiegato · commesso · avvocato</td><td>impiegata · commessa · avvocata</td><td>office worker · shop assistant · lawyer</td></tr>
+      <tr><td>-e → -a</td><td>cameriere · infermiere</td><td>cameriera · infermiera</td><td>waiter · nurse</td></tr>
+      <tr><td>-tore → -trice</td><td>traduttore · direttore · attore</td><td>traduttrice · direttrice · attrice</td><td>translator · director · actor</td></tr>
+      <tr><td>-e (same)</td><td>insegnante · cantante</td><td>insegnante · cantante</td><td>teacher · singer</td></tr>
+      <tr><td>-ista (same)</td><td>giornalista · dentista · barista</td><td>giornalista · dentista · barista</td><td>journalist · dentist · barista</td></tr>
+      <tr><td>special</td><td>studente · medico</td><td>studentessa · medico / dottoressa</td><td>student · doctor</td></tr>
+      <tr><td>loanwords</td><td>designer · manager</td><td>designer · manager</td><td>(invariable)</td></tr>
+    </tbody></table></div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>شغل‌ها هم مذکر/مؤنث دارن. الگوها: <bdi>-o → -a</bdi>، <bdi>-e → -a</bdi>، <bdi>-tore → -trice</bdi>. کلمه‌هایی که به <bdi>-ista</bdi> یا <bdi>-ante</bdi> تموم می‌شن برای هر دو یکی‌ان. کلمه‌های انگلیسی مثل <bdi>designer</bdi> عوض نمی‌شن.</p></div>
+
+  <div class="vocab-group"><h4>🏠 Dati personali · Personal details</h4>
+  <div class="vocab-list">
+    <div class="vocab-item"><div><span class="w">abitare</span> <span class="pos">v.</span> <span class="ipa">/abiˈtare/</span> <button class="say" data-say="abitare">🔊</button></div><div class="en">to live (somewhere)</div><div class="ex">"Abito a Bologna, in via del Pratello."</div></div>
+    <div class="vocab-item"><div><span class="w">la via</span> <span class="pos">n. f.</span> <span class="ipa">/ˈvia/</span> <button class="say" data-say="la via">🔊</button></div><div class="en">street</div><div class="ex">"in via Zamboni"</div></div>
+    <div class="vocab-item"><div><span class="w">l'indirizzo (email)</span> <span class="pos">n. m.</span> <span class="ipa">/indiˈrittso/</span> <button class="say" data-say="l'indirizzo email">🔊</button></div><div class="en">(email) address</div><div class="ex">"Ha un indirizzo email?"</div></div>
+    <div class="vocab-item"><div><span class="w">la chiocciola · il punto</span> <span class="pos">n.</span> <span class="ipa">/ˈkjɔttʃola/</span> <button class="say" data-say="la chiocciola, il punto">🔊</button></div><div class="en">@ ("snail") · dot</div><div class="ex">"darya punto karimi chiocciola gmail punto com"</div></div>
+    <div class="vocab-item"><div><span class="w">l'anno / gli anni</span> <span class="pos">n. m.</span> <span class="ipa">/ˈanno/</span> <button class="say" data-say="l'anno, gli anni">🔊</button></div><div class="en">year / years</div><div class="ex">"Ho trentuno anni."</div></div>
+    <div class="vocab-item"><div><span class="w">la lingua</span> <span class="pos">n. f.</span> <span class="ipa">/ˈliŋɡwa/</span> <button class="say" data-say="la lingua">🔊</button></div><div class="en">language (also: tongue)</div><div class="ex">"Quante lingue parli?"</div></div>
+    <div class="vocab-item"><div><span class="w">la tessera</span> <span class="pos">n. f.</span> <span class="ipa">/ˈtɛssera/</span> <button class="say" data-say="la tessera">🔊</button></div><div class="en">membership card</div><div class="ex">"Vorrei la tessera della biblioteca."</div></div>
+    <div class="vocab-item"><div><span class="w">mi dispiace</span> <span class="pos">expr.</span> <span class="ipa">/mi disˈpjatʃe/</span> <button class="say" data-say="mi dispiace">🔊</button></div><div class="en">I'm sorry</div><div class="ex">"No, mi dispiace, la domenica è chiusa."</div></div>
+  </div></div>
+
+  <h4>🗣️ Le lingue · Languages (same as the masculine nationality!)</h4>
+  <p>parlo <strong>persiano</strong> (or <em>farsi</em>) · <strong>inglese</strong> · <strong>italiano</strong> · <strong>arabo</strong> · <strong>francese</strong> · <strong>tedesco</strong> · <strong>spagnolo</strong> · <strong>turco</strong> · <strong>cinese</strong>. Languages are masculine and lower-case: <em>l'italiano è bello</em>. Degrees: <em>parlo bene / un po' / abbastanza bene / non parlo…</em></p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>اسم زبان‌ها همون شکل مذکرِ ملیته: <bdi>italiano</bdi>، <bdi>persiano</bdi>. با حرف کوچیک نوشته می‌شن. ایتالیایی‌ها هم <bdi>persiano</bdi> می‌گن هم <bdi>farsi</bdi>.</p></div>
+
+  <h4>🔢 I numeri da 20 a 100 · tap to hear</h4>
+  <div class="num-grid">
+    <button class="tile" data-say="venti"><b>20</b><span>venti</span></button>
+    <button class="tile" data-say="ventuno"><b>21</b><span>vent<strong>u</strong>no</span></button>
+    <button class="tile" data-say="ventidue"><b>22</b><span>ventidue</span></button>
+    <button class="tile" data-say="ventitré"><b>23</b><span>ventitr<strong>é</strong></span></button>
+    <button class="tile" data-say="ventotto"><b>28</b><span>vent<strong>o</strong>tto</span></button>
+    <button class="tile" data-say="trenta"><b>30</b><span>trenta</span></button>
+    <button class="tile" data-say="trentuno"><b>31</b><span>trentuno</span></button>
+    <button class="tile" data-say="quaranta"><b>40</b><span>quaranta</span></button>
+    <button class="tile" data-say="quarantadue"><b>42</b><span>quarantadue</span></button>
+    <button class="tile" data-say="cinquanta"><b>50</b><span>cinquanta</span></button>
+    <button class="tile" data-say="sessanta"><b>60</b><span>sessanta</span></button>
+    <button class="tile" data-say="settanta"><b>70</b><span>settanta</span></button>
+    <button class="tile" data-say="ottanta"><b>80</b><span>ottanta</span></button>
+    <button class="tile" data-say="novanta"><b>90</b><span>novanta</span></button>
+    <button class="tile" data-say="novantanove"><b>99</b><span>novantanove</span></button>
+    <button class="tile" data-say="cento"><b>100</b><span>cento</span></button>
+  </div>
+  <p class="small"><strong>Two rules:</strong> (1) before <em>uno</em> and <em>otto</em> the tens drop their final vowel: vent<strong>i</strong> + uno → <strong>ventuno</strong>, trent<strong>a</strong> + otto → <strong>trentotto</strong>. (2) Numbers ending in 3 take an accent: ventitr<strong>é</strong>, trentatr<strong>é</strong>. Note: with <em>anni</em>, people say both <em>trentuno anni</em> and <em>trentun anni</em>.</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>دو قانون: ۱) قبل از <bdi>uno</bdi> و <bdi>otto</bdi> حرف صدادار آخر دهگان حذف می‌شه (<bdi>ventuno</bdi>، <bdi>trentotto</bdi>). ۲) عددهایی که به ۳ تموم می‌شن علامت تکیه می‌گیرن (<bdi>ventitré</bdi>). ترتیب هم مثل فارسیه: اول دهگان بعد یکان، ولی بدون «و».</p></div>
+
+  <div class="colloc">
+    <h4>🔗 Collocation box</h4>
+    <ul>
+      <li><strong>fare il / la / l'</strong> + profession → <em>faccio il traduttore, fa l'ingegnere</em></li>
+      <li><strong>lavorare in</strong> + workplace / <strong>a casa</strong> / <strong>da casa</strong> → <em>lavoro in uno studio · lavoro da casa</em> (remote)</li>
+      <li><strong>parlare</strong> + language (no article) / <strong>parlare bene / un po'</strong></li>
+      <li><strong>avere … anni</strong> → <em>ho 31 anni</em></li>
+      <li><strong>abitare in via…, numero…</strong> → street first, then number</li>
+      <li><strong>fare la tessera</strong> → to get a membership card</li>
+    </ul>
+  </div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>این ترکیب‌ها رو یکجا حفظ کن. مثلاً <bdi>parlare</bdi> + اسم زبان بدون حرف تعریف میاد (<bdi>parlo inglese</bdi>)، ولی <bdi>insegnare</bdi> و <bdi>studiare</bdi> معمولاً با حرف تعریف (<bdi>insegno l'italiano</bdi>).</p></div>
+</section>
+
+<!-- SECTION: Practice — Grammar -->
+<section class="lesson-section" id="practice-grammar" data-title="5 · Pratica — Grammatica">
+  <h2 class="section-title"><span class="num">5</span> Pratica · Grammatica</h2>
+  <p>Type, then <strong>Controlla</strong> (or Enter). Orange = right word, missing accent.</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>بنویس و <bdi>Controlla</bdi> رو بزن. نارنجی یعنی کلمه درسته ولی علامت تکیه رو جا انداختی. اول بدون نگاه کردن به جدول‌ها امتحان کن.</p></div>
+
+  <h3 class="sub-title">3.1 · Present tense</h3>
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">A · Controllata</span><h4>Luca's tandem notes</h4></div>
+    <p class="instr">Conjugate the verb in brackets.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>فعل داخل پرانتز رو صرف کن. اول ببین فاعل کیه و فعل از کدوم خانواده‌ست (<bdi>-are / -ere / -ire</bdi>).</p></div>
+    <ol class="ex-items">
+      <li>Darya <input class="blank" data-a="abita" aria-label="1"> (abitare) in via del Pratello.</li>
+      <li>Io <input class="blank" data-a="studio" aria-label="2"> (studiare) persiano la sera.</li>
+      <li>Darya, tu <input class="blank" data-a="parli" aria-label="3"> (parlare) benissimo!</li>
+      <li>Lei <input class="blank" data-a="disegna" aria-label="4"> (disegnare) app e siti web.</li>
+      <li>Il negozio di Ana <input class="blank" data-a="apre" aria-label="5"> (aprire) alle nove.</li>
+      <li>Thomas <input class="blank" data-a="scrive" aria-label="6"> (scrivere) un'email a Sara.</li>
+      <li>Io <input class="blank" data-a="ho" aria-label="7"> (avere) trentaquattro anni.</li>
+      <li>E tu, che lavoro <input class="blank" data-a="fai" aria-label="8"> (fare)?</li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">B · Scelta</span><h4>Tu, Lei or lui?</h4></div>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>به موقعیت نگاه کن و فعل مناسب رو انتخاب کن. یادت باشه <bdi>Lei</bdi>ی رسمی مثل «او» صرف می‌شه.</p></div>
+    <div class="mcq" data-a="b" data-why="Library clerk → Darya: formal Lei → abita."><p class="q">1. Sig.ra Gatti to Darya: "Dove ___?"</p><div class="opts"><button data-o="a">abiti</button><button data-o="b">abita</button><button data-o="c">abito</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="a" data-why="Luca → Darya: friends → tu → hai."><p class="q">2. Luca to Darya: "___ un numero di telefono?"</p><div class="opts"><button data-o="a">Hai</button><button data-o="b">Ha</button><button data-o="c">Ho</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="c" data-why="Talking about Thomas → he → fa."><p class="q">3. Sara about Thomas: "___ l'ingegnere."</p><div class="opts"><button data-o="a">Faccio</button><button data-o="b">Fai</button><button data-o="c">Fa</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="b" data-why="-ire verb, 3rd person → parte."><p class="q">4. "Luca ___ (partire) per Teheran a giugno."</p><div class="opts"><button data-o="a">parta</button><button data-o="b">parte</button><button data-o="c">parti</button></div><p class="fb"></p></div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">C · Trasformazione</span><h4>From "I" to "she": Darya's profile in the 3rd person</h4></div>
+    <p class="instr">Sara presents Darya to a new tutor. Rewrite each sentence about Darya.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>سارا داریا رو به یه معلم جدید معرفی می‌کنه. هر جمله رو از «من» به «او» تبدیل کن: کل جمله رو بنویس و از اسم <bdi>Darya</bdi> شروع کن.</p></div>
+    <ol class="ex-items">
+      <li>Abito a Bologna. → <input class="blank full" data-a="darya abita a bologna|abita a bologna" data-show="Darya abita a Bologna." aria-label="1"></li>
+      <li>Ho trentuno anni. → <input class="blank full" data-a="darya ha trentuno anni|ha trentuno anni|darya ha 31 anni" data-show="Darya ha trentuno anni." aria-label="2"></li>
+      <li>Faccio la designer. → <input class="blank full" data-a="darya fa la designer|fa la designer" data-show="Darya fa la designer." aria-label="3"></li>
+      <li>Scrivo un post. → <input class="blank full" data-a="darya scrive un post|scrive un post" data-show="Darya scrive un post." aria-label="4"></li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag free">D · Libera</span><h4>Your Tandem profile</h4></div>
+    <p class="instr">Write your own Tandem profile (5–7 sentences), modelled on Darya's: name, age, nationality, where you live, job, languages, what you're looking for.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>پروفایل تاندم خودت رو بنویس (۵ تا ۷ جمله) شبیه پروفایل داریا: اسم، سن، ملیت، کجا زندگی می‌کنی، شغل، زبان‌ها و دنبال چی هستی. حداقل ۴ فعل مختلف در زمان حال استفاده کن.</p></div>
+    <textarea class="free" data-key="g1-free" placeholder="Ciao! Mi chiamo… Ho … anni… Abito a… Lavoro in… Parlo… Cerco…"></textarea>
+    <p class="saved-note">💾 Saved automatically in this browser.</p>
+  </div>
+
+  <h3 class="sub-title">3.2 · Un, uno, una, un'</h3>
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">A · Classificazione</span><h4>Which article?</h4></div>
+    <p class="instr">Tap a word, then its article.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>روی یه کلمه بزن، بعد حرف تعریف درستش رو انتخاب کن. به جنسیت و حرف اول کلمه دقت کن.</p></div>
+    <div class="sorter">
+      <div class="chips">
+        <button class="chip" data-c="un">amico</button><button class="chip" data-c="uno">studente</button><button class="chip" data-c="una">scuola</button><button class="chip" data-c="unap">amica</button><button class="chip" data-c="un">ristorante</button><button class="chip" data-c="uno">zaino</button><button class="chip" data-c="una">lingua</button><button class="chip" data-c="unap">azienda</button><button class="chip" data-c="un">indirizzo</button><button class="chip" data-c="uno">psicologo</button>
+      </div>
+      <div class="buckets">
+        <div class="bucket" data-c="un"><h5>un</h5><div class="drop"></div></div>
+        <div class="bucket" data-c="uno"><h5>uno</h5><div class="drop"></div></div>
+        <div class="bucket" data-c="una"><h5>una</h5><div class="drop"></div></div>
+        <div class="bucket" data-c="unap"><h5>un'</h5><div class="drop"></div></div>
+      </div>
+      <p class="ex-fb" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">B · Controllata</span><h4>Who works where?</h4></div>
+    <p class="instr">Fill in <em>un, uno, una</em> or <em>un'</em>.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>جای خالی رو با <bdi>un</bdi>، <bdi>uno</bdi>، <bdi>una</bdi> یا <bdi>un'</bdi> پر کن (برای <bdi>un'</bdi> آپوستروف رو هم بنویس).</p></div>
+    <ol class="ex-items">
+      <li>Darya lavora in <input class="blank s" data-a="uno" aria-label="1"> studio di design.</li>
+      <li>Ana lavora in <input class="blank s" data-a="una" aria-label="2"> libreria.</li>
+      <li>Thomas lavora in <input class="blank s" data-a="un'" aria-label="3"> azienda tedesca.</li>
+      <li>Marco ha <input class="blank s" data-a="un" aria-label="4"> bar sotto i portici.</li>
+      <li>Luca è <input class="blank s" data-a="un" aria-label="5"> amico di Sara.</li>
+      <li>Sara è <input class="blank s" data-a="un'" aria-label="6"> insegnante. (She's a woman!)</li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">C · Scelta</span><h4>Questo o questa? Introduce people at the tandem</h4></div>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>داری آدم‌ها رو تو جلسه‌ی تاندم معرفی می‌کنی. برای مرد <bdi>questo</bdi>، برای زن <bdi>questa</bdi>.</p></div>
+    <div class="mcq" data-a="a"><p class="q">1. "___ è Thomas, un compagno di corso."</p><div class="opts"><button data-o="a">Questo</button><button data-o="b">Questa</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="b"><p class="q">2. "___ è Ana, un'amica spagnola."</p><div class="opts"><button data-o="a">Questo</button><button data-o="b">Questa</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="b" data-why="Feminine + vowel → un'. 'insegnante' is the same word for men and women."><p class="q">3. "Questa è Sara, ___ insegnante."</p><div class="opts"><button data-o="a">un</button><button data-o="b">un'</button><button data-o="c">una</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="c" data-why="studente: s + consonant → uno."><p class="q">4. "Questo è Jamal, ___ studente afghano."</p><div class="opts"><button data-o="a">un</button><button data-o="b">una</button><button data-o="c">uno</button></div><p class="fb"></p></div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag free">D · Libera</span><h4>Introduce three people</h4></div>
+    <p class="instr">You're bringing three people from your life to the tandem. Introduce each in one sentence: <em>Questo/Questa è…, un/uno/una/un' + job/relationship, lavora in…</em></p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>سه نفر از آدم‌های زندگیت رو به جلسه‌ی تاندم آوردی. هر کدوم رو تو یه جمله معرفی کن: کی هست، شغلش چیه و کجا کار می‌کنه.</p></div>
+    <textarea class="free" data-key="g2-free" placeholder="Questa è Neda, una collega: è ingegnere e lavora in un'azienda a Teheran…"></textarea>
+    <p class="saved-note">💾 Saved automatically in this browser.</p>
+  </div>
+
+  <h3 class="sub-title">3.3 · a / in / di + question words</h3>
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">A · Controllata</span><h4>Where exactly?</h4></div>
+    <p class="instr">Fill in <em>a</em>, <em>in</em> or <em>di</em>.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>با <bdi>a</bdi>، <bdi>in</bdi> یا <bdi>di</bdi> پر کن. شهر؟ کشور؟ خیابون؟ اصالت؟</p></div>
+    <ol class="ex-items">
+      <li>Thomas è <input class="blank s" data-a="di" aria-label="1"> Vienna, ma abita <input class="blank s" data-a="a" aria-label="2"> Bologna.</li>
+      <li>Vienna è <input class="blank s" data-a="in" aria-label="3"> Austria.</li>
+      <li>Lo studio di Darya è <input class="blank s" data-a="in" aria-label="4"> via Zamboni.</li>
+      <li>Luca lavora <input class="blank s" data-a="a" aria-label="5"> casa.</li>
+      <li>La sorella di Darya abita <input class="blank s" data-a="a" aria-label="6"> Shiraz, <input class="blank s" data-a="in" aria-label="7"> Iran.</li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">B · Abbinamento</span><h4>Question ↔ answer</h4></div>
+    <p class="instr">Match each of Luca's questions with Darya's answer.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>هر سؤال لوکا رو به جواب داریا وصل کن. به کلمه‌ی پرسشی (<bdi>che, chi, dove, quanti</bdi>) دقت کن.</p></div>
+    <div class="match">
+      <div class="match-col left">
+        <button data-k="1" data-say="Che lavoro fai?">Che lavoro fai?</button>
+        <button data-k="2" data-say="Chi è Ana?">Chi è Ana?</button>
+        <button data-k="3" data-say="Dove abiti?">Dove abiti?</button>
+        <button data-k="4" data-say="Quante lingue parli?">Quante lingue parli?</button>
+        <button data-k="5" data-say="Come stai?">Come stai?</button>
+      </div>
+      <div class="match-col right">
+        <button data-k="1">Sono designer.</button>
+        <button data-k="2">Una compagna di corso.</button>
+        <button data-k="3">In via del Pratello.</button>
+        <button data-k="4">Tre: persiano, inglese e italiano.</button>
+        <button data-k="5">Benissimo, grazie!</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">C · Domande</span><h4>Ask the question</h4></div>
+    <p class="instr">Write the <strong>informal</strong> question that gets each answer.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>جواب رو داری. سؤال خودمونی (<bdi>tu</bdi>) که به این جواب می‌رسه رو بنویس.</p></div>
+    <ol class="ex-items">
+      <li>"Abito a Bologna." → <input class="blank w" data-a="dove abiti" data-show="Dove abiti?" aria-label="1"></li>
+      <li>"Ho trentuno anni." → <input class="blank w" data-a="quanti anni hai" data-show="Quanti anni hai?" aria-label="2"></li>
+      <li>"Faccio il traduttore." → <input class="blank w" data-a="che lavoro fai|che cosa fai|cosa fai" data-show="Che lavoro fai?" aria-label="3"></li>
+      <li>"È Luca, un amico di Sara." → <input class="blank w" data-a="chi è|chi è lui|chi è questo" data-show="Chi è?" aria-label="4"></li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag free">D · Libera</span><h4>Your geography</h4></div>
+    <p class="instr">Write 4 sentences: where you're from (<em>di</em>), where you live (<em>a</em> + city, <em>in</em> + country), your street (<em>in via…</em>), where you work or study (<em>in…</em> or <em>a casa</em>).</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>۴ جمله درباره‌ی جغرافیای زندگی خودت بنویس: اهل کجایی، کجا زندگی می‌کنی (شهر و کشور)، تو کدوم خیابون، و کجا کار یا درس می‌خونی.</p></div>
+    <textarea class="free" data-key="g3-free" placeholder="Sono di… Abito a…, in… Abito in via… Lavoro in…"></textarea>
+    <p class="saved-note">💾 Saved automatically in this browser.</p>
+  </div>
+</section>
+
+<!-- SECTION: Practice — Vocabulary -->
+<section class="lesson-section" id="practice-vocab" data-title="6 · Pratica — Vocabolario">
+  <h2 class="section-title"><span class="num">6</span> Pratica · Vocabolario</h2>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">A · Controllata</span><h4>She does the same job</h4></div>
+    <p class="instr">Write the feminine form of each profession.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>شکل مؤنث هر شغل رو بنویس. الگوهای جدول مشاغل رو یادت بیار. بعضی‌ها اصلاً عوض نمی‌شن!</p></div>
+    <ol class="ex-items">
+      <li>Luca è traduttore. Sua sorella è <input class="blank" data-a="traduttrice" aria-label="1">.</li>
+      <li>Marco è barista. Sua moglie è <input class="blank" data-a="barista" aria-label="2">.</li>
+      <li>Il padre di Ana è cameriere. Ana è <input class="blank" data-a="cameriera" aria-label="3">.</li>
+      <li>Thomas è studente. Darya è <input class="blank" data-a="studentessa" aria-label="4">.</li>
+      <li>Il collega di Darya è impiegato. La collega è <input class="blank" data-a="impiegata" aria-label="5">.</li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">B · Dettato</span><h4>Numbers dictation: the tandem members' details</h4></div>
+    <p class="instr">Press 🔊 and type the number (digits).</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>🔊 رو بزن و عددی که می‌شنوی رو با رقم بنویس. اگه سریع بود، 🐢 رو در بخش داستان روشن کن.</p></div>
+    <ol class="ex-items">
+      <li>Età di Luca: <button class="say" data-say="trentatré">🔊</button> <input class="blank s" data-a="33" data-norm="digits" aria-label="1"></li>
+      <li>Età di Marco: <button class="say" data-say="quarantacinque">🔊</button> <input class="blank s" data-a="45" data-norm="digits" aria-label="2"></li>
+      <li>Via Zamboni, numero: <button class="say" data-say="sessantotto">🔊</button> <input class="blank s" data-a="68" data-norm="digits" aria-label="3"></li>
+      <li>Età della Dott.ssa Conti: <button class="say" data-say="cinquantasette">🔊</button> <input class="blank s" data-a="57" data-norm="digits" aria-label="4"></li>
+      <li>Via del Pratello, numero: <button class="say" data-say="novantuno">🔊</button> <input class="blank s" data-a="91" data-norm="digits" aria-label="5"></li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">C · Scrittura</span><h4>Write the number in words</h4></div>
+    <p class="instr">Watch out for the dropped vowels and accents!</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>عدد رو با حروف ایتالیایی بنویس. حواست به حذف حرف صدادار (۲۱، ۳۸) و علامت تکیه (۲۳) باشه.</p></div>
+    <ol class="ex-items">
+      <li>21 → <input class="blank" data-a="ventuno" aria-label="21"></li>
+      <li>38 → <input class="blank" data-a="trentotto" aria-label="38"></li>
+      <li>23 → <input class="blank" data-a="ventitré" aria-label="23"></li>
+      <li>76 → <input class="blank" data-a="settantasei" aria-label="76"></li>
+      <li>100 → <input class="blank" data-a="cento" aria-label="100"></li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">D · Flashcards</span><h4>Flip &amp; recall</h4></div>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>قبل از برگردوندن کارت، جواب رو بلند به ایتالیایی بگو.</p></div>
+    <div class="cards">
+      <button class="flashcard" data-say="la libreria"><span class="front">bookshop</span><span class="back">la libreria</span></button>
+      <button class="flashcard" data-say="la biblioteca"><span class="front">library</span><span class="back">la biblioteca</span></button>
+      <button class="flashcard" data-say="Che lavoro fai?"><span class="front">What do you do? (tu)</span><span class="back">Che lavoro fai?</span></button>
+      <button class="flashcard" data-say="Non c'è male"><span class="front">Not bad</span><span class="back">Non c'è male</span></button>
+      <button class="flashcard" data-say="la chiocciola"><span class="front">@</span><span class="back">la chiocciola</span></button>
+      <button class="flashcard" data-say="Mi dispiace"><span class="front">I'm sorry</span><span class="back">Mi dispiace</span></button>
+      <button class="flashcard" data-say="un'azienda"><span class="front">a company</span><span class="back">un'azienda</span></button>
+      <button class="flashcard" data-say="Faccio l'insegnante"><span class="front">I'm a teacher (fare)</span><span class="back">Faccio l'insegnante</span></button>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag free">E · Produzione</span><h4>Fill in the library form, then say it</h4></div>
+    <p class="instr">Answer Sig.ra Gatti's questions about yourself in full sentences: Come si chiama? Quanti anni ha? Dove abita? Che lavoro fa? Quante lingue parla? Ha un indirizzo email? (spell it with <em>chiocciola</em> and <em>punto</em>).</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>به سؤال‌های خانم گاتی درباره‌ی خودت با جمله‌ی کامل جواب بده. ایمیلت رو هم با <bdi>chiocciola</bdi> (@) و <bdi>punto</bdi> (.) بنویس. بعد جواب‌هات رو بلند بخون.</p></div>
+    <textarea class="free" data-key="v-free" placeholder="Mi chiamo… Ho … anni. Abito in via…, numero… Faccio il/la… Parlo… Il mio indirizzo email è: … chiocciola … punto …"></textarea>
+    <p class="saved-note">💾 Saved automatically in this browser.</p>
+  </div>
+</section>
+
+<!-- SECTION: Speaking Tasks -->
+<section class="lesson-section" id="speaking" data-title="7 · Parlare — Speaking">
+  <h2 class="section-title"><span class="num">7</span> Parlare · Speaking tasks</h2>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>ضبط‌کننده‌ی صدای گوشیت رو آماده کن. هر تمرین می‌گه چی رو ضبط کنی و موقع گوش دادن به چی دقت کنی.</p></div>
+
+  <div class="task">
+    <h3>🔁 Task 1 · Retell: the tandem evening</h3>
+    <dl class="task-meta">
+      <dt>What to do</dt><dd>Read <a href="#scene2">Scena 2</a> twice. Close the file (or scroll away). Retell what happened <strong>in the 3rd person</strong>: who Luca is, his job, what he studies, Darya's job, where she lives, who Thomas and Ana are.</dd>
+      <dt>How long</dt><dd>90 seconds</dd>
+      <dt>Record</dt><dd>The full retelling.</dd>
+      <dt>Listen for</dt><dd>3rd-person endings: <em>lavora, studia, abita, fa, ha</em>, not <em>-o</em>! Did you use <em>un/uno/una/un'</em> correctly?</dd>
+    </dl>
+    <div class="timer" data-s="90"><span class="t-display">1:30</span><button class="btn primary t-start">▶ Start</button><button class="btn t-reset">↺</button></div>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>صحنه‌ی ۲ رو دو بار بخون، بعد فایل رو ببند و ماجرا رو به صورت سوم‌شخص (او) تعریف کن: لوکا کیه، چه‌کاره‌ست، داریا کجا زندگی می‌کنه و... موقع گوش دادن ببین فعل‌ها رو درست با <bdi>-a/-e</bdi> تموم کردی یا نه.</p></div>
+  </div>
+
+  <div class="task">
+    <h3>🎭 Task 2 · Roleplay: a new tandem partner</h3>
+    <dl class="task-meta">
+      <dt>What to do</dt><dd>Play both roles. You're at a tandem evening; it's informal (<em>tu</em>) from the start. Each person must ask at least 4 questions.</dd>
+      <dt>How long</dt><dd>3 minutes</dd>
+      <dt>Record</dt><dd>The whole dialogue.</dd>
+      <dt>Listen for</dt><dd>Did you vary the question words (<em>che, chi, dove, quante, come</em>)? Did you bounce questions back (<em>E tu?</em>)?</dd>
+    </dl>
+    <div class="role-cards">
+      <div class="role"><b>A · You</b><br>Greet and ask how they are. Ask: job, where they live, how many languages they speak. Introduce a friend who's with you (<em>Questo/Questa è…</em>). Give your number.</div>
+      <div class="role"><b>B · Giulia, 27, Italian</b><br>Nurse (<em>infermiera</em>) in a hospital, lives in Bologna in via Saragozza, speaks Italian and English, studies Arabic. Asks you: where you're from, your job, your age.</div>
+    </div>
+    <div class="timer" data-s="180"><span class="t-display">3:00</span><button class="btn primary t-start">▶ Start</button><button class="btn t-reset">↺</button></div>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>هر دو نقش رو بازی کن. فضا خودمونیه (<bdi>tu</bdi>). هر نفر باید حداقل ۴ سؤال بپرسه. یادت نره سؤال رو برگردونی (<bdi>E tu?</bdi>) و دوستت رو هم معرفی کنی.</p></div>
+  </div>
+
+  <div class="task">
+    <h3>💬 Task 3 · Opinion: "È maleducato chiedere l'età?"</h3>
+    <dl class="task-meta">
+      <dt>What to do</dt><dd>Is it rude to ask someone's age? Give your opinion with simple frames: <em>Secondo me sì / no. · In Iran… · In Italia… · Con un amico… / Con un collega…</em> Give at least 2 examples of situations.</dd>
+      <dt>How long</dt><dd>90 seconds</dd>
+      <dt>Record</dt><dd>Your statement.</dd>
+      <dt>Listen for</dt><dd>Did you use <em>avere</em> for age? Did you use <em>a</em>/<em>in</em> correctly for places?</dd>
+    </dl>
+    <div class="timer" data-s="90"><span class="t-display">1:30</span><button class="btn primary t-start">▶ Start</button><button class="btn t-reset">↺</button></div>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>نظرت رو بگو: پرسیدن سن بی‌ادبیه؟ با قالب‌های ساده مثل <bdi>Secondo me sì/no</bdi> (به نظرم آره/نه) و حداقل دو تا مثال از موقعیت‌های مختلف (با دوست، با همکار، تو ایران، تو ایتالیا).</p></div>
+  </div>
+
+  <div class="task">
+    <h3>🎧 Task 4 · Shadowing: at the library</h3>
+    <dl class="task-meta">
+      <dt>What to do</dt><dd>Use <a href="#scene3">Scena 3</a>. (1) Listen and read. (2) Speak along with the audio (turn on 🐢 if needed). (3) Read Darya's lines only, replacing her details with <strong>yours</strong>.</dd>
+      <dt>How long</dt><dd>3 rounds · about 5 minutes</dd>
+      <dt>Record</dt><dd>Round 3.</dd>
+      <dt>Listen for</dt><dd>Silent <em>h</em> in <em>ho / ha</em>. <em>Quanti</em> = /ˈkwanti/. Stress: <em>biblio<strong>te</strong>ca</em>, <em><strong>tes</strong>sera</em>.</dd>
+    </dl>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>دور سوم فقط جمله‌های داریا رو بخون، ولی اطلاعات خودت رو جایگزین کن (اسم، سن، آدرس، شغل). <bdi>h</bdi> در <bdi>ho</bdi> رو تلفظ نکن!</p></div>
+  </div>
+</section>
+
+<!-- SECTION: Tips & Strategies -->
+<section class="lesson-section" id="tips" data-title="8 · Consigli — Tips">
+  <h2 class="section-title"><span class="num">8</span> Consigli · Tips &amp; strategies</h2>
+  <div class="tips">
+    <div class="tip"><h4>1 · Learn verbs as a "chant"</h4><p>Say every new verb as a 3-beat chant: <em>lavoro–lavori–lavora</em>, <em>scrivo–scrivi–scrive</em>. Rhythm sticks better than tables. Do it while walking or cooking.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>هر فعل جدید رو مثل یه سرود سه‌ضربی بگو: <bdi>lavoro–lavori–lavora</bdi>. ریتم بهتر از جدول تو ذهن می‌مونه. موقع راه رفتن یا آشپزی تکرارش کن.</p></div></div>
+    <div class="tip"><h4>2 · False friends: libreria ≠ library</h4><p><em>Libreria</em> = bookshop; <em>biblioteca</em> = library. Your English "library" will keep pulling you towards <em>libreria</em>, so make a mental picture: in a <em>libreria</em> you <strong>pay</strong> for books; in a <em>biblioteca</em> you borrow them with your <em>tessera</em>.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p><bdi>libreria</bdi> یعنی کتاب‌فروشی (نه کتابخونه!). کتابخونه می‌شه <bdi>biblioteca</bdi>. ترفند: تو <bdi>libreria</bdi> پول می‌دی و کتاب می‌خری.</p></div></div>
+    <div class="tip"><h4>3 · Addresses go small → big</h4><p>Italian addresses start with the street and number, then the city: <em>via del Pratello 42, Bologna</em>. Persian addresses often go big → small (city, area, street, alley, number). Practise saying your address the Italian way.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>آدرس ایتالیایی از کوچیک به بزرگه: اول خیابون و پلاک، بعد شهر. آدرس فارسی معمولاً برعکسه (شهر، محله، خیابون، کوچه، پلاک). آدرس خودت رو به سبک ایتالیایی تمرین کن.</p></div></div>
+    <div class="tip"><h4>4 · Cultural note: what Italians ask</h4><p>"Che lavoro fai?" is a very normal early question in Italy, but salary is not. Age is fine among young people or in forms, more delicate with older adults, especially women. "Come stai?" usually expects a short answer, not a health report!</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تو ایتالیا پرسیدن شغل خیلی عادیه، ولی پرسیدن حقوق نه. سن پرسیدن بین جوون‌ها یا تو فرم‌ها اوکیه، ولی با بزرگ‌ترها (به‌خصوص خانم‌ها) حساس‌تره. جواب <bdi>Come stai?</bdi> هم کوتاهه، لازم نیست تعارف و جزئیات بگی!</p></div></div>
+    <div class="tip"><h4>5 · Outside this file: do a real tandem</h4><p>Apps like <strong>Tandem</strong> and <strong>HelloTalk</strong> connect you with Italians who want to learn your language (Persian or English). Use your profile from exercise 3.1-D. Many Italian cities, including Bologna, also have in-person language-exchange evenings: search "scambio linguistico" + your city.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>اپ‌های <bdi>Tandem</bdi> و <bdi>HelloTalk</bdi> تو رو به ایتالیایی‌هایی وصل می‌کنن که می‌خوان فارسی یا انگلیسی یاد بگیرن. پروفایلی که تو تمرین ۳.۱-D نوشتی رو اونجا استفاده کن. «<bdi>scambio linguistico</bdi>» + اسم شهرت رو هم سرچ کن تا جلسه‌های حضوری پیدا کنی.</p></div></div>
+  </div>
+</section>
+
+<!-- SECTION: Listening & Watching -->
+<section class="lesson-section" id="listening" data-title="9 · Ascoltare &amp; guardare">
+  <h2 class="section-title"><span class="num">9</span> Ascoltare &amp; guardare</h2>
+  <div class="resource">
+    <div class="platform">YouTube · Easy Italian</div>
+    <h4>Street interviews about work</h4>
+    <p><strong>Why:</strong> Real Italians answering questions about their jobs and lives, with subtitles.</p>
+    <p><strong>Micro-task:</strong> Search the channel for "lavoro". In one video, write down 3 professions you hear and say whether each speaker used <em>sono…</em> or <em>faccio il/la…</em>.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تو کانال دنبال «<bdi>lavoro</bdi>» بگرد. از یه ویدیو ۳ تا شغل بنویس و ببین هر کس با <bdi>sono</bdi> گفته یا با <bdi>faccio il/la</bdi>.</p></div>
+  </div>
+  <div class="resource">
+    <div class="platform">YouTube · One World Italiano</div>
+    <h4>Beginner lessons on introductions and personal information</h4>
+    <p><strong>Why:</strong> A native teacher explains A1 structures with clear examples and on-screen text.</p>
+    <p><strong>Micro-task:</strong> Find a lesson about introducing yourself or the present tense. Pause each time a verb appears and say the <em>io / tu / lui</em> forms aloud before she does.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>یه درس درباره‌ی معرفی یا زمان حال پیدا کن. هر بار فعلی دیدی، ویدیو رو نگه دار و قبل از معلم سه شکل <bdi>io / tu / lui</bdi> رو بلند بگو.</p></div>
+  </div>
+  <div class="resource">
+    <div class="platform">Podcast · Coffee Break Italian</div>
+    <h4>Continue Season 1</h4>
+    <p><strong>Why:</strong> The early episodes recycle exactly this level: numbers, where you live, what you do.</p>
+    <p><strong>Micro-task:</strong> Play the next episode. Every time you hear a number above 20, pause and write it in digits. Check yourself with the transcript or the episode notes.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>قسمت بعدی رو گوش بده. هر بار عدد بالای ۲۰ شنیدی، نگه دار و با رقم بنویسش. بعد با متن یا یادداشت‌های قسمت چک کن.</p></div>
+  </div>
+</section>
+
+<!-- SECTION: Explore More — Autonomy -->
+<section class="lesson-section" id="explore" data-title="10 · Explore More">
+  <h2 class="section-title"><span class="num">10</span> Explore More · Autonomia</h2>
+  <ol class="explore-list">
+    <li><strong>Real job ads.</strong> Go to an Italian job site (e.g. InfoJobs.it or Indeed Italia). Find 3 ads and copy the job titles. Many say "cameriere/a" or "impiegato/a": write both forms.
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تو یه سایت کاریابی ایتالیایی (مثل <bdi>InfoJobs.it</bdi>) سه تا آگهی پیدا کن و عنوان شغل‌ها رو بنویس، هم شکل مذکر هم مؤنث.</p></div></li>
+    <li><strong>Map your Bologna.</strong> Open Google Maps on Bologna. Choose 3 real streets near Piazza Maggiore and write: "Abito in via…, numero…, a Bologna, in Emilia-Romagna, in Italia."
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تو گوگل‌مپ بولونیا رو باز کن، ۳ خیابون واقعی نزدیک <bdi>Piazza Maggiore</bdi> انتخاب کن و برای هر کدوم یه آدرس کامل با <bdi>a</bdi> و <bdi>in</bdi> بنویس.</p></div></li>
+    <li><strong>The real Salaborsa.</strong> Visit the Biblioteca Salaborsa website and find the page about registering (<em>iscrizione</em>). Note 3 pieces of information they ask for.
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>سایت کتابخونه‌ی واقعی <bdi>Salaborsa</bdi> رو باز کن و صفحه‌ی ثبت‌نام (<bdi>iscrizione</bdi>) رو پیدا کن. ۳ تا از اطلاعاتی که می‌خوان رو بنویس. لازم نیست همه‌ش رو بفهمی!</p></div></li>
+    <li><strong>Tombola numbers.</strong> Search "tombola napoletana smorfia": each number from 1 to 90 has a traditional meaning. Pick 5 numbers above 20, write them in words, and note their meaning.
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>«<bdi>tombola napoletana smorfia</bdi>» رو سرچ کن. تو این بازی سنتی هر عدد از ۱ تا ۹۰ یه معنی داره. ۵ عدد بالای ۲۰ انتخاب کن، با حروف بنویس و معنیشون رو یادداشت کن.</p></div></li>
+    <li><strong>Read 3 real profiles.</strong> On Tandem or HelloTalk (or Instagram bios), read 3 Italian profiles. Note how each person says their job and their age.
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>۳ تا پروفایل واقعی ایتالیایی بخون و ببین هر کس شغل و سنش رو چطور گفته.</p></div></li>
+    <li><strong>Your own interest.</strong> Find something in Italian that genuinely interests you this week and note one new word or phrase from it.
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>این هفته یه چیز ایتالیایی پیدا کن که واقعاً برات جالبه و یه کلمه یا عبارت جدید ازش یادداشت کن.</p></div></li>
+  </ol>
+</section>
+
+<!-- SECTION: Weekly Summary -->
+<section class="lesson-section" id="summary" data-title="11 · Riepilogo — Summary">
+  <h2 class="section-title"><span class="num">11</span> Riepilogo · Lesson summary</h2>
+  <div class="summary-grid">
+    <div class="sum-card"><h4>📐 Grammar</h4><ul><li>-are: o / i / a · -ere/-ire: o / i / e</li><li>avere: ho, hai, ha · fare: faccio, fai, fa</li><li>un / uno / una / un'</li><li>questo / questa è…</li><li>a (city) · in (country/street/work) · di (origin)</li></ul></div>
+    <div class="sum-card c2"><h4>📚 Vocabulary</h4><ul><li>jobs: m/f patterns (-tore/-trice…)</li><li>workplaces: studio, azienda, libreria ≠ biblioteca</li><li>numbers 20–100</li><li>email: chiocciola, punto</li></ul></div>
+    <div class="sum-card c3"><h4>💬 Key phrases</h4><ul><li>Come stai? / Come sta? – Non c'è male</li><li>Che lavoro fai? – Faccio il/la…</li><li>Quanti anni hai? – Ho … anni</li><li>Mi dispiace.</li></ul></div>
+    <div class="sum-card c4"><h4>🇮🇹 Culture</h4><ul><li>Language exchange = "tandem"</li><li>Addresses: via + number, then city</li><li>Ask about work, not salary</li><li>Salaborsa, Bologna's library in Piazza Maggiore</li></ul></div>
+  </div>
+
+  <h3>Self-check · Can you…?</h3>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>صادقانه جواب بده. اگه «هنوز نه» زدی، برگرد به همون بخش.</p></div>
+  <ol class="selfcheck">
+    <li>…conjugate <em>abitare, scrivere, aprire</em> for io / tu / lui?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…say your age and job in two different ways?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…explain why it's <em>uno studio</em> but <em>un'azienda</em>?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…introduce a male and a female friend to someone?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…say where you live with street, city and country, using the right prepositions?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…count from 20 to 100 in tens, and say 21, 28 and 33 correctly?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…ask "how are you" formally and informally, and answer with 3 different levels?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…spell your email address in Italian?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+  </ol>
+
+  <h3>Before the next lesson ✅</h3>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>قبل از درس بعدی این کارها رو انجام بده و تیکشون رو بزن.</p></div>
+  <ul class="checklist" data-key="next">
+    <li><label><input type="checkbox"><span>Chant 10 verbs (io–tu–lui) aloud: lavorare, abitare, parlare, studiare, insegnare, scrivere, vivere, prendere, aprire, partire.</span></label></li>
+    <li><label><input type="checkbox"><span>Publish (or at least finish) your Tandem profile and say it aloud from memory.</span></label></li>
+    <li><label><input type="checkbox"><span>Redo the 3.2 sorter and 3.3-A without mistakes.</span></label></li>
+    <li><label><input type="checkbox"><span>Record the retell task (Task 1) again and compare.</span></label></li>
+    <li><label><input type="checkbox"><span>Read 5 house numbers or prices aloud in Italian wherever you are this week.</span></label></li>
+  </ul>
+</section>
+
+<!-- SECTION: Answer Key -->
+<section class="lesson-section answer-key" id="answers" data-title="12 · Soluzioni — Answer Key">
+  <h2 class="section-title"><span class="num">12</span> Soluzioni · Answer key</h2>
+  <p class="callout"><strong>Speaking and free-writing tasks don't have fixed answers — review your own output or share with a tutor.</strong></p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تمرین‌های گفتاری و نوشتاری آزاد جواب ثابت ندارن. خودت بررسیشون کن یا به معلم نشون بده.</p></div>
+
+  <details><summary>3.1 · A, Luca's tandem notes</summary><ol><li>abita</li><li>studio <span class="note">(studiare: stem studi- → io studio, not "studiio")</span></li><li>parli</li><li>disegna</li><li>apre <span class="note">(-ire → 3rd person -e)</span></li><li>scrive</li><li>ho</li><li>fai</li></ol></details>
+  <details><summary>3.1 · B, Tu, Lei or lui?</summary><ol><li>abita (formal Lei)</li><li>Hai</li><li>Fa</li><li>parte</li></ol></details>
+  <details><summary>3.1 · C, From "I" to "she"</summary><ol><li>Darya abita a Bologna.</li><li>Darya ha trentuno anni.</li><li>Darya fa la designer.</li><li>Darya scrive un post.</li></ol></details>
+  <details><summary>3.1 · D, Tandem profile</summary><p class="note">Check: every verb ends in -o when it's about you (abito, lavoro, parlo, cerco); <em>ho … anni</em>; <em>a</em> + city, <em>in</em> + country.</p></details>
+  <details><summary>3.2 · A, Which article?</summary><p><strong>un:</strong> amico, ristorante, indirizzo · <strong>uno:</strong> studente, zaino, psicologo · <strong>una:</strong> scuola, lingua · <strong>un':</strong> amica, azienda</p></details>
+  <details><summary>3.2 · B, Who works where?</summary><ol><li>uno <span class="note">(s + consonant)</span></li><li>una</li><li>un' <span class="note">(feminine + vowel)</span></li><li>un</li><li>un <span class="note">(masculine + vowel: no apostrophe)</span></li><li>un' <span class="note">(insegnante, a woman → un')</span></li></ol></details>
+  <details><summary>3.2 · C, Questo o questa?</summary><ol><li>Questo</li><li>Questa</li><li>un'</li><li>uno</li></ol></details>
+  <details><summary>3.3 · A, Where exactly?</summary><ol><li>di · a</li><li>in</li><li>in</li><li>a <span class="note">(a casa)</span></li><li>a · in <span class="note">(city → a, country → in)</span></li></ol></details>
+  <details><summary>3.3 · B, Question ↔ answer</summary><p>Che lavoro fai? → Sono designer · Chi è Ana? → Una compagna di corso · Dove abiti? → In via del Pratello · Quante lingue parli? → Tre… · Come stai? → Benissimo, grazie!</p></details>
+  <details><summary>3.3 · C, Ask the question</summary><ol><li>Dove abiti?</li><li>Quanti anni hai?</li><li>Che lavoro fai?</li><li>Chi è? <span class="note">(a person → chi)</span></li></ol></details>
+  <details><summary>Vocabulary · A, Feminine jobs</summary><ol><li>traduttrice</li><li>barista <span class="note">(-ista: invariable)</span></li><li>cameriera</li><li>studentessa</li><li>impiegata</li></ol></details>
+  <details><summary>Vocabulary · B, Dictation</summary><ol><li>33 (trentatré)</li><li>45 (quarantacinque)</li><li>68 (sessantotto)</li><li>57 (cinquantasette)</li><li>91 (novantuno) <span class="note">vowel dropped before uno</span></li></ol></details>
+  <details><summary>Vocabulary · C, Numbers in words</summary><ol><li>ventuno</li><li>trentotto</li><li>ventitré <span class="note">(accent!)</span></li><li>settantasei</li><li>cento</li></ol></details>
+  <details><summary>Vocabulary · E, Library form</summary><p class="note">Check: answers in the <em>io</em> form (Mi chiamo, Ho, Abito, Faccio, Parlo); "ho … anni"; email spelled with <em>chiocciola</em> and <em>punto</em>.</p></details>
+</section>
+
+</main>
+<button class="back-to-top" id="backTop" aria-label="Back to top">↑</button>
+<script>
+(function(){
+  "use strict";
+  var KEY = document.body.getAttribute('data-lesson') || 'lesson';
+  var store = {
+    get: function(k){ try { var v = localStorage.getItem(KEY+':'+k); return v ? JSON.parse(v) : null; } catch(e){ return null; } },
+    set: function(k,v){ try { localStorage.setItem(KEY+':'+k, JSON.stringify(v)); } catch(e){} }
+  };
+  var $ = function(s,c){ return (c||document).querySelector(s); };
+  var $$ = function(s,c){ return Array.prototype.slice.call((c||document).querySelectorAll(s)); };
+
+  /* ---------- Progress bar, back to top, active section ---------- */
+  var bar = $('#progressBar'), backTop = $('#backTop');
+  var sections = $$('.lesson-section');
+  var menuLinks = $$('#navMenu a');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? Math.min(100, (h.scrollTop || document.body.scrollTop) / max * 100) : 0;
+    bar.style.width = pct + '%'; bar.setAttribute('aria-valuenow', Math.round(pct));
+    backTop.classList.toggle('show', (window.scrollY || h.scrollTop) > 600);
+    var current = null;
+    sections.forEach(function(s){ if (s.getBoundingClientRect().top < 140) current = s.id; });
+    menuLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#'+current); });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  backTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  /* ---------- Hamburger menu ---------- */
+  var menuBtn = $('#menuBtn'), menu = $('#navMenu');
+  function setMenu(open){ menu.classList.toggle('open', open); menuBtn.setAttribute('aria-expanded', open); menuBtn.textContent = open ? '✕' : '☰'; }
+  menuBtn.addEventListener('click', function(e){ e.stopPropagation(); setMenu(!menu.classList.contains('open')); });
+  menu.addEventListener('click', function(e){ if (e.target.tagName === 'A') setMenu(false); });
+  document.addEventListener('click', function(e){ if (menu.classList.contains('open') && !menu.contains(e.target)) setMenu(false); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') setMenu(false); });
+
+  /* ---------- Farsi toggle ---------- */
+  var faBtn = $('#faBtn');
+  function setFa(show){ document.body.classList.toggle('fa-hidden', !show); faBtn.setAttribute('aria-pressed', show); store.set('fa', show); }
+  var faPref = store.get('fa'); setFa(faPref === null ? true : faPref);
+  faBtn.addEventListener('click', function(){ setFa(document.body.classList.contains('fa-hidden')); });
+
+  /* ---------- Text-to-speech (Italian) ---------- */
+  var tts = ('speechSynthesis' in window) && ('SpeechSynthesisUtterance' in window);
+  var itVoice = null, rate = 0.9;
+  function pickVoice(){ try { var vs = speechSynthesis.getVoices(); itVoice = vs.filter(function(v){ return /^it([-_]|$)/i.test(v.lang); })[0] || null; } catch(e){} }
+  if (tts){ pickVoice(); try { speechSynthesis.onvoiceschanged = pickVoice; } catch(e){} } else { document.body.classList.add('no-tts'); }
+  function utter(t){ var u = new SpeechSynthesisUtterance(t); u.lang = 'it-IT'; if (itVoice) u.voice = itVoice; u.rate = rate; return u; }
+  function say(t){ if (!tts) return; speechSynthesis.cancel(); speechSynthesis.speak(utter(t)); }
+  function sayAll(list){ if (!tts) return; speechSynthesis.cancel(); list.forEach(function(t){ speechSynthesis.speak(utter(t)); }); }
+
+  /* ---------- Score ---------- */
+  var solved = {}, total = 0, sid = 0;
+  function reg(el){ el.setAttribute('data-sid', 's'+(sid++)); total++; }
+  function solve(el){ var k = el.getAttribute('data-sid'); if (k && !solved[k]) { solved[k] = 1; updScore(); } }
+  function updScore(){ $('#scoreBadge').textContent = '✓ ' + Object.keys(solved).length + '/' + total; }
+  $$('.exercise .blank').forEach(reg);
+  $$('.mcq').forEach(reg);
+  $$('.match .match-col.left button').forEach(reg);
+  $$('.sorter .chip').forEach(reg);
+
+  /* ---------- Fill-in blanks ---------- */
+  function norm(s){ return (s||'').toLowerCase().replace(/[’`´]/g,"'").replace(/[.,!?;:¿¡"«»()]/g,' ').replace(/\s+/g,' ').trim(); }
+  function strip(s){ return s.normalize ? s.normalize('NFD').replace(/[̀-ͯ]/g,'') : s; }
+  function checkBlank(inp){
+    inp.classList.remove('ok','bad','near');
+    var v = norm(inp.value); if (!v) return null;
+    var ans = (inp.getAttribute('data-a')||'').split('|').map(norm);
+    var res = 'bad';
+    if (inp.getAttribute('data-norm') === 'digits'){
+      var d = v.replace(/\D/g,''); if (ans.some(function(a){ return a.replace(/\D/g,'') === d; })) res = 'ok';
+    } else if (ans.indexOf(v) > -1) res = 'ok';
+    else if (ans.map(strip).indexOf(strip(v)) > -1) res = 'near';
+    inp.classList.add(res);
+    if (res === 'ok' && !inp.classList.contains('revealed')) solve(inp);
+    return res;
+  }
+  function checkExercise(ex){
+    var bl = $$('.blank', ex), ok = 0, near = 0, filled = 0;
+    bl.forEach(function(b){ var r = checkBlank(b); if (r) filled++; if (r === 'ok') ok++; if (r === 'near') near++; });
+    var fb = $('.ex-fb', ex); if (!fb) return;
+    fb.className = 'ex-fb ' + (ok === bl.length ? 'good' : 'meh');
+    fb.textContent = ok === bl.length ? 'Perfetto! ' + ok + '/' + bl.length + ' ✓' :
+      ok + '/' + bl.length + ' corrette' + (near ? ' · ' + near + ' quasi (controlla gli accenti ` ´)' : '') + (filled < bl.length ? ' · ' + (bl.length - filled) + ' vuote' : '');
+  }
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' && e.target.classList && e.target.classList.contains('blank')) { e.preventDefault(); checkBlank(e.target); }
+  });
+
+  /* ---------- Matching (shuffle right column) ---------- */
+  $$('.match').forEach(function(m){
+    var col = $('.match-col.right', m); if (!col) return;
+    var items = $$('button', col);
+    for (var i = items.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); col.appendChild(items[j]); items.splice(j,1); }
+  });
+
+  /* ---------- Delegated clicks ---------- */
+  document.addEventListener('click', function(e){
+    var t = e.target.closest ? e.target.closest('button, .bucket') : null;
+    if (!t) return;
+
+    if (t.classList.contains('say')) { say(t.getAttribute('data-say') || t.textContent); return; }
+    if (t.classList.contains('tile') && t.hasAttribute('data-say')) { say(t.getAttribute('data-say')); return; }
+    if (t.classList.contains('say-scene')) {
+      var sc = document.getElementById(t.getAttribute('data-target'));
+      if (sc) sayAll($$('.line-it', sc).map(function(x){ return x.textContent; }));
+      return;
+    }
+    if (t.classList.contains('stop-audio')) { if (tts) speechSynthesis.cancel(); return; }
+    if (t.classList.contains('rate-toggle')) {
+      rate = rate > 0.8 ? 0.65 : 0.9;
+      $$('.rate-toggle').forEach(function(b){ b.textContent = rate < 0.8 ? '🐢 Lento (ON)' : '🐢 Lento (OFF)'; });
+      return;
+    }
+    if (t.classList.contains('hl-toggle')) {
+      var st = document.getElementById(t.getAttribute('data-target'));
+      if (st) { st.classList.toggle('hl-off'); t.textContent = st.classList.contains('hl-off') ? '🖍️ Evidenzia: OFF' : '🖍️ Evidenzia: ON'; }
+      return;
+    }
+    if (t.classList.contains('btn-check')) { checkExercise(t.closest('.exercise')); return; }
+    if (t.classList.contains('btn-reveal')) {
+      var ex = t.closest('.exercise');
+      $$('.blank', ex).forEach(function(b){ if (!b.classList.contains('ok')) { b.value = (b.getAttribute('data-show') || b.getAttribute('data-a').split('|')[0]); b.classList.add('revealed'); checkBlank(b); } });
+      var fb = $('.ex-fb', ex); if (fb) { fb.className = 'ex-fb meh'; fb.textContent = 'Soluzioni mostrate — rifallo domani senza guardare!'; }
+      return;
+    }
+    if (t.classList.contains('btn-reset')) {
+      var ex2 = t.closest('.exercise');
+      $$('.blank', ex2).forEach(function(b){ b.value=''; b.classList.remove('ok','bad','near','revealed'); });
+      var fb2 = $('.ex-fb', ex2); if (fb2) fb2.textContent = '';
+      return;
+    }
+    /* MCQ */
+    if (t.parentNode && t.parentNode.classList && t.parentNode.classList.contains('opts')) {
+      var q = t.closest('.mcq'); if (!q || q.classList.contains('answered')) return;
+      if (t.getAttribute('data-o') === q.getAttribute('data-a')) {
+        t.classList.add('correct'); q.classList.add('answered'); solve(q);
+        var f = $('.fb', q); if (f) f.textContent = '✓ ' + (q.getAttribute('data-why') || 'Esatto!');
+      } else { t.classList.remove('wrong'); void t.offsetWidth; t.classList.add('wrong'); }
+      return;
+    }
+    /* Match */
+    var mm = t.closest('.match');
+    if (mm && t.tagName === 'BUTTON' && !t.classList.contains('done')) {
+      var side = t.closest('.match-col').classList.contains('left') ? 'left' : 'right';
+      $$('.match-col.' + side + ' button', mm).forEach(function(b){ b.classList.remove('sel'); });
+      t.classList.add('sel');
+      var L = $('.match-col.left button.sel', mm), R = $('.match-col.right button.sel', mm);
+      if (L && R) {
+        if (L.getAttribute('data-k') === R.getAttribute('data-k')) {
+          [L,R].forEach(function(b){ b.classList.remove('sel'); b.classList.add('done'); });
+          solve(L);
+          if (L.hasAttribute('data-say')) say(L.getAttribute('data-say'));
+        } else {
+          [L,R].forEach(function(b){ b.classList.remove('sel','no'); void b.offsetWidth; b.classList.add('no'); });
+        }
+      }
+      return;
+    }
+    /* Sorter */
+    if (t.classList.contains('chip') && !t.classList.contains('placed')) {
+      var srt = t.closest('.sorter'); $$('.chip', srt).forEach(function(c){ c.classList.remove('sel'); }); t.classList.add('sel'); return;
+    }
+    if (t.classList.contains('bucket')) {
+      var s2 = t.closest('.sorter'), chip = $('.chip.sel', s2); if (!chip) return;
+      if (chip.getAttribute('data-c') === t.getAttribute('data-c')) {
+        chip.classList.remove('sel'); chip.classList.add('placed'); $('.drop', t).appendChild(chip); solve(chip);
+        var left = $$('.chips .chip', s2).length, fbs = $('.ex-fb', s2.closest('.exercise') || s2);
+        if (fbs && left === 0) { fbs.className = 'ex-fb good'; fbs.textContent = 'Tutto a posto! ✓'; }
+      } else { t.classList.remove('no'); void t.offsetWidth; t.classList.add('no'); }
+      return;
+    }
+    /* Flashcards */
+    if (t.classList.contains('flashcard')) { t.classList.toggle('flipped'); if (!t.classList.contains('flipped') && t.hasAttribute('data-say')) {} else if (t.hasAttribute('data-say')) say(t.getAttribute('data-say')); return; }
+    /* Self-check */
+    if (t.classList.contains('sc-btn')) {
+      var li = t.closest('li'), idx = $$('.selfcheck li').indexOf(li);
+      $$('.sc-btn', li).forEach(function(b){ b.classList.remove('on'); }); t.classList.add('on');
+      var sc2 = store.get('selfcheck') || {}; sc2[idx] = t.getAttribute('data-v'); store.set('selfcheck', sc2);
+      return;
+    }
+  });
+
+  /* ---------- Timers ---------- */
+  $$('.timer').forEach(function(tm){
+    var secs = parseInt(tm.getAttribute('data-s'), 10) || 60, left = secs, iv = null;
+    var disp = $('.t-display', tm), start = $('.t-start', tm), reset = $('.t-reset', tm);
+    function fmt(n){ return Math.floor(n/60) + ':' + ('0' + (n%60)).slice(-2); }
+    function draw(){ disp.textContent = fmt(left); }
+    draw();
+    start.addEventListener('click', function(){
+      if (iv) { clearInterval(iv); iv = null; tm.classList.remove('running'); start.textContent = '▶ Riprendi'; return; }
+      if (left <= 0) left = secs;
+      tm.classList.remove('done'); tm.classList.add('running'); start.textContent = '⏸ Pausa';
+      iv = setInterval(function(){ left--; draw(); if (left <= 0) { clearInterval(iv); iv = null; tm.classList.remove('running'); tm.classList.add('done'); disp.textContent = 'Stop!'; start.textContent = '▶ Ancora'; try { navigator.vibrate && navigator.vibrate(300); } catch(e){} } }, 1000);
+    });
+    reset.addEventListener('click', function(){ clearInterval(iv); iv = null; left = secs; tm.classList.remove('running','done'); start.textContent = '▶ Start'; draw(); });
+  });
+
+  /* ---------- Persisted textareas, checklists, self-check ---------- */
+  $$('textarea.free').forEach(function(ta){
+    var k = 'ta:' + ta.getAttribute('data-key'); var v = store.get(k); if (v) ta.value = v;
+    ta.addEventListener('input', function(){ store.set(k, ta.value); });
+  });
+  $$('.checklist').forEach(function(cl){
+    var k = 'cl:' + cl.getAttribute('data-key'), saved = store.get(k) || {};
+    $$('input[type=checkbox]', cl).forEach(function(cb, i){ cb.checked = !!saved[i]; cb.addEventListener('change', function(){ saved[i] = cb.checked; store.set(k, saved); }); });
+  });
+  var scSaved = store.get('selfcheck') || {};
+  $$('.selfcheck li').forEach(function(li, i){ if (scSaved[i]) { var b = $('.sc-btn[data-v="' + scSaved[i] + '"]', li); if (b) b.classList.add('on'); } });
+
+  /* ---------- Scrollable tables hint ---------- */
+  function markTables(){ $$('.table-wrap').forEach(function(w){ w.classList.toggle('is-scrollable', w.scrollWidth > w.clientWidth + 2); }); }
+  $$('.table-wrap').forEach(function(w){ if (!$('.scroll-hint', w)) { var h = document.createElement('div'); h.className = 'scroll-hint'; h.textContent = '↔ scorri / scroll'; w.insertBefore(h, w.firstChild); } });
+  window.addEventListener('resize', markTables); markTables();
+
+  updScore(); onScroll();
+})();
+</script>
+</body>
+</html>

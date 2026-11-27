@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lezione 1 · Primi contatti — Nuovo Espresso 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ===== Palette (varies per lesson) ===== */
+:root{
+  --primary:#A13A2A; --primary-dark:#6E2318; --accent:#C7862A; --bg:#FBF6EF; --surface:#FFFFFF;
+  --ink:#2A2220; --muted:#6A5A52; --line:#E8DCCD; --tint:#F6E9DD;
+  --hl1:#FFE7A3; --hl2:#3B7EA1; --hl3:#D5EFCF;
+  --ok:#1E7A3A; --ok-bg:#E5F4EA; --bad:#B3261E; --bad-bg:#FCE9E7; --near:#8A5300; --near-bg:#FFF1D9;
+  --nav-h:56px;
+}
+/* ===== Base ===== */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:120px}
+body{margin:0;font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif;font-size:16px;line-height:1.78;color:var(--ink);background:var(--bg);overflow-x:hidden;padding-top:var(--nav-h);padding-bottom:140px;-webkit-text-size-adjust:100%}
+p,li,td,th,h1,h2,h3,h4,h5,div,span,label,button,a,summary,dd,dt{overflow-wrap:break-word;word-break:break-word}
+img,table,video,iframe,svg{max-width:100%}
+h1,h2,h3,h4{font-family:'Playfair Display',Georgia,serif;line-height:1.25;color:var(--primary-dark);margin:1.2em 0 .5em}
+h3{font-size:1.35rem} h4{font-size:1.1rem}
+a{color:var(--primary-dark)}
+code,.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92em}
+.ipa{font-family:'Inter',sans-serif;color:var(--muted);font-size:.92em;white-space:nowrap}
+.page{max-width:900px;margin:0 auto;padding:0 18px}
+.muted{color:var(--muted)}
+.small{font-size:.9rem}
+
+/* ===== Progress bar + Nav ===== */
+.progress-bar{position:fixed;top:0;left:0;height:4px;width:0;background:var(--accent);z-index:1003;transition:width .08s linear}
+.top-nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);background:var(--primary-dark);color:#fff;z-index:1002;display:flex;align-items:center;gap:8px;padding:4px 10px 0;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.nav-btn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.4);color:#fff;border-radius:9px;height:38px;min-width:40px;padding:0 10px;font:600 15px 'Inter',sans-serif;cursor:pointer;flex-shrink:0}
+.nav-btn:hover,.nav-btn:focus-visible{background:rgba(255,255,255,.2)}
+.nav-btn.fa-btn{font-family:'Vazirmatn',sans-serif}
+.nav-btn[aria-pressed="false"]{opacity:.65;text-decoration:line-through}
+.nav-title{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;font-size:15px;word-break:normal}
+.score-badge{flex-shrink:0;font-size:13px;font-weight:700;background:#fff;color:var(--primary-dark);border-radius:999px;padding:3px 10px;white-space:nowrap}
+.nav-menu{position:fixed;top:var(--nav-h);left:0;right:0;max-height:calc(100vh - var(--nav-h));overflow-y:auto;background:var(--surface);z-index:1001;box-shadow:0 10px 30px rgba(0,0,0,.2);display:none}
+.nav-menu.open{display:block}
+.nav-menu-inner{max-width:900px;margin:0 auto;padding:6px 0 12px}
+.nav-menu a{display:block;padding:10px 20px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);font-size:15px}
+.nav-menu a:hover{background:var(--tint)}
+.nav-menu a.active{background:var(--tint);color:var(--primary-dark);font-weight:700;border-left:4px solid var(--primary)}
+
+/* ===== Header ===== */
+.lesson-header{background:linear-gradient(135deg,var(--primary-dark),var(--primary));color:#fff;margin:0 -18px;padding:34px 24px 26px;border-radius:0 0 26px 26px;position:relative;overflow:hidden}
+.lesson-header::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.08)}
+.lesson-header h1{color:#fff;font-size:clamp(1.9rem,6vw,2.9rem);margin:.15em 0 .1em}
+.lesson-header .en-title{font-size:1.1rem;opacity:.95;margin:0}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.pill{display:inline-block;border-radius:999px;padding:2px 12px;font-size:13px;font-weight:600;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4)}
+.cast{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.cast span{background:rgba(0,0,0,.18);border-radius:10px;padding:4px 10px;font-size:13.5px}
+.howto{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:18px 0}
+.howto ol{margin:.3em 0 0 1.1em;padding:0}
+
+/* ===== TOC ===== */
+.toc{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 20px;margin:20px 0 10px}
+.toc h2{margin:0 0 8px;font-size:1.3rem}
+.toc ol{columns:2;column-gap:28px;margin:0;padding:0;list-style:none;counter-reset:toc}
+.toc li{break-inside:avoid;padding:5px 0;counter-increment:toc}
+.toc li a{text-decoration:none;color:var(--ink);display:flex;gap:10px;align-items:baseline}
+.toc li a::before{content:counter(toc);flex-shrink:0;display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--tint);color:var(--primary-dark);font-weight:700;font-size:13px}
+.toc li a:hover{color:var(--primary-dark);text-decoration:underline}
+.toc ul{list-style:none;padding:0 0 0 36px;margin:2px 0}
+.toc ul li{counter-increment:none;padding:1px 0;font-size:14px}
+.toc ul li a::before{content:"–";background:none;width:auto;height:auto}
+
+/* ===== Sections + sticky headers ===== */
+.lesson-section{padding:4px 0 30px;border-bottom:1px solid var(--line)}
+.section-title{position:sticky;top:var(--nav-h);z-index:40;background:var(--bg);margin:0 -18px 14px;padding:12px 18px 10px;font-size:clamp(1.3rem,4.4vw,1.75rem);border-bottom:2px solid var(--primary);display:flex;gap:10px;align-items:baseline}
+.section-title .num{font-family:'Inter',sans-serif;font-size:.8em;font-weight:700;color:#fff;background:var(--primary);border-radius:8px;padding:0 8px;flex-shrink:0}
+.sub-title{border-left:5px solid var(--accent);padding-left:12px}
+
+/* ===== Highlights ===== */
+.g1{background:var(--hl1);border-radius:3px;padding:0 2px}
+.g2{border-bottom:3px solid var(--hl2);padding-bottom:1px}
+.g3{background:var(--hl3);border-radius:3px;padding:0 2px}
+.vv{font-weight:700;color:var(--primary-dark)}
+.story.hl-off .g1,.story.hl-off .g3{background:none;padding:0}
+.story.hl-off .g2{border-bottom:0}
+.story.hl-off .vv{font-weight:inherit;color:inherit}
+.legend{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:14px;margin:8px 0}
+.legend span{white-space:nowrap}
+
+/* ===== Story ===== */
+.warmup{background:var(--tint);border-radius:14px;padding:14px 18px;margin:12px 0}
+.story-tools{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.scene{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 16px 10px;margin:16px 0}
+.scene-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px}
+.scene-head h3{margin:0;font-size:1.2rem}
+.scene-setting{font-style:italic;color:var(--muted);margin:0 0 10px;font-size:15px}
+.line{display:flex;gap:10px;margin:10px 0;align-items:flex-start}
+.line.right{flex-direction:row-reverse}
+.avatar{flex-shrink:0;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff}
+.bubble{background:var(--bg);border:1px solid var(--line);border-radius:4px 16px 16px 16px;padding:8px 12px;max-width:min(560px,calc(100% - 48px))}
+.line.right .bubble{border-radius:16px 4px 16px 16px;background:var(--tint)}
+.who{display:block;font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.02em}
+.line-it{display:inline}
+.say{background:none;border:0;cursor:pointer;font-size:15px;padding:0 3px;vertical-align:baseline;opacity:.75}
+.say:hover{opacity:1}
+.no-tts .say,.no-tts .say-scene{display:none}
+.post{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin:16px 0;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.post-head{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.post-head b{display:block;line-height:1.2}
+.post .tags{color:var(--primary-dark);font-weight:600}
+.gloss{font-size:14px;color:var(--muted);margin-top:4px}
+
+/* ===== Buttons ===== */
+.btn{font:600 14.5px 'Inter',sans-serif;border-radius:10px;border:1.5px solid var(--primary);background:var(--surface);color:var(--primary-dark);padding:7px 14px;cursor:pointer;line-height:1.3}
+.btn:hover{background:var(--tint)}
+.btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn.primary:hover{background:var(--primary-dark)}
+.btn-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+
+/* ===== Cards / boxes ===== */
+.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:16px 0}
+.box h4{margin-top:.2em}
+.callout{border-left:5px solid var(--primary);background:var(--tint);border-radius:0 12px 12px 0;padding:12px 16px;margin:16px 0}
+.context-ref{background:var(--surface);border:1px dashed var(--primary);border-radius:12px;padding:10px 14px;margin:10px 0 14px;font-size:15.5px}
+.context-ref::before{content:"📖 Dal racconto";display:block;font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.errors{background:var(--bad-bg);border-radius:12px;padding:12px 16px;margin:16px 0}
+.errors h4{color:var(--bad);margin:.1em 0 .4em;font-family:'Inter',sans-serif;font-size:1rem}
+.err-row{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.06)}
+.err-row:last-child{border-bottom:0}
+.err-row .x{color:var(--bad);text-decoration:line-through}
+.err-row .v{color:var(--ok);font-weight:600}
+.err-row .why{grid-column:1/-1;font-size:14px;color:var(--muted)}
+
+/* ===== Tables ===== */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:14px 0;border-radius:12px;border:1px solid var(--line);background:var(--surface);max-width:100%}
+.table-wrap .scroll-hint{display:none;position:sticky;left:0;font-size:12px;font-weight:700;color:var(--primary-dark);background:var(--tint);padding:3px 10px}
+.table-wrap.is-scrollable .scroll-hint{display:block}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{word-break:normal;overflow-wrap:break-word;padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--tint);color:var(--primary-dark);font-weight:700;font-size:14px}
+tr:last-child td{border-bottom:0}
+table.wide{min-width:560px}
+
+/* ===== Visual aids ===== */
+.spectrum{margin:18px 0}
+.spectrum-bar{height:12px;border-radius:999px;background:linear-gradient(90deg,var(--hl3),var(--hl1),var(--accent))}
+.spectrum-labels{display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;margin-top:6px}
+.spectrum-labels span{font-size:14px;text-align:center;flex:1;min-width:70px}
+.spectrum-ends{display:flex;justify-content:space-between;font-size:12.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.blocks{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0;font-size:17px}
+.blk{border-radius:8px;padding:4px 10px;font-weight:600;border:1.5px solid var(--line);background:var(--surface)}
+.blk.a{background:var(--hl1)} .blk.b{background:var(--hl3)} .blk.c{background:var(--tint)}
+.two-doors{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+.door{border-radius:14px;padding:12px 14px;border:2px solid var(--line);background:var(--surface)}
+.door h4{margin:0 0 6px;font-family:'Inter',sans-serif;font-size:15px}
+.timeline{display:flex;margin:16px 0;border-radius:12px;overflow:hidden;font-size:13.5px;text-align:center}
+.timeline div{padding:10px 6px;color:#1b1b1b}
+.wordmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:10px;margin:14px 0}
+.wordmap .hub{grid-column:1/-1;text-align:center;font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;background:var(--primary);color:#fff;border-radius:14px;padding:10px}
+.wordmap .cluster{border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--surface)}
+.wordmap .cluster b{display:block;color:var(--primary-dark);margin-bottom:4px}
+.colloc{border:2px solid var(--accent);border-radius:14px;padding:12px 16px;margin:16px 0;background:var(--surface)}
+.colloc h4{margin:.1em 0 .4em}
+.colloc ul{margin:0;padding-left:1.1em}
+.num-grid,.abc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:8px;margin:12px 0}
+.tile{background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:8px 6px;text-align:center;cursor:pointer;font:inherit;color:var(--ink)}
+.tile:hover{border-color:var(--primary);background:var(--tint)}
+.tile b{display:block;font-size:1.25rem;color:var(--primary-dark);line-height:1.2}
+.tile span{font-size:13.5px}
+.tile.foreign{border-style:dashed}
+
+/* ===== Vocabulary entries ===== */
+.vocab-group h4{margin-bottom:.2em}
+.vocab-list{display:grid;gap:8px;margin:8px 0 16px}
+.vocab-item{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:2px 14px}
+.vocab-item .w{font-weight:700;color:var(--primary-dark);font-size:1.05rem}
+.vocab-item .pos{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-left:4px}
+.vocab-item .en{text-align:right}
+.vocab-item .ex{grid-column:1/-1;font-size:14.5px;color:var(--muted);font-style:italic}
+
+/* ===== Flashcards ===== */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:12px 0}
+.flashcard{min-height:92px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;padding:10px;font:inherit;color:var(--ink);display:grid;place-items:center;text-align:center}
+.flashcard .back{display:none;color:var(--primary-dark);font-weight:600}
+.flashcard .front{font-weight:700;font-size:1.05rem}
+.flashcard.flipped{background:var(--tint);border-color:var(--primary)}
+.flashcard.flipped .front{display:none}.flashcard.flipped .back{display:block}
+
+/* ===== Exercises ===== */
+.exercise{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 18px;margin:20px 0;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.ex-head{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:4px}
+.ex-head h4{margin:0;font-size:1.08rem}
+.tag{font:700 11.5px 'Inter',sans-serif;text-transform:uppercase;letter-spacing:.05em;border-radius:999px;padding:2px 9px;background:var(--tint);color:var(--primary-dark)}
+.tag.free{background:var(--hl3);color:#1f3b1f}
+.instr{margin:4px 0 8px}
+.ex-items{padding-left:1.4em;margin:8px 0}
+.ex-items li{margin:9px 0}
+.blank{font:inherit;font-size:16px;color:var(--ink);border:0;border-bottom:2px solid var(--primary);background:var(--tint);padding:1px 6px;width:8.5em;max-width:100%;border-radius:5px 5px 0 0}
+.blank.s{width:5em}.blank.w{width:15em}.blank.full{width:100%;display:block;margin-top:4px}
+.blank:focus{outline:2px solid var(--accent);outline-offset:1px}
+.blank.ok{border-color:var(--ok);background:var(--ok-bg)}
+.blank.bad{border-color:var(--bad);background:var(--bad-bg)}
+.blank.near{border-color:var(--near);background:var(--near-bg)}
+.blank.revealed{border-style:dashed}
+.ex-fb{font-weight:600;min-height:1.2em;margin:6px 0 0}
+.ex-fb.good{color:var(--ok)}.ex-fb.meh{color:var(--near)}
+.mcq{border-top:1px dashed var(--line);padding:10px 0}
+.mcq:first-of-type{border-top:0}
+.mcq .q{margin:0 0 6px;font-weight:500}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts button{font:inherit;font-size:15px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:6px 12px;cursor:pointer;text-align:left}
+.opts button:hover{border-color:var(--primary)}
+.opts button.correct{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);font-weight:700}
+.opts button.wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad);animation:shake .3s}
+.mcq .fb{font-size:14.5px;margin:6px 0 0;color:var(--ok)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.match{display:grid;grid-template-columns:1fr 1fr;gap:8px 12px;margin:10px 0}
+.match-col{display:flex;flex-direction:column;gap:8px}
+.match button{font:inherit;font-size:15px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;padding:8px 10px;cursor:pointer;text-align:left;min-height:44px}
+.match button.sel{border-color:var(--accent);background:var(--near-bg);font-weight:600}
+.match button.done{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);cursor:default}
+.match button.no{animation:shake .3s;border-color:var(--bad)}
+.sorter .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;min-height:20px}
+.chip{font:inherit;font-size:15px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:5px 13px;cursor:pointer}
+.chip.sel{border-color:var(--accent);background:var(--near-bg);font-weight:600}
+.chip.placed{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);cursor:default}
+.buckets{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:10px}
+.bucket{border:2px dashed var(--line);border-radius:14px;padding:10px;min-height:90px;cursor:pointer;background:var(--bg)}
+.bucket h5{margin:0 0 6px;font:700 14px 'Inter',sans-serif;color:var(--primary-dark)}
+.bucket .drop{display:flex;flex-wrap:wrap;gap:6px}
+.bucket.no{border-color:var(--bad);animation:shake .3s}
+textarea.free{width:100%;min-height:120px;font:inherit;font-size:16px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg);color:var(--ink);resize:vertical}
+.saved-note{font-size:12.5px;color:var(--muted)}
+.hint{margin-top:8px}
+.hint summary{cursor:pointer;font-weight:600;color:var(--primary-dark);font-size:14.5px}
+details.reveal{background:var(--tint);border-radius:10px;padding:6px 12px;margin:8px 0}
+details.reveal summary{cursor:pointer;font-weight:600;color:var(--primary-dark)}
+
+/* ===== Noticing ===== */
+.notice-list{counter-reset:nq;list-style:none;padding:0}
+.notice-list>li{counter-increment:nq;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px 12px 54px;margin:12px 0;position:relative}
+.notice-list>li::before{content:counter(nq);position:absolute;left:14px;top:12px;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700}
+
+/* ===== Speaking ===== */
+.task{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 18px;margin:18px 0;border-top:5px solid var(--primary)}
+.task h3{margin:.1em 0 .3em;font-size:1.2rem}
+.task-meta{display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;margin:10px 0}
+.task-meta dt{font-weight:700;color:var(--primary-dark);font-size:14.5px}
+.task-meta dd{margin:0}
+.role-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:10px;margin:10px 0}
+.role{border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg)}
+.role b{color:var(--primary-dark)}
+.timer{display:inline-flex;align-items:center;gap:8px;background:var(--tint);border-radius:12px;padding:6px 10px;margin:6px 0;flex-wrap:wrap}
+.t-display{font:700 1.4rem 'Inter',monospace;min-width:3.2em;text-align:center;color:var(--primary-dark)}
+.timer.done .t-display{color:var(--bad)}
+.timer.running .t-display{color:var(--ok)}
+
+/* ===== Tips / Resources / Explore ===== */
+.tips{display:grid;gap:12px}
+.tip{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px;border-left:5px solid var(--accent)}
+.tip h4{margin:.1em 0 .3em;font-family:'Inter',sans-serif;font-size:1.02rem}
+.resource{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px;margin:12px 0}
+.resource .platform{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.resource h4{margin:.1em 0 .3em}
+.explore-list{list-style:none;padding:0;counter-reset:ex}
+.explore-list>li{counter-increment:ex;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 16px 12px 56px;margin:10px 0;position:relative}
+.explore-list>li::before{content:"🧭";position:absolute;left:16px;top:12px;font-size:22px}
+
+/* ===== Summary ===== */
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:12px;margin:14px 0}
+.sum-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 16px;border-top:6px solid var(--primary)}
+.sum-card.c2{border-top-color:var(--accent)}.sum-card.c3{border-top-color:var(--hl2)}.sum-card.c4{border-top-color:var(--primary-dark)}
+.sum-card h4{margin:.1em 0 .4em;font-family:'Inter',sans-serif;font-size:1rem;text-transform:uppercase;letter-spacing:.04em}
+.sum-card ul{margin:0;padding-left:1.1em}
+.selfcheck{list-style:none;padding:0}
+.selfcheck li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:8px 0}
+.sc-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.sc-btn{font:inherit;font-size:13.5px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:3px 11px;cursor:pointer}
+.sc-btn.on[data-v="yes"]{background:var(--ok-bg);border-color:var(--ok);color:var(--ok);font-weight:700}
+.sc-btn.on[data-v="almost"]{background:var(--near-bg);border-color:var(--near);color:var(--near);font-weight:700}
+.sc-btn.on[data-v="no"]{background:var(--bad-bg);border-color:var(--bad);color:var(--bad);font-weight:700}
+.checklist{list-style:none;padding:0}
+.checklist li{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:8px 0}
+.checklist label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.checklist input{width:20px;height:20px;margin-top:4px;accent-color:var(--primary);flex-shrink:0}
+.checklist input:checked+span{text-decoration:line-through;color:var(--muted)}
+
+/* ===== Answer key ===== */
+.answer-key details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 14px;margin:10px 0}
+.answer-key summary{cursor:pointer;font-weight:700;color:var(--primary-dark)}
+.answer-key ol{padding-left:1.3em}
+.answer-key .note{color:var(--muted);font-size:14.5px}
+
+/* ===== Farsi notes (same style in every lesson) ===== */
+.farsi-note{direction:rtl;text-align:right;font-family:'Vazirmatn',Tahoma,sans-serif;font-size:15.5px;line-height:1.95;background:#EDF6F1;color:#1C2B25;border-right:4px solid #2F7D63;border-radius:10px;padding:9px 14px;margin:10px 0 14px}
+.farsi-note .fa-label{display:inline-block;font-size:11.5px;font-weight:700;background:#2F7D63;color:#fff;border-radius:999px;padding:0 9px;margin-left:8px;line-height:1.9;vertical-align:1px}
+.farsi-note p{margin:0;display:inline}
+.farsi-note bdi{font-family:'Inter',sans-serif;font-weight:600;color:#14532D}
+li .farsi-note,td .farsi-note{margin:6px 0 4px}
+body.fa-hidden .farsi-note{display:none}
+
+/* ===== Back to top ===== */
+.back-to-top{position:fixed;right:16px;bottom:18px;width:46px;height:46px;border-radius:50%;border:0;background:var(--primary-dark);color:#fff;font-size:20px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:opacity .2s;z-index:900}
+.back-to-top.show{opacity:1;pointer-events:auto}
+
+/* ===== Responsive ===== */
+@media (max-width:620px){
+  body{font-size:16px}
+  .toc ol{columns:1}
+  .two-doors{grid-template-columns:1fr}
+  .vocab-item{grid-template-columns:1fr}
+  .vocab-item .en{text-align:left}
+  .err-row{grid-template-columns:1fr}
+  .task-meta{grid-template-columns:1fr}
+  .task-meta dd{margin-bottom:6px}
+  .match{gap:8px}
+  .nav-title{font-size:13.5px}
+  .timeline{font-size:12px}
+}
+@media print{.top-nav,.progress-bar,.nav-menu,.back-to-top{display:none}body{padding-top:0}.section-title{position:static}}
+</style>
+</head>
+<body data-lesson="nuovo-espresso-lesson-01-primi-contatti">
+<div class="progress-bar" id="progressBar" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+<nav class="top-nav" aria-label="Lesson navigation">
+  <button class="nav-btn" id="menuBtn" aria-expanded="false" aria-controls="navMenu" aria-label="Open section menu">☰</button>
+  <div class="nav-title">Lezione 1 · Primi contatti</div>
+  <span class="score-badge" id="scoreBadge" title="Exercises solved">✓ 0/0</span>
+  <button class="nav-btn fa-btn" id="faBtn" aria-pressed="true" title="Show / hide Farsi notes">فا</button>
+</nav>
+<div class="nav-menu" id="navMenu"><div class="nav-menu-inner">
+<a href="#story">1 · La storia — The Story</a>
+<a href="#noticing">2 · Noticing — Nota bene</a>
+<a href="#grammar">3 · Grammatica in contesto</a>
+<a href="#vocab">4 · Vocabolario in contesto</a>
+<a href="#practice-grammar">5 · Pratica — Grammatica</a>
+<a href="#practice-vocab">6 · Pratica — Vocabolario</a>
+<a href="#speaking">7 · Parlare — Speaking</a>
+<a href="#tips">8 · Consigli — Tips</a>
+<a href="#listening">9 · Ascoltare &amp; guardare</a>
+<a href="#explore">10 · Explore More</a>
+<a href="#summary">11 · Riepilogo — Summary</a>
+<a href="#answers">12 · Soluzioni — Answer Key</a>
+</div></div>
+<main class="page">
+<!-- SECTION: Page Header -->
+<header class="lesson-header" id="top">
+  <div class="meta-row">
+    <span class="pill">Lezione 1</span>
+    <span class="pill">Nuovo Espresso 1 · Lezione 1</span>
+    <span class="pill">Livello A1</span>
+  </div>
+  <h1>Primi contatti</h1>
+  <p class="en-title">First contacts — greeting people, saying who you are and where you're from</p>
+  <div class="cast">
+    <span>🎨 Darya Karimi — designer, Teheran</span>
+    <span>📚 Sara Ferri — tutor, Bologna</span>
+    <span>🏛️ Dott.ssa Lucia Conti — school director</span>
+    <span>⚙️ Thomas Weber — engineer, Vienna</span>
+    <span>☀️ Ana Morales — Valencia</span>
+    <span>☕ Marco Bellini — Bar Il Portico</span>
+  </div>
+</header>
+
+<div class="howto">
+  <strong>How this lesson works:</strong>
+  <ol>
+    <li>Read the story for <em>meaning</em> first, with highlights OFF. Press 🔊 to hear any line.</li>
+    <li>Turn highlights ON and do the Noticing questions. Only then read the rules.</li>
+    <li>Exercises check themselves. Your score is in the top bar (✓). Press <strong>فا</strong> to show or hide the Farsi notes.</li>
+  </ol>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>اول داستان رو فقط برای فهمیدن معنی بخون (رنگ‌ها خاموش). بعد رنگ‌ها رو روشن کن و به سؤال‌های «توجه کن» جواب بده. قانون‌ها بعداً میان. تمرین‌ها خودشون جوابت رو چک می‌کنن. دکمه‌ی <bdi>فا</bdi> بالای صفحه این یادداشت‌های فارسی رو روشن/خاموش می‌کنه.</p></div>
+</div>
+
+<nav class="toc" aria-label="Table of contents">
+  <h2>Indice · Contents</h2>
+  <ol>
+    <li><a href="#story">La storia · The Story</a></li>
+    <li><a href="#noticing">Noticing · Nota bene</a></li>
+    <li><a href="#grammar">Grammatica in contesto</a>
+      <ul>
+        <li><a href="#g1">Essere &amp; chiamarsi</a></li>
+        <li><a href="#g2">Tu o Lei? + domande</a></li>
+        <li><a href="#g3">Aggettivi di nazionalità</a></li>
+      </ul>
+    </li>
+    <li><a href="#vocab">Vocabolario in contesto</a></li>
+    <li><a href="#practice-grammar">Pratica · Grammatica</a></li>
+    <li><a href="#practice-vocab">Pratica · Vocabolario</a></li>
+    <li><a href="#speaking">Parlare · Speaking</a></li>
+    <li><a href="#tips">Consigli · Tips</a></li>
+    <li><a href="#listening">Ascoltare &amp; guardare</a></li>
+    <li><a href="#explore">Explore More</a></li>
+    <li><a href="#summary">Riepilogo · Summary</a></li>
+    <li><a href="#answers">Soluzioni · Answer Key</a></li>
+  </ol>
+</nav>
+
+<!-- SECTION: The Context — The Story -->
+<section class="lesson-section" id="story" data-title="1 · La storia — The Story">
+  <h2 class="section-title"><span class="num">1</span> La storia: Il primo giorno</h2>
+
+  <div class="warmup">
+    <strong>Before you read 🤔</strong> Which Italian greetings do you already know (from films, food, travel)? Think about your own language: how do you greet your boss compared with a friend? Do you use different words, or a different "you"?
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>قبل از خوندن: چه سلام‌های ایتالیایی‌ای بلدی؟ تو فارسی به رئیست چی می‌گی و به دوستت چی؟ «تو» و «شما» رو یادت باشه، چون ایتالیایی هم دقیقاً همین تفاوت رو داره!</p></div>
+  </div>
+
+  <p><strong>The situation:</strong> It's Monday, 9 a.m., in Bologna. Darya Karimi, a 31-year-old UX designer from Tehran, has just moved to Italy for a job. Before she starts work, she has signed up for an evening-and-morning Italian course at a language school under the city's famous porticoes. Today is her first day.</p>
+
+  <div class="story-tools">
+    <button class="btn hl-toggle" data-target="storyBox">🖍️ Evidenzia: OFF</button>
+    <button class="btn rate-toggle">🐢 Lento (OFF)</button>
+    <button class="btn stop-audio">⏹ Stop audio</button>
+  </div>
+  <div class="legend">
+    <span><span class="g1">giallo</span> = essere / chiamarsi / non</span>
+    <span><span class="g2">sottolineato</span> = formal / informal phrases &amp; questions</span>
+    <span><span class="g3">verde</span> = nationalities</span>
+  </div>
+
+  <div class="story hl-off" id="storyBox">
+
+    <div class="scene" id="scene1">
+      <div class="scene-head"><h3>Scena 1 · Alla reception</h3><button class="btn say-scene" data-target="scene1">▶ Ascolta la scena</button></div>
+      <p class="scene-setting">The language school "Parole sotto i Portici". The director, Dott.ssa Lucia Conti (about 55), is at the front desk.</p>
+      <div class="line"><div class="avatar" style="background:#4A4A4A">LC</div><div class="bubble"><span class="who">Dott.ssa Conti</span><span class="line-it"><span class="g2">Buongiorno!</span></span> <button class="say" data-say="Buongiorno!">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it"><span class="g2">Buongiorno!</span> <span class="g1">Mi chiamo</span> Darya Karimi.</span> <button class="say" data-say="Buongiorno! Mi chiamo Darya Karimi.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#4A4A4A">LC</div><div class="bubble"><span class="who">Dott.ssa Conti</span><span class="line-it"><span class="g2">Piacere</span>, io <span class="g1">sono</span> Lucia Conti, la direttrice. <span class="g2">Scusi, come si scrive</span> il cognome?</span> <button class="say" data-say="Piacere, io sono Lucia Conti, la direttrice. Scusi, come si scrive il cognome?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Cappa – a – erre – i – emme – i. Karimi.</span> <button class="say" data-say="Cappa, a, erre, i, emme, i. Karimi.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#4A4A4A">LC</div><div class="bubble"><span class="who">Dott.ssa Conti</span><span class="line-it">Perfetto. E <span class="g2">Lei <span class="g1">è</span> di dove</span>, signora Karimi?</span> <button class="say" data-say="Perfetto. E Lei è di dove, signora Karimi?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it"><span class="g1">Sono</span> di Teheran. <span class="g1">Sono</span> <span class="g3">iraniana</span>.</span> <button class="say" data-say="Sono di Teheran. Sono iraniana.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#4A4A4A">LC</div><div class="bubble"><span class="who">Dott.ssa Conti</span><span class="line-it">Benissimo. E <span class="g2">qual è il Suo numero</span> di telefono?</span> <button class="say" data-say="Benissimo. E qual è il Suo numero di telefono?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Tre tre nove… uno due otto… sette sei cinque zero.</span> <button class="say" data-say="Tre tre nove, uno due otto, sette sei cinque zero.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#4A4A4A">LC</div><div class="bubble"><span class="who">Dott.ssa Conti</span><span class="line-it">Grazie. <span class="g2">Benvenuta</span> a Bologna! La classe <span class="g1">è</span> al primo piano. Buona lezione!</span> <button class="say" data-say="Grazie. Benvenuta a Bologna! La classe è al primo piano. Buona lezione!">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">Grazie mille. <span class="g2">ArrivederLa!</span></span> <button class="say" data-say="Grazie mille. ArrivederLa!">🔊</button></div></div>
+      <p class="gloss">la direttrice = the (female) director · il cognome = surname · al primo piano = on the first floor</p>
+    </div>
+
+    <div class="scene" id="scene2">
+      <div class="scene-head"><h3>Scena 2 · In classe</h3><button class="btn say-scene" data-target="scene2">▶ Ascolta la scena</button></div>
+      <p class="scene-setting">A bright classroom. Eight adult students. The tutor, Sara Ferri (29), smiles at the group.</p>
+      <div class="line"><div class="avatar" style="background:#A13A2A">SF</div><div class="bubble"><span class="who">Sara</span><span class="line-it"><span class="g2">Ciao</span> a tutti! Io <span class="g1">sono</span> Sara, <span class="g1">sono</span> la vostra tutor. Allora… <span class="g2">diamoci del tu</span>, va bene?</span> <button class="say" data-say="Ciao a tutti! Io sono Sara, sono la vostra tutor. Allora, diamoci del tu, va bene?">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#A13A2A">SF</div><div class="bubble"><span class="who">Sara</span><span class="line-it">Tu, <span class="g2">come <span class="g1">ti chiami</span>?</span></span> <button class="say" data-say="Tu, come ti chiami?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it"><span class="g1">Mi chiamo</span> Darya.</span> <button class="say" data-say="Mi chiamo Darya.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#A13A2A">SF</div><div class="bubble"><span class="who">Sara</span><span class="line-it">Darya, che bel nome! E <span class="g2">di dove <span class="g1">sei</span>?</span></span> <button class="say" data-say="Darya, che bel nome! E di dove sei?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it"><span class="g1">Sono</span> di Teheran, <span class="g1">sono</span> <span class="g3">iraniana</span>.</span> <button class="say" data-say="Sono di Teheran, sono iraniana.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#A13A2A">SF</div><div class="bubble"><span class="who">Sara</span><span class="line-it">(to the man next to Darya) E tu? <span class="g2"><span class="g1">Sei</span> <span class="g3">tedesco</span>?</span></span> <button class="say" data-say="E tu? Sei tedesco?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#2F6A8F">TW</div><div class="bubble"><span class="who">Thomas</span><span class="line-it">No, <span class="g1">non sono</span> <span class="g3">tedesco</span>. <span class="g1">Sono</span> <span class="g3">austriaco</span>, di Vienna. <span class="g1">Mi chiamo</span> Thomas.</span> <button class="say" data-say="No, non sono tedesco. Sono austriaco, di Vienna. Mi chiamo Thomas.">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#B5651D">AM</div><div class="bubble"><span class="who">Ana</span><span class="line-it">E io <span class="g1">mi chiamo</span> Ana. <span class="g1">Sono</span> <span class="g3">spagnola</span>, di Valencia.</span> <button class="say" data-say="E io mi chiamo Ana. Sono spagnola, di Valencia.">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#2F6A8F">TW</div><div class="bubble"><span class="who">Thomas</span><span class="line-it">(to Darya) <span class="g2">Piacere</span>, Darya.</span> <button class="say" data-say="Piacere, Darya.">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it"><span class="g2">Piacere mio!</span> Sara, <span class="g2">scusa</span>… <span class="g2">come si dice</span> "Nice to meet you" in italiano?</span> <button class="say" data-say="Piacere mio! Sara, scusa, come si dice Nice to meet you in italiano?">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#A13A2A">SF</div><div class="bubble"><span class="who">Sara</span><span class="line-it">Si dice "Piacere!" — proprio come hai detto tu! Allora: Ana <span class="g1">è</span> <span class="g3">spagnola</span>, Thomas <span class="g1">è</span> <span class="g3">austriaco</span>, Darya <span class="g1">è</span> <span class="g3">iraniana</span>… e io <span class="g1">sono</span> <span class="g3">italiana</span>, di Bologna!</span> <button class="say" data-say="Si dice Piacere! Proprio come hai detto tu! Allora: Ana è spagnola, Thomas è austriaco, Darya è iraniana, e io sono italiana, di Bologna!">🔊</button></div></div>
+      <p class="gloss">la vostra tutor = your tutor · che bel nome! = what a lovely name! · proprio come hai detto tu = exactly as you said</p>
+    </div>
+
+    <div class="scene" id="scene3">
+      <div class="scene-head"><h3>Scena 3 · Al bar, la sera</h3><button class="btn say-scene" data-target="scene3">▶ Ascolta la scena</button></div>
+      <p class="scene-setting">7.30 p.m. Darya and Thomas stop at "Il Portico", a small bar near the school. Behind the counter: Marco Bellini (45), the owner.</p>
+      <div class="line"><div class="avatar" style="background:#3D6B35">MB</div><div class="bubble"><span class="who">Marco</span><span class="line-it"><span class="g2">Buonasera!</span></span> <button class="say" data-say="Buonasera!">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it"><span class="g2">Buonasera!</span></span> <button class="say" data-say="Buonasera!">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#3D6B35">MB</div><div class="bubble"><span class="who">Marco</span><span class="line-it">Lei <span class="g1">non è</span> di Bologna, vero, signora?</span> <button class="say" data-say="Lei non è di Bologna, vero, signora?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">No, <span class="g1">non sono</span> <span class="g3">italiana</span>. <span class="g1">Sono</span> <span class="g3">iraniana</span>. <span class="g1">Mi chiamo</span> Darya.</span> <button class="say" data-say="No, non sono italiana. Sono iraniana. Mi chiamo Darya.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#3D6B35">MB</div><div class="bubble"><span class="who">Marco</span><span class="line-it"><span class="g2">Piacere</span>, io <span class="g1">sono</span> Marco. (to Thomas) E tu? <span class="g1">Sei</span> <span class="g3">inglese</span>?</span> <button class="say" data-say="Piacere, io sono Marco. E tu? Sei inglese?">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#2F6A8F">TW</div><div class="bubble"><span class="who">Thomas</span><span class="line-it">No, <span class="g1">non sono</span> <span class="g3">inglese</span>! <span class="g1">Sono</span> <span class="g3">austriaco</span>. <span class="g1">Mi chiamo</span> Thomas.</span> <button class="say" data-say="No, non sono inglese! Sono austriaco. Mi chiamo Thomas.">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#3D6B35">MB</div><div class="bubble"><span class="who">Marco</span><span class="line-it">Ah, scusa! E la vostra amica francese, Claire… <span class="g2">come <span class="g1">si chiama</span>?</span> No, no: Claire <span class="g1">è</span> <span class="g3">francese</span> e <span class="g1">si chiama</span> Claire! Ah ah!</span> <button class="say" data-say="Ah, scusa! E la vostra amica francese, Claire, come si chiama? No, no: Claire è francese e si chiama Claire! Ah ah!">🔊</button></div></div>
+      <div class="line right"><div class="avatar" style="background:#7A3E9D">DK</div><div class="bubble"><span class="who">Darya</span><span class="line-it">(laughing) Marco, <span class="g2">diamoci del tu</span>! <span class="g2">Ciao, a domani!</span></span> <button class="say" data-say="Marco, diamoci del tu! Ciao, a domani!">🔊</button></div></div>
+      <div class="line"><div class="avatar" style="background:#3D6B35">MB</div><div class="bubble"><span class="who">Marco</span><span class="line-it">Va bene, Darya! <span class="g2">Ciao</span> ragazzi, <span class="g2">buona serata!</span></span> <button class="say" data-say="Va bene, Darya! Ciao ragazzi, buona serata!">🔊</button></div></div>
+      <p class="gloss">vero? = right? · la vostra amica = your friend · ragazzi = guys · buona serata = have a nice evening</p>
+    </div>
+
+    <div class="post">
+      <div class="post-head"><div class="avatar" style="background:#7A3E9D">DK</div><div><b>darya.designs</b><span class="small muted">Bologna, Italia · 22:14</span></div></div>
+      <p class="line-it">Primo giorno a Bologna! 🇮🇹 La scuola <span class="g1">è</span> bellissima. La direttrice <span class="g1">si chiama</span> Lucia Conti: <span class="g1">è</span> molto gentile. La tutor <span class="g1">si chiama</span> Sara ed <span class="g1">è</span> <span class="g3">italiana</span>, di Bologna. In classe c'è Thomas: <span class="g1">non è</span> <span class="g3">tedesco</span>, <span class="g1">è</span> <span class="g3">austriaco</span>! 😄 Ana <span class="g1">è</span> <span class="g3">spagnola</span> e Claire <span class="g1">è</span> <span class="g3">francese</span>. E io? Io <span class="g1">sono</span> <span class="g3">iraniana</span> e da oggi <span class="g1">sono</span> anche un po' bolognese. ❤️ <span class="tags">#primogiorno #italiano #bologna</span></p>
+      <button class="say" data-say="Primo giorno a Bologna! La scuola è bellissima. La direttrice si chiama Lucia Conti: è molto gentile. La tutor si chiama Sara ed è italiana, di Bologna. In classe c'è Thomas: non è tedesco, è austriaco! Ana è spagnola e Claire è francese. E io? Io sono iraniana e da oggi sono anche un po' bolognese.">🔊 Ascolta il post</button>
+      <p class="gloss">molto gentile = very kind · c'è = there is · da oggi = from today · un po' bolognese = a bit "Bolognese"</p>
+    </div>
+  </div>
+
+  <details class="reveal">
+    <summary>✔ Did you understand? (quick gist check)</summary>
+    <p>1) Darya is from Tehran and is Iranian. 2) Thomas is Austrian, not German or English. 3) Sara is Italian, from Bologna. 4) Darya uses formal language with the director and informal language with Sara, and later with Marco after "diamoci del tu".</p>
+  </details>
+</section>
+
+<!-- SECTION: Noticing Phase -->
+<section class="lesson-section" id="noticing" data-title="2 · Noticing — Nota bene">
+  <h2 class="section-title"><span class="num">2</span> Noticing · Nota bene</h2>
+  <p>Now switch the highlights <strong>ON</strong> in the story (🖍️) and look back. Try to answer each question <em>before</em> opening the hint.</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>حالا رنگ‌ها رو تو داستان روشن کن و برگرد سراغش. اول خودت سعی کن جواب بدی، بعد راهنما رو باز کن. هدف اینه که خودت الگو رو کشف کنی، نه اینکه حفظش کنی.</p></div>
+  <ol class="notice-list">
+    <li><strong>Can you find</strong> every yellow form of the verb "to be"? Who says <em>sono</em>, who hears <em>sei</em>, and when do we get <em>è</em>?
+      <details class="hint"><summary>💡 Hint</summary><p>Look at who is speaking to whom. <em>Sono</em> is always about the speaker. <em>Sei</em> comes in questions to one friend. <em>È</em> describes a third person (Ana, Thomas)… or someone the speaker calls <em>Lei</em>.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>ببین کی با کی حرف می‌زنه: <bdi>sono</bdi> یعنی «من هستم»، <bdi>sei</bdi> یعنی «تو هستی»، <bdi>è</bdi> یعنی «او هست»، و جالبه که برای «شما»ی مؤدبانه هم همین <bdi>è</bdi> رو می‌گن.</p></div></details></li>
+    <li><strong>What do you notice about</strong> the questions? Sara asks Darya <span class="g2">come ti chiami?</span> and <span class="g2">di dove sei?</span>, but the director asks <span class="g2">Lei è di dove?</span>, and Marco asks about Claire <span class="g2">come si chiama?</span>. What changes, and why?
+      <details class="hint"><summary>💡 Hint</summary><p>With a friend (<em>tu</em>): <em>ti chiami, sei</em>. Talking <strong>about</strong> Claire, or <strong>to</strong> the director (<em>Lei</em>): <em>si chiama, è</em>. The polite "you" uses exactly the same forms as "she".</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>با دوست (<bdi>tu</bdi>): <bdi>ti chiami</bdi> و <bdi>sei</bdi>. وقتی درباره‌ی کلر حرف می‌زنیم، یا وقتی با مدیر رسمی حرف می‌زنیم (<bdi>Lei</bdi>): <bdi>si chiama</bdi> و <bdi>è</bdi>. «شما»ی مؤدبانه دقیقاً همون فعلِ «او» رو داره.</p></div></details></li>
+    <li><strong>Look at the green words.</strong> Thomas is <em>austriaco</em> but Darya is <em>iraniana</em>. Claire is <em>francese</em>, and Marco asks Thomas if he's <em>inglese</em>. Why do some words change between a man and a woman, and some don't?
+      <details class="hint"><summary>💡 Hint</summary><p>Compare the last letters: <em>-o</em> (man) / <em>-a</em> (woman). Words ending in <em>-e</em> look the same for both.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>حرف آخر رو مقایسه کن: <bdi>-o</bdi> برای مرد، <bdi>-a</bdi> برای زن. کلمه‌هایی که با <bdi>-e</bdi> تموم می‌شن برای هر دو یکی‌ان.</p></div></details></li>
+    <li><strong>Can you find</strong> three negative sentences? Where exactly does <em>non</em> go?
+      <details class="hint"><summary>💡 Hint</summary><p>"<em>No, non sono tedesco.</em>" — <em>No</em> answers the question. <em>Non</em> sits directly <strong>before the verb</strong>.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p><bdi>no</bdi> یعنی «نه» (جواب سؤال)، ولی <bdi>non</bdi> درست قبل از فعل میاد و جمله رو منفی می‌کنه، مثل «نـ» تو «نیستم».</p></div></details></li>
+    <li><strong>Who says what to whom?</strong> Darya says <span class="g2">ArrivederLa</span> to the director but <span class="g2">Ciao, a domani</span> to Marco. What happened in between?
+      <details class="hint"><summary>💡 Hint</summary><p>"<em>Diamoci del tu!</em>" ("Let's use <em>tu</em> with each other") switches the relationship from formal to informal.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>جمله‌ی <bdi>Diamoci del tu</bdi> یعنی «بیا با هم خودمونی حرف بزنیم» (بیا «تو» بگیم). از اون لحظه به بعد رابطه از رسمی به دوستانه تغییر می‌کنه.</p></div></details></li>
+  </ol>
+</section>
+
+<!-- SECTION: Grammar in Context -->
+<section class="lesson-section" id="grammar" data-title="3 · Grammatica in contesto">
+  <h2 class="section-title"><span class="num">3</span> Grammatica in contesto</h2>
+
+  <!-- Grammar point 1 -->
+  <h3 class="sub-title" id="g1">3.1 · Essere (to be) &amp; chiamarsi (to be called) + non</h3>
+  <div class="context-ref">"<span class="g1">Mi chiamo</span> Darya." · "<span class="g1">Sono</span> iraniana." · "Tu, come <span class="g1">ti chiami</span>?" · "Claire <span class="g1">è</span> francese e <span class="g1">si chiama</span> Claire." · "<span class="g1">Non sono</span> tedesco."</div>
+  <p>Everyone in the story introduces themselves with two verbs: <strong>essere</strong> (to be) and <strong>chiamarsi</strong> (literally "to call oneself"). Here are the singular forms you saw.</p>
+  <div class="table-wrap"><table class="wide">
+    <thead><tr><th>Person</th><th>essere</th><th>IPA</th><th>chiamarsi</th><th>IPA</th><th>From the story</th></tr></thead>
+    <tbody>
+      <tr><td>io (I)</td><td><span class="g1">sono</span></td><td class="ipa">/ˈsono/</td><td><span class="g1">mi chiamo</span></td><td class="ipa">/mi ˈkjamo/</td><td>Sono iraniana. Mi chiamo Darya.</td></tr>
+      <tr><td>tu (you, informal)</td><td><span class="g1">sei</span></td><td class="ipa">/ˈsɛi/</td><td><span class="g1">ti chiami</span></td><td class="ipa">/ti ˈkjami/</td><td>Di dove sei? Come ti chiami?</td></tr>
+      <tr><td>lui / lei (he / she)</td><td><span class="g1">è</span></td><td class="ipa">/ɛ/</td><td><span class="g1">si chiama</span></td><td class="ipa">/si ˈkjama/</td><td>Claire è francese e si chiama Claire.</td></tr>
+      <tr><td>Lei (you, formal)</td><td><span class="g1">è</span></td><td class="ipa">/ɛ/</td><td><span class="g1">si chiama</span></td><td class="ipa">/si ˈkjama/</td><td>Lei è di dove?</td></tr>
+    </tbody></table></div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p><bdi>essere</bdi> یعنی «بودن»: <bdi>sono</bdi> = هستم، <bdi>sei</bdi> = هستی، <bdi>è</bdi> = هست. <bdi>chiamarsi</bdi> یعنی «نامیده شدن» و برای گفتن اسم به کار می‌ره: <bdi>mi chiamo</bdi> = اسمم ... است. فاعل (<bdi>io, tu</bdi>) معمولاً حذف می‌شه، چون آخر فعل خودش نشون می‌ده کیه، درست مثل فارسی که «هستم» خودش یعنی «من».</p></div>
+
+  <h4>Visual: how "chiamarsi" is built</h4>
+  <div class="blocks"><span class="blk a">mi</span>+<span class="blk c">chiam</span>+<span class="blk b">-o</span>= <strong>mi chiamo</strong> <span class="muted small">(I call myself)</span></div>
+  <div class="blocks"><span class="blk a">ti</span>+<span class="blk c">chiam</span>+<span class="blk b">-i</span>= <strong>ti chiami</strong> <span class="muted small">(you call yourself)</span></div>
+  <div class="blocks"><span class="blk a">si</span>+<span class="blk c">chiam</span>+<span class="blk b">-a</span>= <strong>si chiama</strong> <span class="muted small">(he/she calls him/herself · you, formal)</span></div>
+  <p class="small muted">The yellow piece (<em>mi / ti / si</em>) points back to the person. "Ch" before <em>i/e</em> is always a hard /k/ sound: <em>chiamo</em> = /ˈkjamo/, never "tch".</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تکه‌ی زرد (<bdi>mi / ti / si</bdi>) به خود آدم برمی‌گرده: «خودم رو می‌نامم». یادت باشه <bdi>ch</bdi> تو ایتالیایی صدای «ک» می‌ده، نه «چ»: <bdi>chiamo</bdi> = «کیامو».</p></div>
+
+  <h4>Negation: just add non</h4>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Positive</th><th>Negative</th><th>Rule</th></tr></thead>
+    <tbody>
+      <tr><td>Sono tedesco.</td><td><strong>Non</strong> sono tedesco.</td><td>non + verb</td></tr>
+      <tr><td>Lei è di Bologna.</td><td>Lei <strong>non</strong> è di Bologna.</td><td>non + verb</td></tr>
+      <tr><td>Mi chiamo Anna.</td><td><strong>Non</strong> mi chiamo Anna.</td><td>non + mi/ti/si + verb</td></tr>
+    </tbody></table></div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>برای منفی کردن فقط <bdi>non</bdi> رو درست قبل از فعل بذار. اگه <bdi>mi / ti / si</bdi> داری، <bdi>non</bdi> قبل از اون‌ها میاد: <bdi>Non mi chiamo Anna</bdi>. ترتیب کلمه‌ها رو تغییر نده.</p></div>
+
+  <div class="errors">
+    <h4>⚠️ Common errors</h4>
+    <div class="err-row"><span class="x">Io chiamo Darya.</span><span class="v">(Io) mi chiamo Darya.</span><span class="why">Without <em>mi</em> it means "I am calling Darya" (on the phone!).</span></div>
+    <div class="err-row"><span class="x">Mi chiamo è Darya.</span><span class="v">Mi chiamo Darya.</span><span class="why"><em>Chiamarsi</em> is already the verb; don't add <em>è</em>.</span></div>
+    <div class="err-row"><span class="x">Mi non chiamo Anna.</span><span class="v">Non mi chiamo Anna.</span><span class="why"><em>Non</em> goes before the whole "mi chiamo" block.</span></div>
+    <div class="err-row"><span class="x">Thomas e austriaco.</span><span class="v">Thomas è austriaco.</span><span class="why"><em>e</em> = and · <em>è</em> = is. The accent changes the meaning!</span></div>
+    <div class="err-row"><span class="x">Io iraniana sono.</span><span class="v">Io sono iraniana.</span><span class="why">The verb goes in the middle, not at the end.</span></div>
+  </div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>اشتباه رایج فارسی‌زبان‌ها: گذاشتن فعل آخر جمله (مثل «من ایرانی هستم»). تو ایتالیایی فعل وسط میاد: <bdi>Io sono iraniana</bdi>. حواست به <bdi>e</bdi> (و) و <bdi>è</bdi> (است) هم باشه. یه علامت کوچیک کل معنی رو عوض می‌کنه!</p></div>
+
+  <!-- Grammar point 2 -->
+  <h3 class="sub-title" id="g2">3.2 · Tu o Lei? Informal vs formal + question words</h3>
+  <div class="context-ref">Sara → Darya: "<span class="g2">Come ti chiami?</span>" "<span class="g2">Di dove sei?</span>" · Director → Darya: "<span class="g2">Lei è di dove?</span>" "<span class="g2">Qual è il Suo numero</span> di telefono?"</div>
+  <p>Italian has two ways to say "you". <strong>tu</strong> is for friends, family, children, classmates and people your age in casual places. <strong>Lei</strong> (often with a capital L in writing) is for strangers, officials, older people and clients. Its secret: <strong>Lei uses the "she" form of the verb</strong>, whether you're talking to a man or a woman.</p>
+  <div class="table-wrap"><table class="wide">
+    <thead><tr><th>Function</th><th>Informal (tu)</th><th>Formal (Lei)</th></tr></thead>
+    <tbody>
+      <tr><td>Name</td><td>Come <strong>ti chiami</strong>?</td><td>Come <strong>si chiama</strong>?</td></tr>
+      <tr><td>Origin</td><td>Di dove <strong>sei</strong>?</td><td>Di dov'<strong>è</strong>? / Lei è di dove?</td></tr>
+      <tr><td>Phone number</td><td>Qual è il <strong>tuo</strong> numero?</td><td>Qual è il <strong>Suo</strong> numero?</td></tr>
+      <tr><td>Excuse me</td><td>Scus<strong>a</strong></td><td>Scus<strong>i</strong></td></tr>
+      <tr><td>Nice to meet you</td><td>Piacere (di conoscer<strong>ti</strong>)</td><td>Piacere (di conoscer<strong>La</strong>)</td></tr>
+      <tr><td>Goodbye</td><td>Ciao! · A domani!</td><td>ArrivederLa! · Arrivederci!</td></tr>
+    </tbody></table></div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p><bdi>tu</bdi> مثل «تو»ی فارسیه و <bdi>Lei</bdi> مثل «شما»ی مؤدبانه. ولی یه فرق مهم هست: فارسی با «شما» فعل جمع می‌گه (شما هستید)، اما ایتالیایی با <bdi>Lei</bdi> فعل سوم‌شخص مفرد رو می‌گه (<bdi>Lei è</bdi>، یعنی دقیقاً همون فعلِ «او هست»). چه طرف مرد باشه چه زن، همیشه <bdi>Lei</bdi>.</p></div>
+
+  <h4>Visual: the greeting spectrum</h4>
+  <div class="spectrum" aria-label="From informal to formal greetings">
+    <div class="spectrum-ends"><span>Informale</span><span>Formale</span></div>
+    <div class="spectrum-bar"></div>
+    <div class="spectrum-labels"><span><strong>Ciao!</strong><br><span class="small">hi / bye</span></span><span><strong>Salve!</strong><br><span class="small">neutral hello</span></span><span><strong>Buongiorno / Buonasera</strong><br><span class="small">polite, any age</span></span><span><strong>ArrivederLa</strong><br><span class="small">very formal bye</span></span></div>
+  </div>
+  <h4>Visual: greetings across the day</h4>
+  <div class="timeline">
+    <div style="background:#FFE7A3;flex:5">☀️ <strong>Buongiorno</strong><br>morning → early afternoon</div>
+    <div style="background:#F6C9A0;flex:5">🌇 <strong>Buonasera</strong><br>from ~4–5 p.m. (arriving or leaving)</div>
+    <div style="background:#C9D6EA;flex:3">🌙 <strong>Buonanotte</strong><br>going to bed only</div>
+  </div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p><bdi>Buongiorno</bdi> از صبح تا اوایل بعدازظهر، <bdi>Buonasera</bdi> از حدود ساعت ۴–۵ عصر به بعد (هم موقع رسیدن، هم موقع رفتن). <bdi>Buonanotte</bdi> فقط وقتی که می‌خوای بری بخوابی، نه وقتی شب وارد یه جایی می‌شی. <bdi>Salve</bdi> یه «سلام» خنثی و امنه، وقتی مطمئن نیستی رسمی باشی یا خودمونی.</p></div>
+
+  <h4>Question words you met</h4>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Question word</th><th>IPA</th><th>Meaning</th><th>From the story</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Come…?</strong></td><td class="ipa">/ˈkome/</td><td>How…? / What…? (name)</td><td>Come ti chiami? · Come si scrive?</td></tr>
+      <tr><td><strong>Di dove…?</strong></td><td class="ipa">/di ˈdove/</td><td>Where… from?</td><td>Di dove sei?</td></tr>
+      <tr><td><strong>Qual è…?</strong></td><td class="ipa">/kwaˈlɛ/</td><td>What is / Which is…?</td><td>Qual è il Suo numero?</td></tr>
+    </tbody></table></div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p><bdi>Come</bdi> = چطور / چی (برای اسم)، <bdi>Di dove</bdi> = اهل کجا، <bdi>Qual è</bdi> = کدومه / چیه. نکته: <bdi>Qual è</bdi> هیچ‌وقت آپوستروف (<bdi>'</bdi>) نمی‌گیره، حتی خیلی از خود ایتالیایی‌ها هم اینجا اشتباه می‌کنن!</p></div>
+
+  <div class="errors">
+    <h4>⚠️ Common errors</h4>
+    <div class="err-row"><span class="x">Lei sei di Teheran?</span><span class="v">Lei è di Teheran?</span><span class="why">Formal <em>Lei</em> always takes the 3rd-person form.</span></div>
+    <div class="err-row"><span class="x">Buongiorno, direttrice, come ti chiami?</span><span class="v">Buongiorno, come si chiama?</span><span class="why">Don't mix a formal greeting with an informal question.</span></div>
+    <div class="err-row"><span class="x">Qual'è il tuo numero?</span><span class="v">Qual è il tuo numero?</span><span class="why">No apostrophe: <em>qual</em> exists on its own.</span></div>
+    <div class="err-row"><span class="x">Buonanotte! (arriving at a bar at 9 p.m.)</span><span class="v">Buonasera!</span><span class="why"><em>Buonanotte</em> is only for leaving / going to sleep.</span></div>
+    <div class="err-row"><span class="x">Ciao, professoressa!</span><span class="v">Buongiorno, professoressa!</span><span class="why">With titles and people you call <em>Lei</em>, avoid <em>ciao</em> until they invite <em>tu</em>.</span></div>
+  </div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>بزرگ‌ترین اشتباه اینه که رسمی و خودمونی رو قاطی کنی: اگه با <bdi>Buongiorno</bdi> شروع کردی، با <bdi>si chiama</bdi> ادامه بده نه <bdi>ti chiami</bdi>. با کسی که «شما» صداش می‌کنی <bdi>Ciao</bdi> نگو، مگه اینکه خودش بگه <bdi>Diamoci del tu</bdi>.</p></div>
+
+  <!-- Grammar point 3 -->
+  <h3 class="sub-title" id="g3">3.3 · Nationality adjectives: -o/-a or -e</h3>
+  <div class="context-ref">"Thomas è <span class="g3">austriaco</span>." · "Darya è <span class="g3">iraniana</span>." · "Ana è <span class="g3">spagnola</span>." · "Claire è <span class="g3">francese</span>." · "Sei <span class="g3">inglese</span>?" (to Thomas)</div>
+  <p>In Italian, a nationality is an adjective, and it <strong>agrees</strong> with the person. There are two families:</p>
+  <div class="two-doors">
+    <div class="door" style="border-color:var(--hl2)"><h4>🚪 Family 1: -o / -a</h4>
+      <p>man → <strong>-o</strong> · woman → <strong>-a</strong></p>
+      <p>italian<strong>o</strong> / italian<strong>a</strong><br>iranian<strong>o</strong> / iranian<strong>a</strong><br>spagnol<strong>o</strong> / spagnol<strong>a</strong><br>austriac<strong>o</strong> / austriac<strong>a</strong><br>tedesc<strong>o</strong> / tedesc<strong>a</strong><br>russ<strong>o</strong> / russ<strong>a</strong></p></div>
+    <div class="door" style="border-color:var(--accent)"><h4>🚪 Family 2: -e (same for both)</h4>
+      <p>man → <strong>-e</strong> · woman → <strong>-e</strong></p>
+      <p>ingles<strong>e</strong><br>frances<strong>e</strong><br>cines<strong>e</strong><br>giappones<strong>e</strong><br>canades<strong>e</strong><br>portoghes<strong>e</strong></p></div>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Person</th><th>Family -o/-a</th><th>Family -e</th></tr></thead>
+    <tbody>
+      <tr><td>Thomas (m)</td><td>è austriac<strong>o</strong></td><td>non è ingles<strong>e</strong></td></tr>
+      <tr><td>Darya (f)</td><td>è iranian<strong>a</strong></td><td>non è frances<strong>e</strong></td></tr>
+      <tr><td>Claire (f)</td><td>non è italian<strong>a</strong></td><td>è frances<strong>e</strong></td></tr>
+    </tbody></table></div>
+  <p>Nationalities are written with a <strong>lower-case</strong> letter (<em>italiano</em>, not <em>Italiano</em>); countries and cities take a capital (<em>l'Italia, l'Iran, Bologna</em>).</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تو فارسی «ایرانی» برای زن و مرد یکیه، ولی تو ایتالیایی صفت ملیت با جنسیت آدم جور می‌شه: مرد <bdi>-o</bdi>، زن <bdi>-a</bdi>. صفت‌هایی که با <bdi>-e</bdi> تموم می‌شن (مثل <bdi>inglese</bdi>، <bdi>francese</bdi>) برای هر دو یکی‌ان. ملیت رو با حرف کوچیک بنویس، ولی اسم کشور رو با حرف بزرگ.</p></div>
+
+  <div class="errors">
+    <h4>⚠️ Common errors</h4>
+    <div class="err-row"><span class="x">Darya è iraniano.</span><span class="v">Darya è iraniana.</span><span class="why">Darya is a woman → <em>-a</em>.</span></div>
+    <div class="err-row"><span class="x">Claire è francesa.</span><span class="v">Claire è francese.</span><span class="why">Spanish/Portuguese interference. In Italian, -e nationalities never become -a.</span></div>
+    <div class="err-row"><span class="x">Sono Italiano.</span><span class="v">Sono italiano.</span><span class="why">No capital letter for nationalities.</span></div>
+    <div class="err-row"><span class="x">Sono di iraniana.</span><span class="v">Sono iraniana. / Sono di Teheran.</span><span class="why"><em>di</em> + city · no <em>di</em> before an adjective.</span></div>
+  </div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>چون فارسی جنسیت دستوری نداره، فارسی‌زبان‌ها زیاد <bdi>-o/-a</bdi> رو جابه‌جا می‌گن. یه ترفند: هر وقت ملیت گفتی، یه لحظه به جنسیتِ کسی که درباره‌ش حرف می‌زنی فکر کن. یادت باشه <bdi>di</bdi> فقط قبل از اسم شهر میاد: <bdi>Sono di Teheran</bdi>، ولی <bdi>Sono iraniana</bdi> (بدون <bdi>di</bdi>).</p></div>
+</section>
+
+<!-- SECTION: Vocabulary in Context -->
+<section class="lesson-section" id="vocab" data-title="4 · Vocabolario in contesto">
+  <h2 class="section-title"><span class="num">4</span> Vocabolario in contesto</h2>
+  <p>Every word below comes from Darya's first day. Press 🔊 to hear it; the example is from the story.</p>
+
+  <div class="vocab-group"><h4>👋 Saluti e cortesia · Greetings &amp; courtesy</h4>
+  <div class="vocab-list">
+    <div class="vocab-item"><div><span class="w">buongiorno</span> <span class="pos">inter.</span> <span class="ipa">/bwɔnˈdʒorno/</span> <button class="say" data-say="buongiorno">🔊</button></div><div class="en">good morning / hello (formal)</div><div class="ex">"Buongiorno! Mi chiamo Darya Karimi."</div></div>
+    <div class="vocab-item"><div><span class="w">buonasera</span> <span class="pos">inter.</span> <span class="ipa">/bwɔnaˈsera/</span> <button class="say" data-say="buonasera">🔊</button></div><div class="en">good evening (hello or bye)</div><div class="ex">Marco: "Buonasera!"</div></div>
+    <div class="vocab-item"><div><span class="w">ciao</span> <span class="pos">inter.</span> <span class="ipa">/ˈtʃao/</span> <button class="say" data-say="ciao">🔊</button></div><div class="en">hi / bye (informal)</div><div class="ex">"Ciao a tutti!"</div></div>
+    <div class="vocab-item"><div><span class="w">salve</span> <span class="pos">inter.</span> <span class="ipa">/ˈsalve/</span> <button class="say" data-say="salve">🔊</button></div><div class="en">hello (neutral)</div><div class="ex">Useful when you're unsure: "Salve, un caffè?"</div></div>
+    <div class="vocab-item"><div><span class="w">arrivederci / ArrivederLa</span> <span class="pos">inter.</span> <span class="ipa">/arriveˈdertʃi/ · /arriveˈderla/</span> <button class="say" data-say="arrivederci, ArrivederLa">🔊</button></div><div class="en">goodbye / goodbye (very formal)</div><div class="ex">"Grazie mille. ArrivederLa!"</div></div>
+    <div class="vocab-item"><div><span class="w">a domani</span> <span class="pos">expr.</span> <span class="ipa">/a doˈmani/</span> <button class="say" data-say="a domani">🔊</button></div><div class="en">see you tomorrow</div><div class="ex">"Ciao, a domani!"</div></div>
+    <div class="vocab-item"><div><span class="w">buona serata</span> <span class="pos">expr.</span> <span class="ipa">/ˈbwɔna seˈrata/</span> <button class="say" data-say="buona serata">🔊</button></div><div class="en">have a nice evening</div><div class="ex">"Ciao ragazzi, buona serata!"</div></div>
+    <div class="vocab-item"><div><span class="w">piacere</span> <span class="pos">n. m.</span> <span class="ipa">/pjaˈtʃere/</span> <button class="say" data-say="piacere">🔊</button></div><div class="en">nice to meet you (lit. "pleasure")</div><div class="ex">"Piacere, Darya." – "Piacere mio!"</div></div>
+    <div class="vocab-item"><div><span class="w">scusa / scusi</span> <span class="pos">v. (imper.)</span> <span class="ipa">/ˈskuza/ · /ˈskuzi/</span> <button class="say" data-say="scusa, scusi">🔊</button></div><div class="en">excuse me (tu / Lei)</div><div class="ex">"Scusi, come si scrive il cognome?"</div></div>
+    <div class="vocab-item"><div><span class="w">grazie (mille)</span> <span class="pos">inter.</span> <span class="ipa">/ˈɡrattsje ˈmille/</span> <button class="say" data-say="grazie mille">🔊</button></div><div class="en">thank you (very much)</div><div class="ex">"Grazie mille. ArrivederLa!"</div></div>
+    <div class="vocab-item"><div><span class="w">benvenuto / benvenuta</span> <span class="pos">adj.</span> <span class="ipa">/benveˈnuto/</span> <button class="say" data-say="benvenuto, benvenuta">🔊</button></div><div class="en">welcome (to a man / woman)</div><div class="ex">"Benvenuta a Bologna!"</div></div>
+  </div></div>
+
+  <div class="vocab-group"><h4>🪪 Dati personali · Personal details</h4>
+  <div class="vocab-list">
+    <div class="vocab-item"><div><span class="w">il nome</span> <span class="pos">n. m.</span> <span class="ipa">/il ˈnome/</span> <button class="say" data-say="il nome">🔊</button></div><div class="en">first name</div><div class="ex">"Darya, che bel nome!"</div></div>
+    <div class="vocab-item"><div><span class="w">il cognome</span> <span class="pos">n. m.</span> <span class="ipa">/il koɲˈɲome/</span> <button class="say" data-say="il cognome">🔊</button></div><div class="en">surname</div><div class="ex">"Come si scrive il cognome?"</div></div>
+    <div class="vocab-item"><div><span class="w">il numero di telefono</span> <span class="pos">n. m.</span> <span class="ipa">/ˈnumero di teˈlɛfono/</span> <button class="say" data-say="il numero di telefono">🔊</button></div><div class="en">phone number</div><div class="ex">"Qual è il Suo numero di telefono?"</div></div>
+    <div class="vocab-item"><div><span class="w">signore / signora</span> <span class="pos">n.</span> <span class="ipa">/siɲˈɲore/ · /siɲˈɲora/</span> <button class="say" data-say="signore, signora">🔊</button></div><div class="en">Mr / Mrs, sir / madam</div><div class="ex">"Lei non è di Bologna, vero, signora?"</div></div>
+    <div class="vocab-item"><div><span class="w">il direttore / la direttrice</span> <span class="pos">n.</span> <span class="ipa">/diretˈtore/ · /diretˈtritʃe/</span> <button class="say" data-say="il direttore, la direttrice">🔊</button></div><div class="en">director (m / f)</div><div class="ex">"Io sono Lucia Conti, la direttrice."</div></div>
+    <div class="vocab-item"><div><span class="w">l'amico / l'amica</span> <span class="pos">n.</span> <span class="ipa">/laˈmiko/ · /laˈmika/</span> <button class="say" data-say="l'amico, l'amica">🔊</button></div><div class="en">friend (m / f)</div><div class="ex">"la vostra amica francese, Claire"</div></div>
+  </div></div>
+
+  <div class="vocab-group"><h4>🗣️ Frasi per la classe · Survival phrases</h4>
+  <div class="vocab-list">
+    <div class="vocab-item"><div><span class="w">Come si scrive?</span> <span class="pos">expr.</span> <span class="ipa">/ˈkome si ˈskrive/</span> <button class="say" data-say="Come si scrive?">🔊</button></div><div class="en">How do you spell it?</div><div class="ex">"Scusi, come si scrive il cognome?"</div></div>
+    <div class="vocab-item"><div><span class="w">Come si dice…?</span> <span class="pos">expr.</span> <span class="ipa">/ˈkome si ˈditʃe/</span> <button class="say" data-say="Come si dice?">🔊</button></div><div class="en">How do you say…?</div><div class="ex">"Come si dice 'Nice to meet you' in italiano?"</div></div>
+    <div class="vocab-item"><div><span class="w">Può ripetere? / Puoi ripetere?</span> <span class="pos">expr.</span> <span class="ipa">/pwɔ riˈpɛtere/</span> <button class="say" data-say="Può ripetere, per favore?">🔊</button></div><div class="en">Can you repeat? (Lei / tu)</div><div class="ex">Extra: use it when the director speaks too fast!</div></div>
+    <div class="vocab-item"><div><span class="w">diamoci del tu</span> <span class="pos">expr.</span> <span class="ipa">/ˈdjamotʃi del ˈtu/</span> <button class="say" data-say="diamoci del tu">🔊</button></div><div class="en">let's use "tu" with each other</div><div class="ex">"Marco, diamoci del tu!"</div></div>
+  </div></div>
+
+  <h4>🌍 Paesi e nazionalità · Countries &amp; nationalities</h4>
+  <div class="table-wrap"><table class="wide">
+    <thead><tr><th>Country</th><th>Man</th><th>Woman</th><th>IPA (m)</th><th>🔊</th></tr></thead>
+    <tbody>
+      <tr><td>l'Italia</td><td>italiano</td><td>italiana</td><td class="ipa">/itaˈljano/</td><td><button class="say" data-say="l'Italia, italiano, italiana">🔊</button></td></tr>
+      <tr><td>l'Iran</td><td>iraniano</td><td>iraniana</td><td class="ipa">/iraˈnjano/</td><td><button class="say" data-say="l'Iran, iraniano, iraniana">🔊</button></td></tr>
+      <tr><td>l'Afghanistan</td><td>afghano</td><td>afghana</td><td class="ipa">/afˈɡano/</td><td><button class="say" data-say="l'Afghanistan, afghano, afghana">🔊</button></td></tr>
+      <tr><td>la Spagna</td><td>spagnolo</td><td>spagnola</td><td class="ipa">/spaɲˈɲɔlo/</td><td><button class="say" data-say="la Spagna, spagnolo, spagnola">🔊</button></td></tr>
+      <tr><td>l'Austria</td><td>austriaco</td><td>austriaca</td><td class="ipa">/auˈstriako/</td><td><button class="say" data-say="l'Austria, austriaco, austriaca">🔊</button></td></tr>
+      <tr><td>la Germania</td><td>tedesco</td><td>tedesca</td><td class="ipa">/teˈdesko/</td><td><button class="say" data-say="la Germania, tedesco, tedesca">🔊</button></td></tr>
+      <tr><td>la Russia</td><td>russo</td><td>russa</td><td class="ipa">/ˈrusso/</td><td><button class="say" data-say="la Russia, russo, russa">🔊</button></td></tr>
+      <tr><td>la Turchia</td><td>turco</td><td>turca</td><td class="ipa">/ˈturko/</td><td><button class="say" data-say="la Turchia, turco, turca">🔊</button></td></tr>
+      <tr><td>gli Stati Uniti</td><td>americano</td><td>americana</td><td class="ipa">/ameriˈkano/</td><td><button class="say" data-say="gli Stati Uniti, americano, americana">🔊</button></td></tr>
+      <tr><td>l'Inghilterra</td><td colspan="2">inglese</td><td class="ipa">/inˈɡlese/</td><td><button class="say" data-say="l'Inghilterra, inglese">🔊</button></td></tr>
+      <tr><td>la Francia</td><td colspan="2">francese</td><td class="ipa">/franˈtʃese/</td><td><button class="say" data-say="la Francia, francese">🔊</button></td></tr>
+      <tr><td>la Cina</td><td colspan="2">cinese</td><td class="ipa">/tʃiˈnese/</td><td><button class="say" data-say="la Cina, cinese">🔊</button></td></tr>
+      <tr><td>il Giappone</td><td colspan="2">giapponese</td><td class="ipa">/dʒappoˈnese/</td><td><button class="say" data-say="il Giappone, giapponese">🔊</button></td></tr>
+      <tr><td>il Canada</td><td colspan="2">canadese</td><td class="ipa">/kanaˈdese/</td><td><button class="say" data-say="il Canada, canadese">🔊</button></td></tr>
+    </tbody></table></div>
+  <p class="small muted">Note: <em>tedesco</em> (German) looks nothing like <em>Germania</em>. Learn it as a pair!</p>
+
+  <h4>🔢 I numeri da 0 a 20 · Tap a tile to hear it</h4>
+  <div class="num-grid">
+    <button class="tile" data-say="zero"><b>0</b><span>zero</span></button>
+    <button class="tile" data-say="uno"><b>1</b><span>uno</span></button>
+    <button class="tile" data-say="due"><b>2</b><span>due</span></button>
+    <button class="tile" data-say="tre"><b>3</b><span>tre</span></button>
+    <button class="tile" data-say="quattro"><b>4</b><span>quattro</span></button>
+    <button class="tile" data-say="cinque"><b>5</b><span>cinque /ˈtʃinkwe/</span></button>
+    <button class="tile" data-say="sei"><b>6</b><span>sei</span></button>
+    <button class="tile" data-say="sette"><b>7</b><span>sette</span></button>
+    <button class="tile" data-say="otto"><b>8</b><span>otto</span></button>
+    <button class="tile" data-say="nove"><b>9</b><span>nove</span></button>
+    <button class="tile" data-say="dieci"><b>10</b><span>dieci /ˈdjɛtʃi/</span></button>
+    <button class="tile" data-say="undici"><b>11</b><span>undici</span></button>
+    <button class="tile" data-say="dodici"><b>12</b><span>dodici</span></button>
+    <button class="tile" data-say="tredici"><b>13</b><span>tredici</span></button>
+    <button class="tile" data-say="quattordici"><b>14</b><span>quattordici</span></button>
+    <button class="tile" data-say="quindici"><b>15</b><span>quindici</span></button>
+    <button class="tile" data-say="sedici"><b>16</b><span>sedici</span></button>
+    <button class="tile" data-say="diciassette"><b>17</b><span>diciassette</span></button>
+    <button class="tile" data-say="diciotto"><b>18</b><span>diciotto</span></button>
+    <button class="tile" data-say="diciannove"><b>19</b><span>diciannove</span></button>
+    <button class="tile" data-say="venti"><b>20</b><span>venti</span></button>
+  </div>
+  <p class="small">Pattern: 11–16 end in <strong>-dici</strong> (undici, dodici…), 17–19 start with <strong>dici-</strong> (diciassette, diciotto, diciannove). And <em>sei</em> = 6 <strong>and</strong> "you are". Context tells you which!</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>الگوی اعداد: ۱۱ تا ۱۶ با <bdi>-dici</bdi> تموم می‌شن، ۱۷ تا ۱۹ با <bdi>dici-</bdi> شروع می‌شن. بامزه اینه که <bdi>sei</bdi> هم یعنی «شش» هم «تو هستی». ایتالیایی‌ها شماره تلفن رو معمولاً رقم به رقم یا دوتا دوتا می‌خونن.</p></div>
+
+  <h4>🔤 L'alfabeto · Tap to hear the letter names</h4>
+  <div class="abc-grid">
+    <button class="tile" data-say="a"><b>A</b><span>a</span></button><button class="tile" data-say="bi"><b>B</b><span>bi</span></button><button class="tile" data-say="ci"><b>C</b><span>ci</span></button><button class="tile" data-say="di"><b>D</b><span>di</span></button><button class="tile" data-say="e"><b>E</b><span>e</span></button><button class="tile" data-say="effe"><b>F</b><span>effe</span></button><button class="tile" data-say="gi"><b>G</b><span>gi</span></button><button class="tile" data-say="acca"><b>H</b><span>acca</span></button><button class="tile" data-say="i"><b>I</b><span>i</span></button><button class="tile" data-say="elle"><b>L</b><span>elle</span></button><button class="tile" data-say="emme"><b>M</b><span>emme</span></button><button class="tile" data-say="enne"><b>N</b><span>enne</span></button><button class="tile" data-say="o"><b>O</b><span>o</span></button><button class="tile" data-say="pi"><b>P</b><span>pi</span></button><button class="tile" data-say="cu"><b>Q</b><span>cu</span></button><button class="tile" data-say="erre"><b>R</b><span>erre</span></button><button class="tile" data-say="esse"><b>S</b><span>esse</span></button><button class="tile" data-say="ti"><b>T</b><span>ti</span></button><button class="tile" data-say="u"><b>U</b><span>u</span></button><button class="tile" data-say="vu"><b>V</b><span>vu / vi</span></button><button class="tile" data-say="zeta"><b>Z</b><span>zeta</span></button>
+    <button class="tile foreign" data-say="i lunga"><b>J</b><span>i lunga</span></button><button class="tile foreign" data-say="cappa"><b>K</b><span>cappa</span></button><button class="tile foreign" data-say="doppia vu"><b>W</b><span>doppia vu</span></button><button class="tile foreign" data-say="ics"><b>X</b><span>ics</span></button><button class="tile foreign" data-say="ipsilon"><b>Y</b><span>ipsilon / i greca</span></button>
+  </div>
+  <p class="small muted">Dashed tiles = "foreign" letters, used only in borrowed words and names. That's why Darya has to spell <strong>K</strong>arimi: <em>cappa</em>!</p>
+
+  <h4>Visual: word map, "Presentarsi"</h4>
+  <div class="wordmap">
+    <div class="hub">Presentarsi · Introducing yourself</div>
+    <div class="cluster"><b>👤 Chi sei?</b>Mi chiamo… · Sono… · Il mio nome è… · Il mio cognome è…</div>
+    <div class="cluster"><b>🌍 Di dove sei?</b>Sono di + città · Sono + nazionalità · Non sono…</div>
+    <div class="cluster"><b>📞 Contatti</b>Il mio numero è… · Come si scrive? · cappa, a, erre…</div>
+    <div class="cluster"><b>🤝 Reazioni</b>Piacere! · Piacere mio! · Benvenuto/a! · Che bel nome!</div>
+  </div>
+
+  <div class="colloc">
+    <h4>🔗 Collocation box · words that travel together</h4>
+    <ul>
+      <li><strong>dare del tu / dare del Lei</strong> (a qualcuno): to use tu / Lei with someone → <em>Diamoci del tu!</em></li>
+      <li><strong>nome e cognome</strong>: full name → <em>Nome e cognome, per favore.</em></li>
+      <li><strong>numero di telefono</strong> / <strong>numero di cellulare</strong>: phone / mobile number</li>
+      <li><strong>essere di + città</strong>: to be from a city → <em>Sono di Teheran.</em></li>
+      <li><strong>benvenuto/a a + città</strong>: welcome to… → <em>Benvenuta a Bologna!</em></li>
+      <li><strong>piacere di conoscerti / conoscerLa</strong>: pleased to meet you (tu / Lei)</li>
+    </ul>
+  </div>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>این ترکیب‌ها رو یکجا حفظ کن، نه کلمه به کلمه. مثلاً <bdi>dare del tu</bdi> یعنی «با کسی خودمونی حرف زدن». <bdi>essere di</bdi> + اسم شهر یعنی «اهل جایی بودن».</p></div>
+</section>
+
+<!-- SECTION: Practice — Grammar -->
+<section class="lesson-section" id="practice-grammar" data-title="5 · Pratica — Grammatica">
+  <h2 class="section-title"><span class="num">5</span> Pratica · Grammatica</h2>
+  <p>Controlled first, then free. Type your answer and press <strong>Controlla</strong> (or Enter). Green = correct, orange = check the accent, red = try again.</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>جوابت رو بنویس و <bdi>Controlla</bdi> (یا Enter) رو بزن. سبز = درست، نارنجی = تقریباً درسته ولی علامت تکیه (مثل <bdi>è</bdi>) رو چک کن، قرمز = دوباره امتحان کن. اول بدون نگاه کردن به قانون‌ها تلاش کن.</p></div>
+
+  <h3 class="sub-title">3.1 · Essere &amp; chiamarsi</h3>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">A · Controllata</span><h4>Complete Darya's first day</h4></div>
+    <p class="instr">Fill in the correct form of <em>essere</em> or <em>chiamarsi</em>.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>جای خالی رو با شکل درست <bdi>essere</bdi> (بودن) یا <bdi>chiamarsi</bdi> (اسم داشتن) پر کن. اول ببین فاعل کیه: من، تو، یا او؟</p></div>
+    <ol class="ex-items">
+      <li>Buongiorno! (Io) <input class="blank" data-a="mi chiamo" aria-label="blank 1"> Darya Karimi.</li>
+      <li>Darya <input class="blank s" data-a="è" aria-label="blank 2"> di Teheran.</li>
+      <li>Sara: "E tu, come <input class="blank" data-a="ti chiami" aria-label="blank 3">?"</li>
+      <li>Thomas: "Io <input class="blank s" data-a="sono" aria-label="blank 4"> austriaco."</li>
+      <li>Sara: "Thomas, (tu) <input class="blank s" data-a="sei" aria-label="blank 5"> tedesco?"</li>
+      <li>La direttrice <input class="blank" data-a="si chiama" aria-label="blank 6"> Lucia Conti.</li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">B · Controllata</span><h4>Choose the right form</h4></div>
+    <p class="instr">Tap the correct option.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>گزینه‌ی درست رو انتخاب کن. اگه اشتباه بزنی، دکمه تکون می‌خوره. دوباره امتحان کن!</p></div>
+    <div class="mcq" data-a="b" data-why="Ana è spagnola: 3rd person → è."><p class="q">1. Ana ___ spagnola.</p><div class="opts"><button data-o="a">sei</button><button data-o="b">è</button><button data-o="c">e</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="c" data-why="Non comes before the whole 'mi chiamo'."><p class="q">2. "Mi chiamo Anna?" – "No, ___ Darya!"</p><div class="opts"><button data-o="a">mi non chiamo… mi chiamo</button><button data-o="b">non chiamo… chiamo</button><button data-o="c">non mi chiamo Anna, mi chiamo</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="a" data-why="Io sono: the verb is in the middle."><p class="q">3. Which sentence is correct?</p><div class="opts"><button data-o="a">Io sono di Vienna.</button><button data-o="b">Io di Vienna sono.</button><button data-o="c">Io è di Vienna.</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="b" data-why="Thomas is talking to Marco (tu) → sei."><p class="q">4. Thomas to Marco: "E tu, ___ di Bologna?"</p><div class="opts"><button data-o="a">è</button><button data-o="b">sei</button><button data-o="c">sono</button></div><p class="fb"></p></div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">C · Trasformazione</span><h4>Marco gets everything wrong. Correct him!</h4></div>
+    <p class="instr">Make each sentence negative with <em>non</em>. Write the whole sentence.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>مارکو همه چی رو اشتباه گفته! هر جمله رو با <bdi>non</bdi> منفی کن و کل جمله رو بنویس. یادت باشه <bdi>non</bdi> درست قبل از فعل میاد.</p></div>
+    <ol class="ex-items">
+      <li>Thomas è tedesco. → <input class="blank full" data-a="thomas non è tedesco" data-show="Thomas non è tedesco." aria-label="answer 1"></li>
+      <li>Darya è di Roma. → <input class="blank full" data-a="darya non è di roma" data-show="Darya non è di Roma." aria-label="answer 2"></li>
+      <li>Sara, tu sei spagnola. → <input class="blank full" data-a="sara tu non sei spagnola|sara non sei spagnola" data-show="Sara, tu non sei spagnola." aria-label="answer 3"></li>
+      <li>La tutor si chiama Claire. → <input class="blank full" data-a="la tutor non si chiama claire" data-show="La tutor non si chiama Claire." aria-label="answer 4"></li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag free">D · Libera</span><h4>Your class list</h4></div>
+    <p class="instr">Imagine you are in Darya's class. Write 4 sentences: introduce yourself, then describe two classmates (real or invented) and say one thing that is <strong>not</strong> true about one of them. Use <em>mi chiamo, sono, si chiama, è, non</em>.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>فرض کن تو کلاس داریا هستی. ۴ جمله بنویس: خودت رو معرفی کن، بعد دو هم‌کلاسی (واقعی یا خیالی) رو توصیف کن و یه جمله‌ی منفی هم بگو. نوشته‌ت خودکار روی همین دستگاه ذخیره می‌شه.</p></div>
+    <textarea class="free" data-key="g1-free" placeholder="Mi chiamo… Sono… Lei si chiama… Non è…"></textarea>
+    <p class="saved-note">💾 Saved automatically in this browser.</p>
+  </div>
+
+  <h3 class="sub-title">3.2 · Tu o Lei?</h3>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">A · Classificazione</span><h4>Formal or informal?</h4></div>
+    <p class="instr">Tap a phrase, then tap the right box.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>اول روی یه عبارت بزن، بعد روی جعبه‌ی درست («تو» خودمونی یا «شما» رسمی).</p></div>
+    <div class="sorter">
+      <div class="chips">
+        <button class="chip" data-c="tu">Come ti chiami?</button><button class="chip" data-c="lei">Scusi!</button><button class="chip" data-c="tu">Di dove sei?</button><button class="chip" data-c="lei">Qual è il Suo numero?</button><button class="chip" data-c="tu">Ciao, a domani!</button><button class="chip" data-c="lei">ArrivederLa!</button><button class="chip" data-c="lei">Lei è di dove?</button><button class="chip" data-c="tu">Scusa!</button>
+      </div>
+      <div class="buckets">
+        <div class="bucket" data-c="tu"><h5>👫 tu (informale)</h5><div class="drop"></div></div>
+        <div class="bucket" data-c="lei"><h5>🎩 Lei (formale)</h5><div class="drop"></div></div>
+      </div>
+      <p class="ex-fb" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">B · Trasformazione</span><h4>Sara's questions → the director's questions</h4></div>
+    <p class="instr">Rewrite each informal question in the formal (<em>Lei</em>) form.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>سؤال‌های خودمونیِ سارا رو به شکل رسمی (با <bdi>Lei</bdi>) بنویس، یعنی همون‌طور که مدیر مدرسه می‌پرسه. یادت باشه فعل با <bdi>Lei</bdi> مثل «او» صرف می‌شه.</p></div>
+    <ol class="ex-items">
+      <li>Come ti chiami? → <input class="blank w" data-a="come si chiama" data-show="Come si chiama?" aria-label="answer 1"></li>
+      <li>Di dove sei? → <input class="blank w" data-a="di dov'è|di dove è|lei di dov'è|lei è di dove|di dove è lei" data-show="Di dov'è?" aria-label="answer 2"></li>
+      <li>Qual è il tuo numero? → <input class="blank w" data-a="qual è il suo numero" data-show="Qual è il Suo numero?" aria-label="answer 3"></li>
+      <li>Scusa, come si scrive? → <input class="blank w" data-a="scusi come si scrive" data-show="Scusi, come si scrive?" aria-label="answer 4"></li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">C · Situazioni</span><h4>What would Darya say?</h4></div>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>به موقعیت فکر کن: طرف کیه و ساعت چنده؟ بعد بهترین جمله رو انتخاب کن.</p></div>
+    <div class="mcq" data-a="c" data-why="Older stranger in the evening → Buonasera + Lei."><p class="q">1. 6.30 p.m. Darya meets her new landlady, Signora Bianchi (60), for the first time.</p><div class="opts"><button data-o="a">Ciao! Come ti chiami?</button><button data-o="b">Buongiorno! Di dove sei?</button><button data-o="c">Buonasera, signora! Piacere, sono Darya.</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="a" data-why="Classmate, same age, casual → tu."><p class="q">2. Darya sits next to a new classmate (about 30) at the morning break.</p><div class="opts"><button data-o="a">Ciao! Come ti chiami?</button><button data-o="b">ArrivederLa!</button><button data-o="c">Buonanotte! Come si chiama?</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="b" data-why="Leaving the formal director → ArrivederLa / Arrivederci."><p class="q">3. Darya leaves the director's office at 11 a.m.</p><div class="opts"><button data-o="a">Ciao, a domani, Lucia!</button><button data-o="b">Grazie, arrivederLa!</button><button data-o="c">Buonanotte!</button></div><p class="fb"></p></div>
+    <div class="mcq" data-a="b" data-why="Arriving at 10 p.m. → still Buonasera. Buonanotte = going to bed."><p class="q">4. 10 p.m. Darya walks into the bar. Marco is at the counter.</p><div class="opts"><button data-o="a">Buonanotte, Marco!</button><button data-o="b">Buonasera, Marco! / Ciao, Marco!</button><button data-o="c">Buongiorno, Marco!</button></div><p class="fb"></p></div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag free">D · Libera</span><h4>Two versions of one meeting</h4></div>
+    <p class="instr">Write a 4-line dialogue in which Darya meets Signora Bianchi (formal). Then rewrite it as if Darya meets Bianchi's 28-year-old son, Luca (informal). Change every form that needs changing.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>یه گفت‌وگوی ۴ خطی بنویس: داریا با خانم بیانکی (رسمی) آشنا می‌شه. بعد همون رو بازنویسی کن، این بار با پسر ۲۸ ساله‌ش، لوکا (خودمونی). همه‌ی شکل‌هایی که باید عوض بشن رو عوض کن: سلام، فعل، «ببخشید» و خداحافظی.</p></div>
+    <textarea class="free" data-key="g2-free" placeholder="FORMALE: Buonasera, signora! …&#10;INFORMALE: Ciao, Luca! …"></textarea>
+    <p class="saved-note">💾 Saved automatically in this browser.</p>
+  </div>
+
+  <h3 class="sub-title">3.3 · Nationality adjectives</h3>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">A · Controllata</span><h4>Who's who at the school?</h4></div>
+    <p class="instr">Write the nationality with the correct ending.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>ملیت رو با پایان درست بنویس. اول ببین طرف زنه یا مرد، بعد ببین صفت از خانواده‌ی <bdi>-o/-a</bdi> هست یا <bdi>-e</bdi>.</p></div>
+    <ol class="ex-items">
+      <li>Darya è <input class="blank" data-a="iraniana" aria-label="1"> (Iran).</li>
+      <li>Thomas è <input class="blank" data-a="austriaco" aria-label="2"> (Austria).</li>
+      <li>Claire è <input class="blank" data-a="francese" aria-label="3"> (Francia).</li>
+      <li>Ana è <input class="blank" data-a="spagnola" aria-label="4"> (Spagna).</li>
+      <li>Sara è <input class="blank" data-a="italiana" aria-label="5"> (Italia).</li>
+      <li>Il marito di Ana, Jake, è <input class="blank" data-a="inglese" aria-label="6"> (Inghilterra).</li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">B · Classificazione</span><h4>Which family?</h4></div>
+    <p class="instr">Tap a nationality, then tap its family.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>هر صفت ملیت رو به خانواده‌ش ببر: یا عوض می‌شه (<bdi>-o/-a</bdi>) یا برای هر دو جنس یکیه (<bdi>-e</bdi>).</p></div>
+    <div class="sorter">
+      <div class="chips">
+        <button class="chip" data-c="oa">tedesco</button><button class="chip" data-c="e">cinese</button><button class="chip" data-c="oa">russa</button><button class="chip" data-c="e">giapponese</button><button class="chip" data-c="oa">americana</button><button class="chip" data-c="e">canadese</button><button class="chip" data-c="oa">turco</button><button class="chip" data-c="e">portoghese</button>
+      </div>
+      <div class="buckets">
+        <div class="bucket" data-c="oa"><h5>-o / -a (changes)</h5><div class="drop"></div></div>
+        <div class="bucket" data-c="e"><h5>-e (same for both)</h5><div class="drop"></div></div>
+      </div>
+      <p class="ex-fb" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">C · Correzione</span><h4>Darya's draft post has mistakes</h4></div>
+    <p class="instr">Darya wrote this <em>before</em> class. Find and fix the mistake in each sentence (type the corrected word only).</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>داریا این جمله‌ها رو قبل از کلاس نوشته و هر کدوم یه اشتباه داره. فقط کلمه‌ی درست‌شده رو بنویس.</p></div>
+    <ol class="ex-items">
+      <li>"Ana è spagnolo." → <input class="blank" data-a="spagnola" aria-label="1"></li>
+      <li>"Claire è francesa." → <input class="blank" data-a="francese" aria-label="2"></li>
+      <li>"Io sono Iraniana." → <input class="blank" data-a="iraniana" data-show="iraniana (lower case)" aria-label="3"></li>
+      <li>"Thomas è austriaca." → <input class="blank" data-a="austriaco" aria-label="4"></li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag free">D · Libera</span><h4>Your international circle</h4></div>
+    <p class="instr">Write about 4 people in your life from different places (colleagues, friends, family abroad). For each: name + city + nationality. Include at least one man and one woman with the <em>-o/-a</em> family, and one <em>-e</em> nationality.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>درباره‌ی ۴ نفر از آدم‌های زندگیت بنویس که اهل جاهای مختلفن: اسم + شهر + ملیت. حداقل یه مرد و یه زن از خانواده‌ی <bdi>-o/-a</bdi> و یه ملیت <bdi>-e</bdi> داشته باش.</p></div>
+    <textarea class="free" data-key="g3-free" placeholder="Mia sorella si chiama Neda, è di Shiraz, è iraniana… / Il mio collega si chiama…"></textarea>
+    <p class="saved-note">💾 Saved automatically in this browser.</p>
+  </div>
+</section>
+
+<!-- SECTION: Practice — Vocabulary -->
+<section class="lesson-section" id="practice-vocab" data-title="6 · Pratica — Vocabolario">
+  <h2 class="section-title"><span class="num">6</span> Pratica · Vocabolario</h2>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">A · Abbinamento</span><h4>Match the phrase to the moment</h4></div>
+    <p class="instr">Tap a phrase on the left, then its situation on the right.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>روی یه عبارت در ستون چپ بزن، بعد موقعیت مناسبش رو در ستون راست پیدا کن.</p></div>
+    <div class="match">
+      <div class="match-col left">
+        <button data-k="1" data-say="Piacere!">Piacere!</button>
+        <button data-k="2" data-say="Come si dice?">Come si dice…?</button>
+        <button data-k="3" data-say="Buona serata!">Buona serata!</button>
+        <button data-k="4" data-say="Come si scrive?">Come si scrive?</button>
+        <button data-k="5" data-say="Benvenuta!">Benvenuta!</button>
+      </div>
+      <div class="match-col right">
+        <button data-k="1">Someone tells you their name.</button>
+        <button data-k="2">You don't know a word in Italian.</button>
+        <button data-k="3">You leave the bar at 8 p.m.</button>
+        <button data-k="4">You didn't catch the spelling of a surname.</button>
+        <button data-k="5">A woman arrives in your city.</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">B · Dettato</span><h4>Phone-number dictation 📞</h4></div>
+    <p class="instr">Press 🔊 and type the number you hear (digits only). These are the new contacts in Darya's phone.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>دکمه‌ی 🔊 رو بزن و شماره‌ای که می‌شنوی رو فقط با عدد بنویس. اگه سریع بود، دکمه‌ی 🐢 بالای داستان رو روشن کن تا آهسته‌تر بشه. (اگه مرورگرت صدا نداره، شماره‌ها تو بخش جواب‌ها به حروف نوشته شدن.)</p></div>
+    <ol class="ex-items">
+      <li>Sara: <button class="say" data-say="tre quattro sette, due due uno, otto nove zero sei">🔊</button> <input class="blank w" data-a="3472218906" data-norm="digits" aria-label="Sara's number"></li>
+      <li>Marco (bar): <button class="say" data-say="zero cinque uno, sei quattro quattro, dodici, diciotto">🔊</button> <input class="blank w" data-a="0516441218" data-norm="digits" aria-label="Marco's number"></li>
+      <li>Thomas: <button class="say" data-say="tre tre tre, venti, quindici, diciannove, otto">🔊</button> <input class="blank w" data-a="3332015198" data-norm="digits" aria-label="Thomas's number"></li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">C · Spelling</span><h4>Spell it like a local</h4></div>
+    <p class="instr">Listen to the spelled-out word and type it.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>به حروفی که هجی می‌شن گوش بده و کلمه رو بنویس. اسم حروف رو از جدول الفبا یادت بیار.</p></div>
+    <ol class="ex-items">
+      <li><button class="say" data-say="bi, o, elle, o, gi, enne, a">🔊</button> <input class="blank" data-a="bologna" aria-label="word 1"></li>
+      <li><button class="say" data-say="cappa, a, erre, i, emme, i">🔊</button> <input class="blank" data-a="karimi" aria-label="word 2"></li>
+      <li><button class="say" data-say="vu, i, e, enne, enne, a">🔊</button> <input class="blank" data-a="vienna" aria-label="word 3"></li>
+      <li><button class="say" data-say="pi, i, a, ci, e, erre, e">🔊</button> <input class="blank" data-a="piacere" aria-label="word 4"></li>
+    </ol>
+    <div class="btn-row"><button class="btn primary btn-check">Controlla</button><button class="btn btn-reveal">Mostra soluzioni</button><button class="btn btn-reset">↺</button></div>
+    <p class="ex-fb" aria-live="polite"></p>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag">D · Flashcards</span><h4>Flip &amp; recall</h4></div>
+    <p class="instr">Say the Italian aloud <strong>before</strong> you flip. Tap to check (and hear it).</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>قبل از اینکه کارت رو برگردونی، معادل ایتالیایی رو بلند بگو. بعد بزن تا جواب رو ببینی و بشنوی.</p></div>
+    <div class="cards">
+      <button class="flashcard" data-say="Piacere mio!"><span class="front">Pleased to meet you too!</span><span class="back">Piacere mio!</span></button>
+      <button class="flashcard" data-say="Di dove sei?"><span class="front">Where are you from? (tu)</span><span class="back">Di dove sei?</span></button>
+      <button class="flashcard" data-say="Come si chiama?"><span class="front">What's your name? (Lei)</span><span class="back">Come si chiama?</span></button>
+      <button class="flashcard" data-say="il cognome"><span class="front">surname</span><span class="back">il cognome</span></button>
+      <button class="flashcard" data-say="tedesca"><span class="front">German (woman)</span><span class="back">tedesca</span></button>
+      <button class="flashcard" data-say="Diamoci del tu!"><span class="front">Let's use "tu"!</span><span class="back">Diamoci del tu!</span></button>
+      <button class="flashcard" data-say="diciassette"><span class="front">17</span><span class="back">diciassette</span></button>
+      <button class="flashcard" data-say="Può ripetere?"><span class="front">Can you repeat? (Lei)</span><span class="back">Può ripetere?</span></button>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="ex-head"><span class="tag free">E · Produzione</span><h4>Your registration form, in words</h4></div>
+    <p class="instr">The school needs your details. Write 5 sentences, as if you were speaking to Dott.ssa Conti: name, how to spell your surname (with Italian letter names!), city, nationality, phone number in words.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>مدرسه اطلاعاتت رو لازم داره. ۵ جمله بنویس، انگار داری با خانم دکتر کونتی (رسمی) حرف می‌زنی: اسم، هجی فامیلی با اسم حروف ایتالیایی، شهر، ملیت و شماره تلفن به حروف.</p></div>
+    <textarea class="free" data-key="v-free" placeholder="Mi chiamo … Il cognome si scrive: … Sono di … Sono … Il mio numero è: tre, …"></textarea>
+    <p class="saved-note">💾 Saved automatically in this browser.</p>
+  </div>
+</section>
+
+<!-- SECTION: Speaking Tasks -->
+<section class="lesson-section" id="speaking" data-title="7 · Parlare — Speaking">
+  <h2 class="section-title"><span class="num">7</span> Parlare · Speaking tasks</h2>
+  <p>Use your phone's voice recorder. Recording yourself is the single best way to hear your own progress.</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>برای همه‌ی این تمرین‌ها از ضبط صدای گوشیت استفاده کن. شنیدن صدای خودت بهترین راه برای دیدن پیشرفته. فایل‌ها رو نگه دار تا چند هفته بعد مقایسه کنی!</p></div>
+
+  <div class="task">
+    <h3>🎧 Task 1 · Shadowing: Scena 1</h3>
+    <dl class="task-meta">
+      <dt>What to do</dt><dd>Go back to <a href="#scene1">Scena 1</a>. (1) Listen with ▶ while reading. (2) Play it again and speak <em>at the same time</em> as the audio. (3) Read both roles aloud alone, at natural speed.</dd>
+      <dt>How long</dt><dd>3 rounds · about 5 minutes</dd>
+      <dt>Record</dt><dd>Round 3 only.</dd>
+      <dt>Listen for</dt><dd>Stress: bwon-<strong>DJOR</strong>-no, pja-<strong>TCHE</strong>-re. The double <em>rr</em> in <em>arrivederci</em> and <em>erre</em>. <em>ch</em> = /k/ in <em>chiamo</em>.</dd>
+    </dl>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>سه دور: ۱) گوش بده و بخون، ۲) هم‌زمان با صدا بگو (مثل سایه)، ۳) تنهایی هر دو نقش رو بلند بخون و فقط این دور رو ضبط کن. موقع گوش دادن به تکیه‌ی کلمه‌ها و حروف دوتایی (<bdi>rr</bdi>) دقت کن. حروف دوتایی مثل تشدید فارسی‌ان!</p></div>
+  </div>
+
+  <div class="task">
+    <h3>🎭 Task 2 · Roleplay: the new apartment</h3>
+    <dl class="task-meta">
+      <dt>What to do</dt><dd>Play both roles (switch chairs, or use two voices). It's 7 p.m. You arrive at your new rented flat in Bologna and meet the owner for the first time. Use <strong>Lei</strong> throughout.</dd>
+      <dt>How long</dt><dd>2–3 minutes</dd>
+      <dt>Record</dt><dd>The whole conversation.</dd>
+      <dt>Listen for</dt><dd>Did you stay formal (<em>si chiama, è, Suo, scusi</em>) all the way through? Did you use <em>Buonasera</em> (not <em>Buonanotte</em>)?</dd>
+    </dl>
+    <div class="role-cards">
+      <div class="role"><b>A · You (the new tenant)</b><br>Greet; give your name; spell your surname; say where you're from; give your phone number; say goodbye politely.</div>
+      <div class="role"><b>B · Signora / Signor Bianchi (60)</b><br>Greet; introduce yourself; ask the tenant's name and how to spell it; ask where they're from; ask for the phone number; welcome them to Bologna.</div>
+    </div>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>هر دو نقش رو خودت بازی کن (جای صندلی رو عوض کن یا صدات رو تغییر بده). ساعت ۷ عصره و برای اولین بار صاحبخونه‌ی جدیدت رو می‌بینی. از اول تا آخر رسمی بمون (<bdi>Lei</bdi>)! بعد گوش بده ببین جایی ناخواسته خودمونی نشدی؟</p></div>
+  </div>
+
+  <div class="task">
+    <h3>⏱️ Task 3 · Timed monologue: "Mi presento"</h3>
+    <dl class="task-meta">
+      <dt>What to do</dt><dd>Introduce yourself to Darya's class without stopping: name, spelling, city, nationality, a (fake) phone number. If you finish early, talk about two people you know (name + nationality). Don't stop: if you get stuck, say <em>"allora…"</em> and keep going.</dd>
+      <dt>How long</dt><dd>60 seconds (try again at 90 seconds)</dd>
+      <dt>Record</dt><dd>Both attempts.</dd>
+      <dt>Listen for</dt><dd>Agreement: <em>-o/-a</em> matches the person. Verb in the middle. How many pauses longer than 3 seconds? Fewer on the second try?</dd>
+    </dl>
+    <div class="timer" data-s="60"><span class="t-display">1:00</span><button class="btn primary t-start">▶ Start</button><button class="btn t-reset">↺</button></div>
+    <div class="timer" data-s="90"><span class="t-display">1:30</span><button class="btn primary t-start">▶ Start</button><button class="btn t-reset">↺</button></div>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تایمر رو بزن و بدون توقف خودت رو معرفی کن: اسم، هجی، شهر، ملیت، یه شماره تلفن (الکی). اگه گیر کردی بگو <bdi>allora…</bdi> (خب…) و ادامه بده. بعد ۹۰ ثانیه امتحان کن و مکث‌ها رو مقایسه کن.</p></div>
+  </div>
+
+  <div class="task">
+    <h3>⚡ Task 4 · Sentence challenge</h3>
+    <dl class="task-meta">
+      <dt>What to do</dt><dd>For each word, say as many <em>different</em> sentences as you can in 60 seconds: <strong>piacere · di dove · non · francese · qual è</strong>. Use the story characters or your own life.</dd>
+      <dt>How long</dt><dd>5 × 60 seconds</dd>
+      <dt>Record</dt><dd>Your favourite round.</dd>
+      <dt>Listen for</dt><dd>Variety: did you use both <em>tu</em> and <em>Lei</em>? <em>Qual è</em> pronounced as one smooth word, /kwaˈlɛ/?</dd>
+    </dl>
+    <div class="timer" data-s="60"><span class="t-display">1:00</span><button class="btn primary t-start">▶ Start</button><button class="btn t-reset">↺</button></div>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>برای هر کلمه ۶۰ ثانیه وقت داری تا هر چندتا جمله‌ی متفاوت که می‌تونی بسازی. سعی کن هم <bdi>tu</bdi> هم <bdi>Lei</bdi> استفاده کنی.</p></div>
+  </div>
+</section>
+
+<!-- SECTION: Tips & Strategies -->
+<section class="lesson-section" id="tips" data-title="8 · Consigli — Tips">
+  <h2 class="section-title"><span class="num">8</span> Consigli · Tips &amp; strategies</h2>
+  <div class="tips">
+    <div class="tip"><h4>1 · The "Lei = lei" trick</h4><p>Formal <em>Lei</em> is grammatically the same as <em>lei</em> (she). So if you know how to talk <strong>about</strong> Claire ("Claire è francese, si chiama Claire"), you already know how to talk <strong>to</strong> the director ("Lei è di Bologna? Come si chiama?"). One set of forms, two jobs.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>ترفند: <bdi>Lei</bdi>ی رسمی دقیقاً مثل <bdi>lei</bdi> (او، زن) صرف می‌شه. پس اگه بلدی درباره‌ی کلر حرف بزنی، بلدی با مدیر هم رسمی حرف بزنی. یه سری فعل، دو تا کاربرد.</p></div></div>
+    <div class="tip"><h4>2 · Persian speakers: verb in the middle, gender on the end</h4><p>Two habits from Persian will try to sneak in: putting the verb last, and ignoring gender. Practise little "frames" until they're automatic: <strong>Sono + nationality</strong>, <strong>Sono di + city</strong>. Say them about yourself, then about a man and a woman you know.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>دو تا عادت فارسی سعی می‌کنن وارد ایتالیاییت بشن: فعل آخر جمله، و بی‌توجهی به جنسیت. قالب‌های کوتاه رو اون‌قدر تکرار کن که خودکار بشن: <bdi>Sono</bdi> + ملیت، <bdi>Sono di</bdi> + شهر.</p></div></div>
+    <div class="tip"><h4>3 · Double consonants = tashdid</h4><p>Italian double letters are held slightly longer, just like a Persian <em>tashdid</em> (as in «بچّه»). Compare <em>sete</em> (thirst) vs <em>sette</em> (seven), and <em>nono</em> (ninth) vs <em>nonno</em> (grandfather). You have an advantage here!</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>حروف دوتایی ایتالیایی دقیقاً مثل تشدید فارسی کشیده‌تر تلفظ می‌شن. <bdi>sete</bdi> (تشنگی) با <bdi>sette</bdi> (هفت) فرق داره. این یکی برای فارسی‌زبان‌ها آسونه!</p></div></div>
+    <div class="tip"><h4>4 · Cultural note: titles and kisses</h4><p>Italians use titles a lot: anyone with a university degree may be called <em>Dottore / Dottoressa</em> (that's why Conti is "Dott.ssa"). Friends often greet with two light cheek kisses (right cheek first), but at a first formal meeting a handshake + <em>Piacere</em> is standard. Wait for the Italian to offer <em>"Diamoci del tu"</em>, especially if they're older or senior.</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تو ایتالیا عنوان‌ها خیلی مهمن: هر کسی که مدرک دانشگاهی داره ممکنه «دکتر» صدا زده بشه. دوست‌ها معمولاً دو تا بوس روی گونه می‌کنن، ولی تو اولین دیدار رسمی دست دادن + <bdi>Piacere</bdi> کافیه. صبر کن تا طرف مقابل (به‌خصوص اگه بزرگ‌تره) خودش پیشنهاد <bdi>tu</bdi> بده.</p></div></div>
+    <div class="tip"><h4>5 · Outside this file: change one thing in your phone</h4><p>Add your Italian contacts (even invented ones: Sara, Marco…) with numbers, and read the numbers aloud in Italian every time you open them. For spaced repetition, make a free <strong>Anki</strong> deck with this lesson's flashcards (one side English, the other Italian + audio).</p>
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>بیرون از این فایل: تو گوشیت چند تا مخاطب ایتالیایی بساز (حتی خیالی) و هر بار شماره‌شون رو به ایتالیایی بلند بخون. برای مرور هم یه دسته کارت تو اپ رایگان <bdi>Anki</bdi> درست کن.</p></div></div>
+  </div>
+</section>
+
+<!-- SECTION: Listening & Watching -->
+<section class="lesson-section" id="listening" data-title="9 · Ascoltare &amp; guardare">
+  <h2 class="section-title"><span class="num">9</span> Ascoltare &amp; guardare</h2>
+  <div class="resource">
+    <div class="platform">YouTube · Easy Italian (Easy Languages)</div>
+    <h4>Street interviews with subtitles</h4>
+    <p><strong>Why:</strong> Real people on Italian streets, with Italian + English subtitles. People often say where they're from and greet the interviewer, which is exactly this lesson's language.</p>
+    <p><strong>Micro-task:</strong> Search the channel for a beginner episode. Watch 3 minutes and write down: (1) every greeting you hear, (2) whether the interviewer uses <em>tu</em> or <em>Lei</em>, (3) one sentence with <em>sono di…</em>.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تو کانال <bdi>Easy Italian</bdi> یه قسمت مبتدی پیدا کن و ۳ دقیقه ببین. بنویس: ۱) همه‌ی سلام‌هایی که شنیدی، ۲) مصاحبه‌گر <bdi>tu</bdi> می‌گه یا <bdi>Lei</bdi>؟ ۳) یه جمله با <bdi>sono di…</bdi>.</p></div>
+  </div>
+  <div class="resource">
+    <div class="platform">Podcast · Coffee Break Italian (Coffee Break Languages)</div>
+    <h4>Season 1, first episodes</h4>
+    <p><strong>Why:</strong> A teacher and a learner build up the very first conversations step by step, explained in English. Perfect for the A1 start.</p>
+    <p><strong>Micro-task:</strong> Listen to one of the first episodes. Pause each time you hear a greeting or introduction phrase and repeat it aloud 3 times. Note one phrase that's <em>not</em> in this file.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>یکی از قسمت‌های اول فصل ۱ رو گوش بده. هر بار که یه عبارت سلام یا معرفی شنیدی، مکث کن و ۳ بار تکرارش کن. یه عبارت جدید که تو این فایل نیست یادداشت کن.</p></div>
+  </div>
+  <div class="resource">
+    <div class="platform">YouTube · Italiano con Elisa</div>
+    <h4>Greetings &amp; introductions videos</h4>
+    <p><strong>Why:</strong> Clear, slow Italian from a native teacher, aimed at beginners.</p>
+    <p><strong>Micro-task:</strong> Search her channel for "salutare" or "presentarsi". While you watch, list any greeting she uses that has a different level of formality than <em>Ciao</em> or <em>Buongiorno</em>, and place it on the spectrum bar from section 3.2.</p>
+    <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تو کانالش دنبال <bdi>salutare</bdi> یا <bdi>presentarsi</bdi> بگرد. سلام‌هایی که می‌گه رو بنویس و هر کدوم رو روی نوار رسمی/خودمونی بخش ۳.۲ جا بده.</p></div>
+  </div>
+</section>
+
+<!-- SECTION: Explore More — Autonomy -->
+<section class="lesson-section" id="explore" data-title="10 · Explore More">
+  <h2 class="section-title"><span class="num">10</span> Explore More · Autonomia</h2>
+  <ol class="explore-list">
+    <li><strong>The Italian phone alphabet.</strong> Search "alfabeto telefonico italiano". Italians spell with city names (A come Ancona, B come Bologna…). Spell your full name this way, aloud and in writing.
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>«<bdi>alfabeto telefonico italiano</bdi>» رو سرچ کن. ایتالیایی‌ها با اسم شهرها هجی می‌کنن (مثلاً A مثل Ancona). اسم کاملت رو این‌طوری هجی کن، هم بلند هم نوشتنی.</p></div></li>
+    <li><strong>Real bios.</strong> Find 3 Italian Instagram or LinkedIn bios (search hashtags like #designer #bologna). Copy any line with <em>sono</em> or a nationality, and note whether it's -o/-a or -e.
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>بیوگرافی ۳ تا ایتالیایی رو تو اینستاگرام یا لینکدین پیدا کن. هر خطی که <bdi>sono</bdi> یا ملیت داره رو کپی کن.</p></div></li>
+    <li><strong>Tu or Lei debate.</strong> Search "dare del tu o del Lei" and read one article or forum thread (use a translator if needed). Write down one situation where Italians disagree about which to use.
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>«<bdi>dare del tu o del Lei</bdi>» رو سرچ کن و یه مقاله یا بحث فروم بخون. یه موقعیت رو بنویس که خود ایتالیایی‌ها سرش اختلاف دارن.</p></div></li>
+    <li><strong>5 new nationalities.</strong> On WordReference, look up the Italian nationality for 5 countries important to you (e.g. Iraq, India, Brazil, Sweden, Egypt). Sort them into the -o/-a or -e family.
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تو سایت <bdi>WordReference</bdi> ملیت ۵ کشوری که برات مهمن رو پیدا کن و هر کدوم رو تو خانواده‌ی <bdi>-o/-a</bdi> یا <bdi>-e</bdi> بذار.</p></div></li>
+    <li><strong>Sports roster.</strong> Open the website of any Serie A football or volleyball team and look at the player list. Find 3 nationality adjectives used about players.
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>سایت یه تیم فوتبال یا والیبال ایتالیایی رو باز کن و تو لیست بازیکن‌ها ۳ تا صفت ملیت پیدا کن.</p></div></li>
+    <li><strong>Your own interest.</strong> Find something in Italian that genuinely interests you this week (a recipe, a song title, a design account, a news headline) and note one new word or phrase from it.
+      <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>این هفته یه چیز ایتالیایی پیدا کن که واقعاً برات جالبه (دستور غذا، اسم آهنگ، صفحه‌ی طراحی، تیتر خبر) و یه کلمه یا عبارت جدید ازش یادداشت کن.</p></div></li>
+  </ol>
+</section>
+
+<!-- SECTION: Weekly Summary -->
+<section class="lesson-section" id="summary" data-title="11 · Riepilogo — Summary">
+  <h2 class="section-title"><span class="num">11</span> Riepilogo · Lesson summary</h2>
+  <div class="summary-grid">
+    <div class="sum-card"><h4>📐 Grammar</h4><ul><li>essere: sono / sei / è</li><li>chiamarsi: mi chiamo / ti chiami / si chiama</li><li>non + verb</li><li>tu vs Lei (Lei = 3rd person)</li><li>nationalities: -o/-a vs -e</li></ul></div>
+    <div class="sum-card c2"><h4>📚 Vocabulary</h4><ul><li>greetings by time &amp; register</li><li>nome, cognome, numero di telefono</li><li>14 countries &amp; nationalities</li><li>numbers 0–20 · alphabet</li></ul></div>
+    <div class="sum-card c3"><h4>💬 Key phrases</h4><ul><li>Piacere! – Piacere mio!</li><li>Di dove sei? / Di dov'è?</li><li>Come si scrive? · Come si dice…?</li><li>Diamoci del tu!</li></ul></div>
+    <div class="sum-card c4"><h4>🇮🇹 Culture</h4><ul><li>Buongiorno → Buonasera after ~4–5 p.m.</li><li>Dottore/Dottoressa for graduates</li><li>Wait for "diamoci del tu"</li><li>Nationalities in lower case</li></ul></div>
+  </div>
+
+  <h3>Self-check · Can you…?</h3>
+  <p class="small muted">Be honest. No answers here: if you choose "not yet", go back to that section.</p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>با خودت صادق باش. اینجا جوابی نیست. اگه گزینه‌ی «هنوز نه» رو زدی، برگرد به همون بخش. انتخاب‌هات روی این دستگاه ذخیره می‌شن.</p></div>
+  <ol class="selfcheck">
+    <li>…introduce yourself in 3 sentences without looking?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…ask "What's your name?" and "Where are you from?" in both the tu and the Lei form?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…explain why the director says "Lei è" and not "Lei sei"?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…say the nationality of an Iranian woman, a German man and a French woman?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…spell your surname with Italian letter names?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…say your phone number in Italian at normal speed?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+    <li>…choose the right greeting for 10 a.m., 6 p.m. and when leaving at 11 p.m.?<div class="sc-btns"><button class="sc-btn" data-v="yes">😀 Sì</button><button class="sc-btn" data-v="almost">🤔 Quasi</button><button class="sc-btn" data-v="no">😬 Non ancora</button></div></li>
+  </ol>
+
+  <h3>Before the next lesson ✅</h3>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>قبل از درس بعدی این کارها رو انجام بده و تیکشون رو بزن. تیک‌ها ذخیره می‌شن.</p></div>
+  <ul class="checklist" data-key="next">
+    <li><label><input type="checkbox"><span>Redo exercises 3.1-A and 3.3-A without looking at the rules.</span></label></li>
+    <li><label><input type="checkbox"><span>Record the 60-second "Mi presento" again, and compare it with your first recording.</span></label></li>
+    <li><label><input type="checkbox"><span>Say 3 real phone numbers from your contacts aloud in Italian.</span></label></li>
+    <li><label><input type="checkbox"><span>Finish at least 2 tasks from Explore More.</span></label></li>
+    <li><label><input type="checkbox"><span>Write one question you still have about tu/Lei to bring to your next session.</span></label></li>
+  </ul>
+</section>
+
+<!-- SECTION: Answer Key -->
+<section class="lesson-section answer-key" id="answers" data-title="12 · Soluzioni — Answer Key">
+  <h2 class="section-title"><span class="num">12</span> Soluzioni · Answer key</h2>
+  <p class="callout"><strong>Speaking and free-writing tasks don't have fixed answers — review your own output or share with a tutor.</strong></p>
+  <div class="farsi-note" lang="fa" dir="rtl"><span class="fa-label">فارسی</span><p>تمرین‌های گفتاری و نوشتاری آزاد جواب ثابت ندارن. خودت دوباره بررسیشون کن یا به یه معلم نشون بده. برای بقیه، اول خودت تمرین رو انجام بده و بعد اینجا رو باز کن.</p></div>
+
+  <details><summary>3.1 · A, Complete Darya's first day</summary><ol><li>mi chiamo</li><li>è <span class="note">(3rd person; with the accent!)</span></li><li>ti chiami</li><li>sono</li><li>sei</li><li>si chiama <span class="note">(the director = she → si + chiama)</span></li></ol></details>
+  <details><summary>3.1 · B, Choose the right form</summary><ol><li>è</li><li>non mi chiamo Anna, mi chiamo <span class="note">(non before the whole "mi chiamo" block)</span></li><li>Io sono di Vienna.</li><li>sei <span class="note">(Thomas → Marco = tu)</span></li></ol></details>
+  <details><summary>3.1 · C, Correct Marco</summary><ol><li>Thomas non è tedesco.</li><li>Darya non è di Roma.</li><li>Sara, (tu) non sei spagnola.</li><li>La tutor non si chiama Claire. <span class="note">Non goes before si.</span></li></ol></details>
+  <details><summary>3.1 · D, Free writing</summary><p class="note">Check: verb in the middle; mi/ti/si matches the person; <em>non</em> directly before the verb (or before mi/ti/si); è with the accent.</p></details>
+  <details><summary>3.2 · A, Formal or informal?</summary><p><strong>tu:</strong> Come ti chiami? · Di dove sei? · Ciao, a domani! · Scusa!<br><strong>Lei:</strong> Scusi! · Qual è il Suo numero? · ArrivederLa! · Lei è di dove?</p></details>
+  <details><summary>3.2 · B, Informal → formal</summary><ol><li>Come si chiama?</li><li>Di dov'è? / Lei è di dove? <span class="note">(dove + è → dov'è)</span></li><li>Qual è il Suo numero?</li><li>Scusi, come si scrive? <span class="note">"come si scrive" doesn't change: here si = "one" (how does one spell it).</span></li></ol></details>
+  <details><summary>3.2 · C, What would Darya say?</summary><ol><li>c, Buonasera, signora! Piacere, sono Darya.</li><li>a, Ciao! Come ti chiami?</li><li>b, Grazie, arrivederLa!</li><li>b, Buonasera / Ciao, Marco! <span class="note">Buonanotte is only for leaving at night or going to bed.</span></li></ol></details>
+  <details><summary>3.2 · D, Free writing</summary><p class="note">In the formal version look for: Buonasera, signora · Piacere · si chiama · è · Suo · scusi · ArrivederLa. In the informal version: Ciao · ti chiami · sei · tuo · scusa · a domani.</p></details>
+  <details><summary>3.3 · A, Who's who?</summary><ol><li>iraniana</li><li>austriaco</li><li>francese <span class="note">(-e: same for men and women)</span></li><li>spagnola</li><li>italiana</li><li>inglese</li></ol></details>
+  <details><summary>3.3 · B, Which family?</summary><p><strong>-o/-a:</strong> tedesco, russa, americana, turco<br><strong>-e:</strong> cinese, giapponese, canadese, portoghese</p></details>
+  <details><summary>3.3 · C, Darya's draft</summary><ol><li>spagnola</li><li>francese <span class="note">(never francesa)</span></li><li>iraniana <span class="note">(lower case)</span></li><li>austriaco <span class="note">(Thomas is a man)</span></li></ol></details>
+  <details><summary>3.3 · D, Free writing</summary><p class="note">Check each adjective against the person's gender; lower-case nationalities; capital letters for cities/countries; <em>di</em> only before the city.</p></details>
+  <details><summary>Vocabulary · A, Match</summary><p>Piacere! → someone tells you their name · Come si dice…? → you don't know a word · Buona serata! → leaving at 8 p.m. · Come si scrive? → surname spelling · Benvenuta! → a woman arrives.</p></details>
+  <details><summary>Vocabulary · B, Phone dictation</summary><ol><li>347 221 8906 <span class="note">(tre quattro sette, due due uno, otto nove zero sei)</span></li><li>051 644 1218 <span class="note">(zero cinque uno, sei quattro quattro, dodici, diciotto). 051 is Bologna's landline area code.</span></li><li>333 20 15 19 8 → 3332015198 <span class="note">(tre tre tre, venti, quindici, diciannove, otto). Italians often read digits in pairs.</span></li></ol></details>
+  <details><summary>Vocabulary · C, Spelling</summary><ol><li>Bologna</li><li>Karimi</li><li>Vienna</li><li>piacere</li></ol></details>
+  <details><summary>Vocabulary · E, Production</summary><p class="note">Look for: formal register throughout (it's the director); correct letter names (acca for H, cappa for K…); numbers 0–20 accurate; "Sono di + city", "Sono + nationality" agreeing with you.</p></details>
+</section>
+
+</main>
+<button class="back-to-top" id="backTop" aria-label="Back to top">↑</button>
+<script>
+(function(){
+  "use strict";
+  var KEY = document.body.getAttribute('data-lesson') || 'lesson';
+  var store = {
+    get: function(k){ try { var v = localStorage.getItem(KEY+':'+k); return v ? JSON.parse(v) : null; } catch(e){ return null; } },
+    set: function(k,v){ try { localStorage.setItem(KEY+':'+k, JSON.stringify(v)); } catch(e){} }
+  };
+  var $ = function(s,c){ return (c||document).querySelector(s); };
+  var $$ = function(s,c){ return Array.prototype.slice.call((c||document).querySelectorAll(s)); };
+
+  /* ---------- Progress bar, back to top, active section ---------- */
+  var bar = $('#progressBar'), backTop = $('#backTop');
+  var sections = $$('.lesson-section');
+  var menuLinks = $$('#navMenu a');
+  function onScroll(){
+    var h = document.documentElement;
+    var max = h.scrollHeight - h.clientHeight;
+    var pct = max > 0 ? Math.min(100, (h.scrollTop || document.body.scrollTop) / max * 100) : 0;
+    bar.style.width = pct + '%'; bar.setAttribute('aria-valuenow', Math.round(pct));
+    backTop.classList.toggle('show', (window.scrollY || h.scrollTop) > 600);
+    var current = null;
+    sections.forEach(function(s){ if (s.getBoundingClientRect().top < 140) current = s.id; });
+    menuLinks.forEach(function(a){ a.classList.toggle('active', a.getAttribute('href') === '#'+current); });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  window.addEventListener('resize', onScroll);
+  backTop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  /* ---------- Hamburger menu ---------- */
+  var menuBtn = $('#menuBtn'), menu = $('#navMenu');
+  function setMenu(open){ menu.classList.toggle('open', open); menuBtn.setAttribute('aria-expanded', open); menuBtn.textContent = open ? '✕' : '☰'; }
+  menuBtn.addEventListener('click', function(e){ e.stopPropagation(); setMenu(!menu.classList.contains('open')); });
+  menu.addEventListener('click', function(e){ if (e.target.tagName === 'A') setMenu(false); });
+  document.addEventListener('click', function(e){ if (menu.classList.contains('open') && !menu.contains(e.target)) setMenu(false); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') setMenu(false); });
+
+  /* ---------- Farsi toggle ---------- */
+  var faBtn = $('#faBtn');
+  function setFa(show){ document.body.classList.toggle('fa-hidden', !show); faBtn.setAttribute('aria-pressed', show); store.set('fa', show); }
+  var faPref = store.get('fa'); setFa(faPref === null ? true : faPref);
+  faBtn.addEventListener('click', function(){ setFa(document.body.classList.contains('fa-hidden')); });
+
+  /* ---------- Text-to-speech (Italian) ---------- */
+  var tts = ('speechSynthesis' in window) && ('SpeechSynthesisUtterance' in window);
+  var itVoice = null, rate = 0.9;
+  function pickVoice(){ try { var vs = speechSynthesis.getVoices(); itVoice = vs.filter(function(v){ return /^it([-_]|$)/i.test(v.lang); })[0] || null; } catch(e){} }
+  if (tts){ pickVoice(); try { speechSynthesis.onvoiceschanged = pickVoice; } catch(e){} } else { document.body.classList.add('no-tts'); }
+  function utter(t){ var u = new SpeechSynthesisUtterance(t); u.lang = 'it-IT'; if (itVoice) u.voice = itVoice; u.rate = rate; return u; }
+  function say(t){ if (!tts) return; speechSynthesis.cancel(); speechSynthesis.speak(utter(t)); }
+  function sayAll(list){ if (!tts) return; speechSynthesis.cancel(); list.forEach(function(t){ speechSynthesis.speak(utter(t)); }); }
+
+  /* ---------- Score ---------- */
+  var solved = {}, total = 0, sid = 0;
+  function reg(el){ el.setAttribute('data-sid', 's'+(sid++)); total++; }
+  function solve(el){ var k = el.getAttribute('data-sid'); if (k && !solved[k]) { solved[k] = 1; updScore(); } }
+  function updScore(){ $('#scoreBadge').textContent = '✓ ' + Object.keys(solved).length + '/' + total; }
+  $$('.exercise .blank').forEach(reg);
+  $$('.mcq').forEach(reg);
+  $$('.match .match-col.left button').forEach(reg);
+  $$('.sorter .chip').forEach(reg);
+
+  /* ---------- Fill-in blanks ---------- */
+  function norm(s){ return (s||'').toLowerCase().replace(/[’`´]/g,"'").replace(/[.,!?;:¿¡"«»()]/g,' ').replace(/\s+/g,' ').trim(); }
+  function strip(s){ return s.normalize ? s.normalize('NFD').replace(/[̀-ͯ]/g,'') : s; }
+  function checkBlank(inp){
+    inp.classList.remove('ok','bad','near');
+    var v = norm(inp.value); if (!v) return null;
+    var ans = (inp.getAttribute('data-a')||'').split('|').map(norm);
+    var res = 'bad';
+    if (inp.getAttribute('data-norm') === 'digits'){
+      var d = v.replace(/\D/g,''); if (ans.some(function(a){ return a.replace(/\D/g,'') === d; })) res = 'ok';
+    } else if (ans.indexOf(v) > -1) res = 'ok';
+    else if (ans.map(strip).indexOf(strip(v)) > -1) res = 'near';
+    inp.classList.add(res);
+    if (res === 'ok' && !inp.classList.contains('revealed')) solve(inp);
+    return res;
+  }
+  function checkExercise(ex){
+    var bl = $$('.blank', ex), ok = 0, near = 0, filled = 0;
+    bl.forEach(function(b){ var r = checkBlank(b); if (r) filled++; if (r === 'ok') ok++; if (r === 'near') near++; });
+    var fb = $('.ex-fb', ex); if (!fb) return;
+    fb.className = 'ex-fb ' + (ok === bl.length ? 'good' : 'meh');
+    fb.textContent = ok === bl.length ? 'Perfetto! ' + ok + '/' + bl.length + ' ✓' :
+      ok + '/' + bl.length + ' corrette' + (near ? ' · ' + near + ' quasi (controlla gli accenti ` ´)' : '') + (filled < bl.length ? ' · ' + (bl.length - filled) + ' vuote' : '');
+  }
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' && e.target.classList && e.target.classList.contains('blank')) { e.preventDefault(); checkBlank(e.target); }
+  });
+
+  /* ---------- Matching (shuffle right column) ---------- */
+  $$('.match').forEach(function(m){
+    var col = $('.match-col.right', m); if (!col) return;
+    var items = $$('button', col);
+    for (var i = items.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); col.appendChild(items[j]); items.splice(j,1); }
+  });
+
+  /* ---------- Delegated clicks ---------- */
+  document.addEventListener('click', function(e){
+    var t = e.target.closest ? e.target.closest('button, .bucket') : null;
+    if (!t) return;
+
+    if (t.classList.contains('say')) { say(t.getAttribute('data-say') || t.textContent); return; }
+    if (t.classList.contains('tile') && t.hasAttribute('data-say')) { say(t.getAttribute('data-say')); return; }
+    if (t.classList.contains('say-scene')) {
+      var sc = document.getElementById(t.getAttribute('data-target'));
+      if (sc) sayAll($$('.line-it', sc).map(function(x){ return x.textContent; }));
+      return;
+    }
+    if (t.classList.contains('stop-audio')) { if (tts) speechSynthesis.cancel(); return; }
+    if (t.classList.contains('rate-toggle')) {
+      rate = rate > 0.8 ? 0.65 : 0.9;
+      $$('.rate-toggle').forEach(function(b){ b.textContent = rate < 0.8 ? '🐢 Lento (ON)' : '🐢 Lento (OFF)'; });
+      return;
+    }
+    if (t.classList.contains('hl-toggle')) {
+      var st = document.getElementById(t.getAttribute('data-target'));
+      if (st) { st.classList.toggle('hl-off'); t.textContent = st.classList.contains('hl-off') ? '🖍️ Evidenzia: OFF' : '🖍️ Evidenzia: ON'; }
+      return;
+    }
+    if (t.classList.contains('btn-check')) { checkExercise(t.closest('.exercise')); return; }
+    if (t.classList.contains('btn-reveal')) {
+      var ex = t.closest('.exercise');
+      $$('.blank', ex).forEach(function(b){ if (!b.classList.contains('ok')) { b.value = (b.getAttribute('data-show') || b.getAttribute('data-a').split('|')[0]); b.classList.add('revealed'); checkBlank(b); } });
+      var fb = $('.ex-fb', ex); if (fb) { fb.className = 'ex-fb meh'; fb.textContent = 'Soluzioni mostrate — rifallo domani senza guardare!'; }
+      return;
+    }
+    if (t.classList.contains('btn-reset')) {
+      var ex2 = t.closest('.exercise');
+      $$('.blank', ex2).forEach(function(b){ b.value=''; b.classList.remove('ok','bad','near','revealed'); });
+      var fb2 = $('.ex-fb', ex2); if (fb2) fb2.textContent = '';
+      return;
+    }
+    /* MCQ */
+    if (t.parentNode && t.parentNode.classList && t.parentNode.classList.contains('opts')) {
+      var q = t.closest('.mcq'); if (!q || q.classList.contains('answered')) return;
+      if (t.getAttribute('data-o') === q.getAttribute('data-a')) {
+        t.classList.add('correct'); q.classList.add('answered'); solve(q);
+        var f = $('.fb', q); if (f) f.textContent = '✓ ' + (q.getAttribute('data-why') || 'Esatto!');
+      } else { t.classList.remove('wrong'); void t.offsetWidth; t.classList.add('wrong'); }
+      return;
+    }
+    /* Match */
+    var mm = t.closest('.match');
+    if (mm && t.tagName === 'BUTTON' && !t.classList.contains('done')) {
+      var side = t.closest('.match-col').classList.contains('left') ? 'left' : 'right';
+      $$('.match-col.' + side + ' button', mm).forEach(function(b){ b.classList.remove('sel'); });
+      t.classList.add('sel');
+      var L = $('.match-col.left button.sel', mm), R = $('.match-col.right button.sel', mm);
+      if (L && R) {
+        if (L.getAttribute('data-k') === R.getAttribute('data-k')) {
+          [L,R].forEach(function(b){ b.classList.remove('sel'); b.classList.add('done'); });
+          solve(L);
+          if (L.hasAttribute('data-say')) say(L.getAttribute('data-say'));
+        } else {
+          [L,R].forEach(function(b){ b.classList.remove('sel','no'); void b.offsetWidth; b.classList.add('no'); });
+        }
+      }
+      return;
+    }
+    /* Sorter */
+    if (t.classList.contains('chip') && !t.classList.contains('placed')) {
+      var srt = t.closest('.sorter'); $$('.chip', srt).forEach(function(c){ c.classList.remove('sel'); }); t.classList.add('sel'); return;
+    }
+    if (t.classList.contains('bucket')) {
+      var s2 = t.closest('.sorter'), chip = $('.chip.sel', s2); if (!chip) return;
+      if (chip.getAttribute('data-c') === t.getAttribute('data-c')) {
+        chip.classList.remove('sel'); chip.classList.add('placed'); $('.drop', t).appendChild(chip); solve(chip);
+        var left = $$('.chips .chip', s2).length, fbs = $('.ex-fb', s2.closest('.exercise') || s2);
+        if (fbs && left === 0) { fbs.className = 'ex-fb good'; fbs.textContent = 'Tutto a posto! ✓'; }
+      } else { t.classList.remove('no'); void t.offsetWidth; t.classList.add('no'); }
+      return;
+    }
+    /* Flashcards */
+    if (t.classList.contains('flashcard')) { t.classList.toggle('flipped'); if (!t.classList.contains('flipped') && t.hasAttribute('data-say')) {} else if (t.hasAttribute('data-say')) say(t.getAttribute('data-say')); return; }
+    /* Self-check */
+    if (t.classList.contains('sc-btn')) {
+      var li = t.closest('li'), idx = $$('.selfcheck li').indexOf(li);
+      $$('.sc-btn', li).forEach(function(b){ b.classList.remove('on'); }); t.classList.add('on');
+      var sc2 = store.get('selfcheck') || {}; sc2[idx] = t.getAttribute('data-v'); store.set('selfcheck', sc2);
+      return;
+    }
+  });
+
+  /* ---------- Timers ---------- */
+  $$('.timer').forEach(function(tm){
+    var secs = parseInt(tm.getAttribute('data-s'), 10) || 60, left = secs, iv = null;
+    var disp = $('.t-display', tm), start = $('.t-start', tm), reset = $('.t-reset', tm);
+    function fmt(n){ return Math.floor(n/60) + ':' + ('0' + (n%60)).slice(-2); }
+    function draw(){ disp.textContent = fmt(left); }
+    draw();
+    start.addEventListener('click', function(){
+      if (iv) { clearInterval(iv); iv = null; tm.classList.remove('running'); start.textContent = '▶ Riprendi'; return; }
+      if (left <= 0) left = secs;
+      tm.classList.remove('done'); tm.classList.add('running'); start.textContent = '⏸ Pausa';
+      iv = setInterval(function(){ left--; draw(); if (left <= 0) { clearInterval(iv); iv = null; tm.classList.remove('running'); tm.classList.add('done'); disp.textContent = 'Stop!'; start.textContent = '▶ Ancora'; try { navigator.vibrate && navigator.vibrate(300); } catch(e){} } }, 1000);
+    });
+    reset.addEventListener('click', function(){ clearInterval(iv); iv = null; left = secs; tm.classList.remove('running','done'); start.textContent = '▶ Start'; draw(); });
+  });
+
+  /* ---------- Persisted textareas, checklists, self-check ---------- */
+  $$('textarea.free').forEach(function(ta){
+    var k = 'ta:' + ta.getAttribute('data-key'); var v = store.get(k); if (v) ta.value = v;
+    ta.addEventListener('input', function(){ store.set(k, ta.value); });
+  });
+  $$('.checklist').forEach(function(cl){
+    var k = 'cl:' + cl.getAttribute('data-key'), saved = store.get(k) || {};
+    $$('input[type=checkbox]', cl).forEach(function(cb, i){ cb.checked = !!saved[i]; cb.addEventListener('change', function(){ saved[i] = cb.checked; store.set(k, saved); }); });
+  });
+  var scSaved = store.get('selfcheck') || {};
+  $$('.selfcheck li').forEach(function(li, i){ if (scSaved[i]) { var b = $('.sc-btn[data-v="' + scSaved[i] + '"]', li); if (b) b.classList.add('on'); } });
+
+  /* ---------- Scrollable tables hint ---------- */
+  function markTables(){ $$('.table-wrap').forEach(function(w){ w.classList.toggle('is-scrollable', w.scrollWidth > w.clientWidth + 2); }); }
+  $$('.table-wrap').forEach(function(w){ if (!$('.scroll-hint', w)) { var h = document.createElement('div'); h.className = 'scroll-hint'; h.textContent = '↔ scorri / scroll'; w.insertBefore(h, w.firstChild); } });
+  window.addEventListener('resize', markTables); markTables();
+
+  updScore(); onScroll();
+})();
+</script>
+</body>
+</html>
