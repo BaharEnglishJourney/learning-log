@@ -10,9 +10,9 @@
 
 **What I built**
 - HTML study pages for *Nuovo Espresso 1*, units 1–3
-[Unit 1](../lesson-01-primi-contatti.html)
-[Unit 2](../lesson-02-io-e-gli-altri.html)
-[Unit 3](../lesson-03-buon-appetito.html)
+[Unit 1](../italian/lesson-01-primi-contatti.html)
+[Unit 2](../italian/lesson-02-io-e-gli-altri.html)
+[Unit 3](../italian/lesson-03-buon-appetito.html)
 - This GitHub account and the `learning-log` repository
 
 **Questions I still have**
