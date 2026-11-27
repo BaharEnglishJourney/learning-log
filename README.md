@@ -45,7 +45,7 @@ above the previous week's entry.
 
 **What I studied**
 - **Linguistics:** Yule, *The Study of Language*: the preface and ch. 1 *The origins of language*
-- **Python:** set up [Python + VS Code / Google Colab]; *Python for Everybody* ch. 1 (Why should you learn to write programs?)
+- **Python:** set up [Python + VS Code]; *Python for Everybody* ch. 1 (Why should you learn to write programs?)
 - **Italian:** *Nuovo Espresso 1*, 20 minutes a day
 - **English:** general English practice
 - **Daniel Kahneman,** *Thinking, Fast and Slow*, ch. 1–2
