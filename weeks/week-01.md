@@ -21,7 +21,6 @@
 
 
 **Yule bridge notes (how a computer would deal with this)**
-- *The origins of language:*
 **Topic:** How did humans get language? And what does that tell us about how machines "get" language?
 
 
